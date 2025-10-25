@@ -11,6 +11,7 @@ export default function RootLayout() {
     title: "",
     headerBackButtonDisplayMode: "minimal",
     headerShadowVisible: false,
+    headerTintColor: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
     headerStyle: {
       backgroundColor: isDarkMode ? colors.dark.background : colors.light.background,
     },
