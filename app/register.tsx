@@ -1,7 +1,6 @@
 import MainView from "@/components/MainView";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { Text } from "react-native";
 
 export default function RegisterScreen() {
@@ -9,11 +8,10 @@ export default function RegisterScreen() {
     headerShown: true
   };
 
-  useHeaderBehavior({ headerShown: screenConf.headerShown, iconName: 'checkmark-circle' });
+  useHeaderBehavior({headerShown: screenConf.headerShown});
 
   return (
     <MainView headerShown={screenConf.headerShown}>
-      <Ionicons name="checkmark-circle" size={32} color={'red'} />
       <Text>Register Page</Text>
     </MainView>
   );
