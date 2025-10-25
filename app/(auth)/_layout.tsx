@@ -6,10 +6,12 @@ export default function RootLayout() {
     <Stack>
       <Stack.Screen name="home"/>
       <Stack.Screen name="settings"/>
+      <Stack.Screen name="transactions"/>
+      <Stack.Screen name="manual-transaction"/>
       <Stack.Screen name="upload-file"/>
       <Stack.Screen name="upload-file-success"/>
       <Stack.Screen name="upload-file-transactions-preview"/>
-      <Stack.Screen name="upload-file-transactions-preview-edition"/>
+      <Stack.Screen name="upload-file-transactions-preview-edition" />
     </Stack>
   )
 }

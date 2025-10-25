@@ -6,20 +6,17 @@ import {
 } from "@react-navigation/native-stack";
 import { useNavigation } from "expo-router";
 import { useLayoutEffect } from "react";
-import { Pressable, StyleSheet, useColorScheme } from "react-native";
+import { Pressable, useColorScheme } from "react-native";
 
 type Options = {
   headerShown: boolean;
   loading?: boolean;
   iconName?: any;
   onPressIconName?: () => void;
+  navigationOptions?: Partial<NativeStackNavigationOptions>;
 };
 
-type StyleParams = {
-  isDarkMode: boolean;
-};
-
-export function useHeaderBehavior({ headerShown, loading = false, iconName = "", onPressIconName }: Options) {
+export function useHeaderBehavior({ headerShown, loading = false, iconName = "", onPressIconName, navigationOptions }: Options) {
   const navigation = useNavigation();
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
@@ -27,8 +24,6 @@ export function useHeaderBehavior({ headerShown, loading = false, iconName = "",
   const getBackgroundColor = () => {
     return isDarkMode ? colors.dark.background : colors.light.background;
   }
-
-  const styles = makeStyles({ isDarkMode });
 
   let baseNavigationOptions: Partial<NativeStackNavigationOptions> = {
     title:"",
@@ -41,6 +36,7 @@ export function useHeaderBehavior({ headerShown, loading = false, iconName = "",
     headerStyle: {
       backgroundColor: getBackgroundColor(),
     },
+    ...navigationOptions
   }
 
   if(iconName!=""){
@@ -64,13 +60,4 @@ export function useHeaderBehavior({ headerShown, loading = false, iconName = "",
     navigation.setOptions(baseNavigationOptions);
   }, [navigation, loading]);
 
-}
-
-function makeStyles({ isDarkMode }: StyleParams) {
-  return StyleSheet.create({
-    header: {
-      borderColor: 'red',
-      borderWidth: 2,
-    }
-  });
 }
