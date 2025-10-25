@@ -1,12 +1,29 @@
+import { colors } from "@/colors";
 import { Stack } from "expo-router";
+import { useColorScheme } from "react-native";
 
 export default function RootLayout() {
+
+  const theme = useColorScheme();
+  const isDarkMode = theme === 'dark';
+
+  const baseOptions: any = {
+    title: "",
+    headerBackButtonDisplayMode: "minimal",
+    headerShadowVisible: false,
+    headerStyle: {
+      backgroundColor: isDarkMode ? colors.dark.background : colors.light.background,
+    },
+  }
+
   return (
-    <Stack screenOptions={{ title: "" }}>
-      <Stack.Screen name="login" options={{title: "", headerBackButtonDisplayMode: "minimal"}}/>
-      <Stack.Screen name="recover-account" options={{title: "", headerBackButtonDisplayMode: "minimal"}}/>
-      <Stack.Screen name="register" options={{title: "", headerBackButtonDisplayMode: "minimal"}}/>
-      <Stack.Screen name="(auth)" options={{ headerShown: false, title: "", headerBackButtonDisplayMode: "minimal"}} />
+    <Stack>
+      <Stack.Screen name="login" options={baseOptions}/>
+      <Stack.Screen name="recover-account" options={baseOptions}/>
+      <Stack.Screen name="register" options={baseOptions}/>
+      <Stack.Screen name="(auth)" options={{ headerShown: false, ...baseOptions }} />
     </Stack>
   )
 }
+
+

@@ -33,12 +33,10 @@ export default function MainView({ headerShown = true, children }: MainViewProps
 }
 
 function makeStyles({ isDarkMode }: StyleParams) {
-  console.log("isDarkMode", isDarkMode);
   return StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: isDarkMode ? colors.dark.background : colors.light.background,
-      borderWidth: 2,
     },
   });
 }
