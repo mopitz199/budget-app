@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export interface MainViewProps {
@@ -9,15 +9,23 @@ export interface MainViewProps {
 export default function MainView({ headerShown = true, children }: MainViewProps) {
   if (headerShown) {
     return (
-      <View>
+      <View style={style.container}>
         {children}
       </View>
     )
   } else {
     return (
-      <SafeAreaView>
+      <SafeAreaView style={style.container}>
         {children}
       </SafeAreaView>
     )
   }
 }
+
+const style = StyleSheet.create({
+  container: {
+    flex: 1,
+    borderColor: 'red',
+    borderWidth: 2,
+  },
+})

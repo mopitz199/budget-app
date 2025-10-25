@@ -1,9 +1,22 @@
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
+import { useLayoutEffect } from "react";
 import { Button, Text, View } from "react-native";
+import { ScreenConf } from "../types/screen-conf";
 
 export default function Index() {
 
+  const screenConf: ScreenConf = {
+    headerShown: false,
+    navigation: useNavigation()
+  };
+
   const router = useRouter();
+
+  useLayoutEffect(() => {
+    screenConf.navigation.setOptions({
+      headerShown: screenConf.headerShown,
+    });
+  }, [screenConf.navigation]);
 
   return (
     <View
@@ -13,7 +26,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <Text>Splash</Text>
       <Button title="Go to Home" onPress={() => {
         router.replace('/(auth)/home')
       }} />
