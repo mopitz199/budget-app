@@ -1,18 +1,17 @@
 import MainView from "@/components/MainView";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
-import { useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Button, Text } from "react-native";
 
 export default function UploadFileScreen() {
 
   const screenConf: ScreenConf = {
-    headerShown: true,
-    navigation: useNavigation()
+    headerShown: true
   };
   const router = useRouter();
-
+  
   const [loading, setLoading] = useState(false);
 
   useHeaderBehavior({ loading: loading, headerShown: screenConf.headerShown });
@@ -27,7 +26,7 @@ export default function UploadFileScreen() {
         }, 3000);
       }} />
       <Button title="Disable Load" onPress={() => setLoading(false)} />
-      <Button title="Go to UploadFileSuccess" onPress={() => router.navigate('/(auth)/upload-file-success')} />
+      <Button title="Go to UploadFileTransactionsPreview" onPress={() => router.navigate('/(auth)/upload-file-transactions-preview')} />
     </MainView>
   );
 }

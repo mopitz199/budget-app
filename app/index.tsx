@@ -1,23 +1,16 @@
-import { useNavigation, useRouter } from "expo-router";
-import { useLayoutEffect } from "react";
+import { useHeaderBehavior } from "@/hooks/header-behavior";
+import { ScreenConf } from "@/types/screen-conf";
+import { useRouter } from "expo-router";
 import { Button, Text, View } from "react-native";
-import { ScreenConf } from "../types/screen-conf";
 
 export default function Index() {
-
   const screenConf: ScreenConf = {
-    headerShown: false,
-    navigation: useNavigation()
+    headerShown: false
   };
-
   const router = useRouter();
 
-  useLayoutEffect(() => {
-    screenConf.navigation.setOptions({
-      headerShown: screenConf.headerShown,
-    });
-  }, [screenConf.navigation]);
-
+  useHeaderBehavior({ headerShown: screenConf.headerShown });
+  
   return (
     <View
       style={{
@@ -27,9 +20,8 @@ export default function Index() {
       }}
     >
       <Text>Splash</Text>
-      <Button title="Go to Home" onPress={() => {
-        router.replace('/(auth)/home')
-      }} />
+      <Button title="Go to Home" onPress={() => {router.replace('/(auth)/home')}} />
+      <Button title="Go to Login" onPress={() => {router.replace('/login')}} />
     </View>
   );
 }

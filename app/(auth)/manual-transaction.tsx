@@ -3,7 +3,7 @@ import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import { Text } from "react-native";
 
-export default function SettingsScreen() {
+export default function ManualTransactionScreen() {
   const screenConf: ScreenConf = {
     headerShown: true
   };
@@ -11,7 +11,7 @@ export default function SettingsScreen() {
 
   return (
     <MainView headerShown={screenConf.headerShown}>
-      <Text>Settings Page</Text>
+      <Text>ManualTransaction Page</Text>
     </MainView>
   );
 }
