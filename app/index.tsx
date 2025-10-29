@@ -1,5 +1,6 @@
 import { colors } from "@/colors";
 import BottomHalfModal from "@/components/BottomHalfModal";
+import { Input } from "@/components/Input";
 import MainView from "@/components/MainView";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
@@ -18,6 +19,7 @@ export default function Index() {
   const styles = makeStyles({ isDarkMode: false });
 
   const [open, setOpen] = useState(false);
+  const [text, setText] = useState("");
 
   return (
     <MainView headerShown={screenConf.headerShown}>
@@ -31,6 +33,11 @@ export default function Index() {
       <Button title="Open Modal" onPress={() => {setOpen(true)} }/>
       <Button title="Go to Home" onPress={() => {router.replace('/(auth)/home')}} />
       <Button title="Go to Login" onPress={() => {router.replace('/login')}} />
+
+      <Input
+        onChangeText={setText}
+        value={text}
+      />
     </MainView>
   );
 }
@@ -46,14 +53,5 @@ function makeStyles({ isDarkMode }: StyleParams) {
       backgroundColor: isDarkMode ? colors.dark.background : colors.light.background,
       padding: 20,
     },
-    backdrop: {
-      flex: 1,
-      borderColor: 'red',
-      borderWidth: 2,
-      backgroundColor: isDarkMode ? colors.dark.loadingBackground : colors.light.loadingBackground,
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 9999,
-    }
   });
 }

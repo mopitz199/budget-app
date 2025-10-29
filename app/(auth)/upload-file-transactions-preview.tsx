@@ -6,10 +6,16 @@ import { Button, Text } from "react-native";
 
 export default function UploadFileTransactionsPreviewScreen() {
   const screenConf: ScreenConf = {
-    headerShown: false
+    headerShown: true
   };
   const router = useRouter();
-  useHeaderBehavior({ headerShown: screenConf.headerShown });
+  useHeaderBehavior({
+    headerShown: screenConf.headerShown,
+    iconName: "close-circle",
+    onPressIconName: () => {
+      router.replace('/home');
+    }
+  });
 
   return (
       <MainView headerShown={screenConf.headerShown}>
