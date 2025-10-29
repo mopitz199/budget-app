@@ -13,11 +13,6 @@ export default function UploadFileTransactionsPreviewEditionScreen() {
   
   useHeaderBehavior({
     headerShown: screenConf.headerShown,
-    iconName: "close-circle",
-    onPressIconName: () => {
-      router.back();
-    },
-    navigationOptions: { animation: "slide_from_bottom" }
   });
 
   return (

@@ -43,7 +43,8 @@ export function useHeaderBehavior({ headerShown, loading = false, iconName = "",
     if(loading){
       baseNavigationOptions.headerLeft = ({ tintColor }: NativeStackHeaderLeftProps) => null
     }else{
-      baseNavigationOptions.headerLeft = ({ tintColor }: NativeStackHeaderLeftProps) => {
+      baseNavigationOptions.headerLeft = ({ tintColor }: NativeStackHeaderLeftProps) => null
+      baseNavigationOptions.headerRight = ({ tintColor }: NativeStackHeaderLeftProps) => {
         return (
           <Pressable onPress={() => {
             onPressIconName && onPressIconName();
