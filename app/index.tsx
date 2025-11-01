@@ -7,7 +7,7 @@ import { ScreenConf } from "@/types/screen-conf";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Button, Image, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { Button, Image, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
 import chileFlag from "../assets/images/flags/chile.png";
 
 export default function Index() {
@@ -42,7 +42,8 @@ export default function Index() {
       <Input
         textInputProps={{
           value: text,
-          onChangeText: setText
+          onChangeText: setText,
+          placeholder: "Monto en CLP",
         }}
         leftComponent={() => (
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -66,7 +67,8 @@ export default function Index() {
       <Input
         textInputProps={{
           value: text,
-          onChangeText: setText
+          onChangeText: setText,
+          placeholder: "Placeholder with right icon",
         }}
         rightComponent={() => (
           <Ionicons
@@ -82,7 +84,8 @@ export default function Index() {
       <Input
         textInputProps={{
           value: text,
-          onChangeText: setText
+          onChangeText: setText,
+          placeholder: "Placeholder with no icons",
         }}
       />
 
@@ -91,7 +94,8 @@ export default function Index() {
       <Input
         textInputProps={{
           value: text,
-          onChangeText: setText
+          onChangeText: setText,
+          placeholder: "Placeholder password",
         }}
         rightComponent={() => (
           <Ionicons
@@ -102,6 +106,31 @@ export default function Index() {
         )}
         onRightPress={() => {setShowPassword(!showPassword)}}
       />
+
+      <View style={{ marginVertical: 12 }}></View>
+
+      <TouchableOpacity style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 56,
+        paddingHorizontal: 12,
+        justifyContent: 'space-between',
+        borderWidth: isDarkMode ? 0 : 0.5,
+        backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
+        borderRadius: 8,
+      }}>
+        <Text style={{
+          fontSize: 16,
+          color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
+        }}>
+          Currency
+        </Text>
+        <Ionicons
+          name={'caret-down-outline'}
+          size={32}
+          color={isDarkMode ? colors.dark.onSurface : colors.light.onSurface}
+        />
+      </TouchableOpacity>
     </MainView>
   );
 }

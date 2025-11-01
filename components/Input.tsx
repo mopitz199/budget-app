@@ -115,7 +115,6 @@ function makeStyles({
       margin: 0,
       height: 56,
       fontSize: 16,
-      paddingHorizontal: 16,
       paddingRight: rightComponent!=undefined ? 50 : 12,
       paddingLeft: leftComponent!=undefined ? cursorPaddingLeft : 12,
     },
