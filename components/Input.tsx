@@ -1,4 +1,5 @@
 import { colors } from "@/colors";
+import { globalStyles } from "@/global-styles";
 import { JSX } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
 
@@ -34,8 +35,7 @@ export function Input (
           left: 0,
           bottom: 0,
           top: 0,
-          paddingLeft: 10,
-          paddingRight: 10,
+          paddingHorizontal: globalStyles.inputPaddingHorizontal,
           paddingTop: 3,
           paddingBottom: 3,
           borderColor: isDarkMode ? colors.dark.outline : colors.light.outline,
@@ -59,9 +59,7 @@ export function Input (
           right: 0,
           bottom: 0,
           top: 0,
-          paddingRight: 10,
-          paddingTop: 3,
-          paddingBottom: 3,
+          paddingRight: globalStyles.inputPaddingHorizontal,
           justifyContent: 'center',
         }}
         onPress={() => {
@@ -115,10 +113,10 @@ function makeStyles({
       color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
       backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
       margin: 0,
-      height: 56,
+      height: globalStyles.inputHeight,
       fontSize: 16,
-      paddingRight: rightComponent!=undefined ? 50 : 12,
-      paddingLeft: leftComponent!=undefined ? cursorPaddingLeft : 12,
+      paddingRight: rightComponent!=undefined ? 50 : globalStyles.inputPaddingHorizontal,
+      paddingLeft: leftComponent!=undefined ? cursorPaddingLeft : globalStyles.inputPaddingHorizontal,
     },
   });
 }

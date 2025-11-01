@@ -3,6 +3,7 @@ import BottomHalfModal from "@/components/BottomHalfModal";
 import { Input } from "@/components/Input";
 import MainView from "@/components/MainView";
 import { SelectorInput } from "@/components/SelectorInput";
+import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -26,6 +27,7 @@ export default function Index() {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [positive, setPositive] = useState(true);
 
   return (
     <MainView headerShown={screenConf.headerShown}>
@@ -60,7 +62,39 @@ export default function Index() {
             </Text>
           </View>
         )}
-        cursorPaddingLeft={93}
+        cursorPaddingLeft={(61+(globalStyles.inputPaddingHorizontal*2))+globalStyles.inputPaddingHorizontal}
+        rightComponent={() => {
+
+          const getColor = () => {
+            if (positive) {
+              return isDarkMode ? colors.dark.success : colors.light.success;
+            } else {
+              return isDarkMode ? colors.dark.error : colors.light.error;
+            }
+          }
+
+          return (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderLeftColor: getColor(),
+                paddingLeft: globalStyles.inputPaddingHorizontal,
+                borderLeftWidth: 1,
+              }}
+            >
+              <Ionicons
+                name={positive ? 'add-circle-outline' : 'remove-circle-outline'}
+                size={globalStyles.inputRightIconSize}
+                color={getColor()}
+              />
+            </View>
+          )
+        }}
+        onRightPress={() => {
+          setPositive(!positive);
+        }}
       />
 
       <View style={{ marginVertical: 12 }}></View>
@@ -74,7 +108,7 @@ export default function Index() {
         rightComponent={() => (
           <Ionicons
             name={'close-circle'}
-            size={32}
+            size={globalStyles.inputRightIconSize}
             color={isDarkMode ? colors.dark.onSurface : colors.light.onSurface}
           />
         )}
@@ -101,7 +135,7 @@ export default function Index() {
         rightComponent={() => (
           <Ionicons
             name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-            size={32}
+            size={globalStyles.inputRightIconSize}
             color={isDarkMode ? colors.dark.onSurface : colors.light.onSurface}
           />
         )}

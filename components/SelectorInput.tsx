@@ -1,4 +1,5 @@
 import { colors } from "@/colors";
+import { globalStyles } from "@/global-styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { JSX, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, useColorScheme } from "react-native";
@@ -81,8 +82,8 @@ export function SelectorInput (
       style={{
         flexDirection: 'row',
         alignItems: 'center',
-        height: 56,
-        paddingHorizontal: 12,
+        height: globalStyles.inputHeight,
+        paddingHorizontal: globalStyles.inputPaddingHorizontal,
         justifyContent: 'space-between',
         borderColor: isDarkMode ? '' : colors.light.outline,
         borderWidth: isDarkMode ? 0 : 0.5,
@@ -104,7 +105,7 @@ export function SelectorInput (
       </Text>
       <Ionicons
         name={'caret-down-outline'}
-        size={32}
+        size={globalStyles.inputRightIconSize}
         color={isDarkMode ? colors.dark.onSurface : colors.light.onSurface}
       />
     </TouchableOpacity>
