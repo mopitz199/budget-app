@@ -3,20 +3,22 @@ import { JSX } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
 
 type InputProps = {
-  onChangeText: (text: string) => void;
-  value: string;
   leftComponent?: () => JSX.Element;
+  onLeftPress?: () => void;
   rightComponent?: () => JSX.Element;
+  onRightPress?: () => void;
   cursorPaddingLeft?: number;
+  textInputProps?: object;
 };
 
 export function Input (
   {
-    onChangeText,
-    value,
     leftComponent = undefined,
+    onLeftPress = undefined,
     rightComponent = undefined,
+    onRightPress = undefined,
     cursorPaddingLeft = 0,
+    textInputProps = {},
   }: InputProps
 ) {
 
@@ -26,7 +28,8 @@ export function Input (
 
   const buildLeftComponent = () => {
     return (
-      <TouchableOpacity style={{
+      <TouchableOpacity
+        style={{
           position: 'absolute',
           left: 0,
           bottom: 0,
@@ -38,7 +41,11 @@ export function Input (
           borderColor: isDarkMode ? colors.dark.outline : colors.light.outline,
           borderRightWidth: 1,
           justifyContent: 'center',
-        }}>
+        }}
+        onPress={() => {
+          {onLeftPress && onLeftPress()}
+        }}
+      >
           {leftComponent != undefined && leftComponent()}
         </TouchableOpacity>
     )
@@ -46,7 +53,8 @@ export function Input (
 
   const buildRightComponent = () => {
     return (
-      <TouchableOpacity style={{
+      <TouchableOpacity
+        style={{
           position: 'absolute',
           right: 0,
           bottom: 0,
@@ -54,9 +62,12 @@ export function Input (
           paddingRight: 10,
           paddingTop: 3,
           paddingBottom: 3,
-          //borderColor: 'green', borderWidth: 2,
           justifyContent: 'center',
-        }}>
+        }}
+        onPress={() => {
+          {onRightPress && onRightPress()}
+        }}
+      >
           {rightComponent != undefined && rightComponent()}
         </TouchableOpacity>
     )
@@ -69,12 +80,10 @@ export function Input (
       <View style={{
         position: 'relative',
         width: "100%",
-        // borderColor: 'red', borderWidth: 2
       }}>
         <TextInput
-          onChangeText={onChangeText}
           style={style.input}
-          value={value}
+          {...textInputProps}
         />
         {leftComponent != undefined && buildLeftComponent()}
         {rightComponent != undefined && buildRightComponent()}

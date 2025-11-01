@@ -24,6 +24,7 @@ export default function Index() {
 
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <MainView headerShown={screenConf.headerShown}>
@@ -39,8 +40,10 @@ export default function Index() {
       <Button title="Go to Login" onPress={() => {router.replace('/login')}} />
 
       <Input
-        onChangeText={setText}
-        value={text}
+        textInputProps={{
+          value: text,
+          onChangeText: setText
+        }}
         leftComponent={() => (
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image
@@ -56,6 +59,15 @@ export default function Index() {
           </View>
         )}
         cursorPaddingLeft={93}
+      />
+
+      <View style={{ marginVertical: 12 }}></View>
+
+      <Input
+        textInputProps={{
+          value: text,
+          onChangeText: setText
+        }}
         rightComponent={() => (
           <Ionicons
             name={'close-circle'}
@@ -63,7 +75,32 @@ export default function Index() {
             color={isDarkMode ? colors.dark.onSurface : colors.light.onSurface}
           />
         )}
-        //leftIconName="close-circle"
+      />
+
+      <View style={{ marginVertical: 12 }}></View>
+
+      <Input
+        textInputProps={{
+          value: text,
+          onChangeText: setText
+        }}
+      />
+
+      <View style={{ marginVertical: 12 }}></View>
+
+      <Input
+        textInputProps={{
+          value: text,
+          onChangeText: setText
+        }}
+        rightComponent={() => (
+          <Ionicons
+            name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+            size={32}
+            color={isDarkMode ? colors.dark.onSurface : colors.light.onSurface}
+          />
+        )}
+        onRightPress={() => {setShowPassword(!showPassword)}}
       />
     </MainView>
   );
