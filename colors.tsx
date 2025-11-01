@@ -7,8 +7,8 @@ export const colors = {
     onSurface: "#1D2430",
     error: "#FF5A5F",
     success: "#00C48C",
-    separatorLine: "#CACACA",
     loadingBackground: "rgba(29, 36, 48, 0.2)",
+    outline: "#CACACA",
   },
   dark: {
     primary: "#0057FF",
@@ -19,7 +19,7 @@ export const colors = {
     onSurface: "#F9F9F9",
     error: "#FF5A5F",
     success: "#00C48C",
-    separatorLine: "#536689",
     loadingBackground: "rgba(249, 249, 249, 0.1)",
+    outline: "#536689",
   },
 };

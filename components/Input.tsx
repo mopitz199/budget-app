@@ -1,14 +1,66 @@
 import { colors } from "@/colors";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { JSX } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
 
+type InputProps = {
+  onChangeText: (text: string) => void;
+  value: string;
+  leftComponent?: () => JSX.Element;
+  rightComponent?: () => JSX.Element;
+  cursorPaddingLeft?: number;
+};
+
 export function Input (
-  { onChangeText, value }: { onChangeText: (text: string) => void; value: string }
+  {
+    onChangeText,
+    value,
+    leftComponent = undefined,
+    rightComponent = undefined,
+    cursorPaddingLeft = 0,
+  }: InputProps
 ) {
 
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
-  const style = makeStyles({ isDarkMode });
+  const style = makeStyles({ isDarkMode, leftComponent, rightComponent, cursorPaddingLeft });
+
+  const buildLeftComponent = () => {
+    return (
+      <TouchableOpacity style={{
+          position: 'absolute',
+          left: 0,
+          bottom: 0,
+          top: 0,
+          paddingLeft: 10,
+          paddingRight: 10,
+          paddingTop: 3,
+          paddingBottom: 3,
+          borderColor: isDarkMode ? colors.dark.outline : colors.light.outline,
+          borderRightWidth: 1,
+          justifyContent: 'center',
+        }}>
+          {leftComponent != undefined && leftComponent()}
+        </TouchableOpacity>
+    )
+  }
+
+  const buildRightComponent = () => {
+    return (
+      <TouchableOpacity style={{
+          position: 'absolute',
+          right: 0,
+          bottom: 0,
+          top: 0,
+          paddingRight: 10,
+          paddingTop: 3,
+          paddingBottom: 3,
+          //borderColor: 'green', borderWidth: 2,
+          justifyContent: 'center',
+        }}>
+          {rightComponent != undefined && rightComponent()}
+        </TouchableOpacity>
+    )
+  }
 
   return (
     <View style={{
@@ -24,23 +76,8 @@ export function Input (
           style={style.input}
           value={value}
         />
-        <TouchableOpacity style={{
-          position: 'absolute',
-          right: 0,
-          bottom: 0,
-          top: 0,
-          paddingRight: 10,
-          paddingTop: 3,
-          paddingBottom: 3,
-          //borderColor: 'green', borderWidth: 2,
-          justifyContent: 'center',
-        }}>
-          <Ionicons
-            name={'close-circle'}
-            size={32}
-            color={'red'}
-          />
-        </TouchableOpacity>        
+        {leftComponent != undefined && buildLeftComponent()}
+        {rightComponent != undefined && buildRightComponent()}
       </View>
     </View>
   )
@@ -48,22 +85,30 @@ export function Input (
 
 type StyleParams = {
   isDarkMode: boolean;
+  leftComponent?: () => JSX.Element;
+  rightComponent?: () => JSX.Element;
+  cursorPaddingLeft?: number;
 };
 
-function makeStyles({ isDarkMode }: StyleParams) {
+function makeStyles({
+  isDarkMode,
+  rightComponent,
+  leftComponent,
+  cursorPaddingLeft,
+}: StyleParams) {
   return StyleSheet.create({
     input: {
       borderColor: isDarkMode ? '' : colors.light.loadingBackground,
-      borderWidth: 0.5,
+      borderWidth: isDarkMode ? 0 : 0.5,
       borderRadius: 8,
       color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
       backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
       margin: 0,
       height: 56,
       fontSize: 16,
-      //lineHeight: 40,
       paddingHorizontal: 16,
-      paddingVertical: 12,  
+      paddingRight: rightComponent!=undefined ? 50 : 12,
+      paddingLeft: leftComponent!=undefined ? cursorPaddingLeft : 12,
     },
   });
 }

@@ -4,19 +4,23 @@ import { Input } from "@/components/Input";
 import MainView from "@/components/MainView";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Button, StyleSheet, Text } from "react-native";
+import { Button, Image, StyleSheet, Text, useColorScheme, View } from "react-native";
+import chileFlag from "../assets/images/flags/chile.png";
 
 export default function Index() {
   const screenConf: ScreenConf = {
     headerShown: false
   };
   const router = useRouter();
-
+  const theme = useColorScheme();
+  const isDarkMode = theme === 'dark';
+  
   useHeaderBehavior({ headerShown: screenConf.headerShown });
   
-  const styles = makeStyles({ isDarkMode: false });
+  const styles = makeStyles({ isDarkMode: isDarkMode });
 
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
@@ -37,6 +41,29 @@ export default function Index() {
       <Input
         onChangeText={setText}
         value={text}
+        leftComponent={() => (
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Image
+              style={{ width: 26, height: 26, marginRight: 8 }}
+              source={chileFlag}
+            />
+            <Text style={{
+              color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
+              fontFamily: 'Roboto', fontWeight: '500'
+            }}>
+              CLP
+            </Text>
+          </View>
+        )}
+        cursorPaddingLeft={93}
+        rightComponent={() => (
+          <Ionicons
+            name={'close-circle'}
+            size={32}
+            color={isDarkMode ? colors.dark.onSurface : colors.light.onSurface}
+          />
+        )}
+        //leftIconName="close-circle"
       />
     </MainView>
   );
