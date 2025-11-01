@@ -9,6 +9,7 @@ export const colors = {
     success: "#00C48C",
     loadingBackground: "rgba(29, 36, 48, 0.2)",
     outline: "#CACACA",
+    placeholder: "#9AA1B3",
   },
   dark: {
     primary: "#0057FF",
@@ -21,5 +22,6 @@ export const colors = {
     success: "#00C48C",
     loadingBackground: "rgba(249, 249, 249, 0.1)",
     outline: "#536689",
+    placeholder: "#9AA1B3",
   },
 };

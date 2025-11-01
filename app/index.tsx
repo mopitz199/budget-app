@@ -2,12 +2,13 @@ import { colors } from "@/colors";
 import BottomHalfModal from "@/components/BottomHalfModal";
 import { Input } from "@/components/Input";
 import MainView from "@/components/MainView";
+import { SelectorInput } from "@/components/SelectorInput";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Button, Image, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
+import { Button, Image, StyleSheet, Text, useColorScheme, View } from "react-native";
 import chileFlag from "../assets/images/flags/chile.png";
 
 export default function Index() {
@@ -109,28 +110,56 @@ export default function Index() {
 
       <View style={{ marginVertical: 12 }}></View>
 
-      <TouchableOpacity style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: 56,
-        paddingHorizontal: 12,
-        justifyContent: 'space-between',
-        borderWidth: isDarkMode ? 0 : 0.5,
-        backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
-        borderRadius: 8,
-      }}>
-        <Text style={{
-          fontSize: 16,
-          color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
-        }}>
-          Currency
-        </Text>
-        <Ionicons
-          name={'caret-down-outline'}
-          size={32}
-          color={isDarkMode ? colors.dark.onSurface : colors.light.onSurface}
-        />
-      </TouchableOpacity>
+      <SelectorInput
+        value={text}
+        placeholder="Select currency"
+        options={[
+          { label: 'Chilean Peso (CLP)', value: 'clp' },
+          { label: 'US Dollar (USD)', value: 'usd' },
+          { label: 'Euro (EUR)', value: 'eur' },
+          { label: 'Japanese Yen (JPY)', value: 'jpy' },
+          { label: 'British Pound (GBP)', value: 'gbp' },
+          { label: 'Australian Dollar (AUD)', value: 'aud' },
+          { label: 'Canadian Dollar (CAD)', value: 'cad' },
+          { label: 'Swiss Franc (CHF)', value: 'chf' },
+          { label: 'Chinese Yuan (CNY)', value: 'cny' },
+          { label: 'Swedish Krona (SEK)', value: 'sek' },
+        ]}
+        onOptionSelect={(option) => { setText(option.value); }}
+        optionComponent={(option) => {
+
+          const getOptionTextColor = () => {
+            if (text === option.value) {
+              return colors.dark.onSurface
+            }else {
+              return isDarkMode ? colors.dark.onSurface : colors.light.onSurface;
+            }
+          }
+
+          return (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingHorizontal: 12,
+                paddingVertical: 0,
+              }}
+            >
+              <Image
+                style={{ width: 26, height: 26, marginRight: 8 }}
+                source={chileFlag}
+              />
+              <Text style={{
+                fontSize: 16,
+                color: getOptionTextColor(),
+                paddingVertical: 12,
+              }}>
+                {option.label}
+              </Text>
+            </View>
+          )
+        }}
+      />
     </MainView>
   );
 }

@@ -210,7 +210,7 @@ export default function BottomHalfModal({
         </View>
 
         {/* Contenido del modal */}
-        <View style={{ paddingHorizontal: 16 }}>
+        <View>
           {children}
         </View>
       </Animated.View>

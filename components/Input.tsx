@@ -82,6 +82,7 @@ export function Input (
         width: "100%",
       }}>
         <TextInput
+          placeholderTextColor={isDarkMode ? colors.dark.placeholder : colors.light.placeholder}
           style={style.input}
           {...textInputProps}
         />
@@ -91,6 +92,7 @@ export function Input (
     </View>
   )
 }
+
 
 type StyleParams = {
   isDarkMode: boolean;
