@@ -1,4 +1,5 @@
 import { colors } from "@/colors";
+import { AmountCurrencyInput } from "@/components/AmountCurrencyInput";
 import BottomHalfModal from "@/components/BottomHalfModal";
 import { Input } from "@/components/Input";
 import MainView from "@/components/MainView";
@@ -42,58 +43,53 @@ export default function Index() {
       <Button title="Go to Home" onPress={() => {router.replace('/(auth)/home')}} />
       <Button title="Go to Login" onPress={() => {router.replace('/login')}} />
 
-      <Input
-        textInputProps={{
-          value: text,
-          onChangeText: setText,
-          placeholder: "Monto en CLP",
-        }}
-        leftComponent={() => (
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image
-              style={{ width: 26, height: 26, marginRight: 8 }}
-              source={chileFlag}
-            />
-            <Text style={{
-              color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
-              fontFamily: 'Roboto', fontWeight: '500'
-            }}>
-              CLP
-            </Text>
-          </View>
-        )}
-        cursorPaddingLeft={(61+(globalStyles.inputPaddingHorizontal*2))+globalStyles.inputPaddingHorizontal}
-        rightComponent={() => {
-
-          const getColor = () => {
-            if (positive) {
-              return isDarkMode ? colors.dark.success : colors.light.success;
-            } else {
-              return isDarkMode ? colors.dark.error : colors.light.error;
+      <AmountCurrencyInput
+        value={text}
+        placeholder="Monto en CLP"
+        onChangeText={setText}
+        currencyOptions={[
+          { label: 'Chilean Peso (CLP)', value: 'clp' },
+          { label: 'US Dollar (USD)', value: 'usd' },
+          { label: 'Euro (EUR)', value: 'eur' },
+          { label: 'Japanese Yen (JPY)', value: 'jpy' },
+          { label: 'British Pound (GBP)', value: 'gbp' },
+          { label: 'Australian Dollar (AUD)', value: 'aud' },
+          { label: 'Canadian Dollar (CAD)', value: 'cad' },
+          { label: 'Swiss Franc (CHF)', value: 'chf' },
+          { label: 'Chinese Yuan (CNY)', value: 'cny' },
+          { label: 'Swedish Krona (SEK)', value: 'sek' },
+        ]}
+        onOptionSelect={(option) => { setText(option.value); }}
+        optionComponent={(option) => {
+          const getOptionTextColor = () => {
+            if (text === option.value) {
+              return colors.dark.onSurface
+            }else {
+              return isDarkMode ? colors.dark.onSurface : colors.light.onSurface;
             }
           }
-
           return (
             <View
               style={{
-                flex: 1,
-                justifyContent: 'center',
+                flexDirection: 'row',
                 alignItems: 'center',
-                borderLeftColor: getColor(),
-                paddingLeft: globalStyles.inputPaddingHorizontal,
-                borderLeftWidth: 1,
+                paddingHorizontal: 12,
+                paddingVertical: 0,
               }}
             >
-              <Ionicons
-                name={positive ? 'add-circle-outline' : 'remove-circle-outline'}
-                size={globalStyles.inputRightIconSize}
-                color={getColor()}
+              <Image
+                style={{ width: 26, height: 26, marginRight: 8 }}
+                source={chileFlag}
               />
+              <Text style={{
+                fontSize: 16,
+                color: getOptionTextColor(),
+                paddingVertical: 12,
+              }}>
+                {option.label}
+              </Text>
             </View>
           )
-        }}
-        onRightPress={() => {
-          setPositive(!positive);
         }}
       />
 
