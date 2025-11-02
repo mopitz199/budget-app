@@ -10,15 +10,17 @@ import { Input } from "./Input";
 type InputProps = {
   value?: string;
   placeholder?: string;
+  currencyValue: string;
   onChangeText?: (text: string) => void;
-  currencyOptions?: Array<{ label: string; value: string, flagImage?: any }>;
-  optionComponent: (option: { label: string; value: string }) => JSX.Element;
-  onOptionSelect: (option: { label: string; value: string }) => void;
+  currencyOptions?: Array<{ label: string; value: string, inputLabel: string, flagImage?: any }>;
+  optionComponent: (option: { label: string; value: string, inputLabel: string, flagImage?: any }) => JSX.Element;
+  onOptionSelect: (option: { label: string; value: string, inputLabel: string, flagImage?: any }) => void;
 };
 
 export function AmountCurrencyInput (
   {
     value = '',
+    currencyValue = 'clp',
     placeholder = 'Enter amount',
     onChangeText = () => {},
     currencyOptions = [],
@@ -38,6 +40,11 @@ export function AmountCurrencyInput (
     }else {
       return isDarkMode ? colors.dark.surface : colors.light.surface;
     }
+  }
+
+  const getCurrentInputLabel = () => {
+    const selectedOption = currencyOptions.find(option => option.value === currencyValue);
+    return selectedOption ? selectedOption.inputLabel : '';
   }
 
   const buildModalContent = () => {
@@ -86,7 +93,7 @@ export function AmountCurrencyInput (
               color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
               fontFamily: 'Roboto', fontWeight: '500'
             }}>
-              CLP
+              {getCurrentInputLabel()}
             </Text>
           </View>
         )}
