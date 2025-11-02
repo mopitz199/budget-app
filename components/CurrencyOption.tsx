@@ -33,7 +33,9 @@ export default function CurrencyOption({
     >
       <Image
         style={{ width: 26, height: 26, marginRight: 8 }}
-        source={currencyOption.extraInfo.flagImage}
+        source={{
+          uri: currencyOption.extraInfo.flagImage
+        }}
       />
       <Text style={{
         fontSize: 16,

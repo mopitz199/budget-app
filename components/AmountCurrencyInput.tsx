@@ -1,9 +1,9 @@
-import chileFlag from "@/assets/images/flags/chile.png";
 import { colors } from "@/colors";
 import { globalStyles } from "@/global-styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Image } from "expo-image";
 import { JSX, useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, useColorScheme, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
 import BottomHalfModal from "./BottomHalfModal";
 import { Input } from "./Input";
 
@@ -11,7 +11,7 @@ type InputProps = {
   value?: string;
   placeholder?: string;
   currencyValue: string;
-  onChangeText?: (text: string) => void;
+  onChangeValue?: (text: string) => void;
   currencyOptions?: Array<{ label: string; value: string, extraInfo?: any }>;
   optionComponent: (option: { label: string; value: string, extraInfo?: any }) => JSX.Element;
   onOptionSelect: (option: { label: string; value: string, extraInfo?: any }) => void;
@@ -20,9 +20,9 @@ type InputProps = {
 export function AmountCurrencyInput (
   {
     value = '',
-    currencyValue = 'clp',
+    currencyValue = 'usd',
     placeholder = 'Enter amount',
-    onChangeText = () => {},
+    onChangeValue = () => {},
     currencyOptions = [],
     optionComponent,
     onOptionSelect,
@@ -33,6 +33,7 @@ export function AmountCurrencyInput (
   const isDarkMode = theme === 'dark';
   const [positive, setPositive] = useState(true);
   const [open, setOpen] = useState(false);
+  const styles = makeStyles({isDarkMode});
 
   const getOptionBackgroundColor = (option: { label: string; value: string, extraInfo?: any }) => {
     if (currencyValue === option.value) {
@@ -47,6 +48,11 @@ export function AmountCurrencyInput (
     return selectedOption ? selectedOption.extraInfo.inputLabel : '';
   }
 
+  const getCurrentFlag = () => {
+    const selectedOption = currencyOptions.find(option => option.value === currencyValue);
+    return selectedOption ? selectedOption.extraInfo.flagImage : '';
+  }
+
   const buildModalContent = () => {
     return (
       <BottomHalfModal visible={open} onClose={() => setOpen(false)}>
@@ -54,13 +60,9 @@ export function AmountCurrencyInput (
           {currencyOptions.map((option) => (
             <TouchableOpacity
               key={option.value}
-              style={{
-                alignItems: 'center',
-                paddingVertical: 12,
-                borderBottomWidth: 1,
+              style={StyleSheet.compose(styles.currencyTouchableOption, {
                 backgroundColor: getOptionBackgroundColor(option),
-                borderBottomColor: isDarkMode ? colors.dark.outline : colors.light.outline,
-              }}
+              })}
               onPress={() => {
                 setOpen(false);
                 onOptionSelect(option);
@@ -80,25 +82,24 @@ export function AmountCurrencyInput (
       <Input
         textInputProps={{
           value: value,
-          onChangeText: onChangeText,
+          onChangeText: onChangeValue,
           placeholder: placeholder,
         }}
         leftComponent={() => (
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={styles.viewLeftComponent}>
             <Image
-              style={{ width: 26, height: 26, marginRight: 8 }}
-              source={chileFlag}
+              style={styles.viewLeftImageComponent}
+              source={{
+                uri: getCurrentFlag(),
+              }}
             />
-            <Text style={{
-              color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
-              fontFamily: 'Roboto', fontWeight: '500'
-            }}>
+            <Text style={styles.viewLeftTextComponent}>
               {getCurrentInputLabel()}
             </Text>
           </View>
         )}
         onLeftPress={() => setOpen(true)}
-        cursorPaddingLeft={(61+(globalStyles.inputPaddingHorizontal*2))+globalStyles.inputPaddingHorizontal}
+        cursorPaddingLeft={85+globalStyles.inputPaddingHorizontal}
         rightComponent={() => {
 
           const getColor = () => {
@@ -111,14 +112,9 @@ export function AmountCurrencyInput (
 
           return (
             <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
+              style={StyleSheet.compose(styles.viewRightComponent, {
                 borderLeftColor: getColor(),
-                paddingLeft: globalStyles.inputPaddingHorizontal,
-                borderLeftWidth: 1,
-              }}
+              })}
             >
               <Ionicons
                 name={positive ? 'add-circle-outline' : 'remove-circle-outline'}
@@ -134,4 +130,40 @@ export function AmountCurrencyInput (
       />
     </>
   )
+}
+
+type StyleParams = {
+  isDarkMode: boolean;
+};
+
+function makeStyles({ isDarkMode }: StyleParams) {
+  return StyleSheet.create({
+    currencyTouchableOption: {
+      alignItems: 'center',
+      paddingVertical: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: isDarkMode ? colors.dark.outline : colors.light.outline,
+    },
+    viewLeftComponent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    viewLeftImageComponent: {
+      width: 26,
+      height: 26,
+      marginRight: 8
+    },
+    viewLeftTextComponent: {
+      color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
+      fontFamily: 'Roboto',
+      fontWeight: '500'
+    },
+    viewRightComponent: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingLeft: globalStyles.inputPaddingHorizontal,
+      borderLeftWidth: 1,
+    },
+  });
 }

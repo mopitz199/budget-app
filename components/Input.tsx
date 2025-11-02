@@ -31,16 +31,16 @@ export function Input (
     return (
       <TouchableOpacity
         style={{
+          flex: 1,
           position: 'absolute',
           left: 0,
           bottom: 0,
           top: 0,
-          paddingHorizontal: globalStyles.inputPaddingHorizontal,
-          paddingTop: 3,
-          paddingBottom: 3,
+          width: 85,
           borderColor: isDarkMode ? colors.dark.outline : colors.light.outline,
           borderRightWidth: 1,
           justifyContent: 'center',
+          alignItems: 'center',
         }}
         onPress={() => {
           {onLeftPress && onLeftPress()}
