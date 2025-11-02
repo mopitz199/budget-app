@@ -8,9 +8,9 @@ import BottomHalfModal from "./BottomHalfModal";
 type InputProps = {
   value?: string;
   placeholder?: string;
-  options?: Array<{ label: string; value: string }>;
-  optionComponent: (option: { label: string; value: string }) => JSX.Element;
-  onOptionSelect: (option: { label: string; value: string }) => void;
+  options?: Array<{ label: string; value: string; extraInfo?: any }>;
+  optionComponent: (option: { label: string; value: string; extraInfo?: any }) => JSX.Element;
+  onOptionSelect: (option: { label: string; value: string; extraInfo?: any }) => void;
 };
 
 export function SelectorInput (

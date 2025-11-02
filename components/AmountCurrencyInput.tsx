@@ -12,9 +12,9 @@ type InputProps = {
   placeholder?: string;
   currencyValue: string;
   onChangeText?: (text: string) => void;
-  currencyOptions?: Array<{ label: string; value: string, inputLabel: string, flagImage?: any }>;
-  optionComponent: (option: { label: string; value: string, inputLabel: string, flagImage?: any }) => JSX.Element;
-  onOptionSelect: (option: { label: string; value: string, inputLabel: string, flagImage?: any }) => void;
+  currencyOptions?: Array<{ label: string; value: string, extraInfo?: any }>;
+  optionComponent: (option: { label: string; value: string, extraInfo?: any }) => JSX.Element;
+  onOptionSelect: (option: { label: string; value: string, extraInfo?: any }) => void;
 };
 
 export function AmountCurrencyInput (
@@ -34,8 +34,8 @@ export function AmountCurrencyInput (
   const [positive, setPositive] = useState(true);
   const [open, setOpen] = useState(false);
 
-  const getOptionBackgroundColor = (option: { label: string; value: string }) => {
-    if (value === option.value) {
+  const getOptionBackgroundColor = (option: { label: string; value: string, extraInfo?: any }) => {
+    if (currencyValue === option.value) {
       return isDarkMode ? colors.dark.primary : colors.light.primary;
     }else {
       return isDarkMode ? colors.dark.surface : colors.light.surface;
@@ -44,7 +44,7 @@ export function AmountCurrencyInput (
 
   const getCurrentInputLabel = () => {
     const selectedOption = currencyOptions.find(option => option.value === currencyValue);
-    return selectedOption ? selectedOption.inputLabel : '';
+    return selectedOption ? selectedOption.extraInfo.inputLabel : '';
   }
 
   const buildModalContent = () => {

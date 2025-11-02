@@ -1,6 +1,7 @@
 import { colors } from "@/colors";
 import { AmountCurrencyInput } from "@/components/AmountCurrencyInput";
 import BottomHalfModal from "@/components/BottomHalfModal";
+import CurrencyOption from "@/components/CurrencyOption";
 import { Input } from "@/components/Input";
 import MainView from "@/components/MainView";
 import { SelectorInput } from "@/components/SelectorInput";
@@ -10,7 +11,7 @@ import { ScreenConf } from "@/types/screen-conf";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Button, Image, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { Button, StyleSheet, Text, useColorScheme, View } from "react-native";
 import chileFlag from "../assets/images/flags/chile.png";
 
 export default function Index() {
@@ -49,47 +50,31 @@ export default function Index() {
         placeholder="Monto en CLP"
         onChangeText={setText}
         currencyOptions={[
-          { label: 'Chilean Peso (CLP)', value: 'clp', inputLabel: 'CLP', flagImage: chileFlag },
-          { label: 'US Dollar (USD)', value: 'usd', inputLabel: 'USD', flagImage: chileFlag },
-          { label: 'Euro (EUR)', value: 'eur', inputLabel: 'EUR', flagImage: chileFlag },
-          { label: 'Japanese Yen (JPY)', value: 'jpy', inputLabel: 'JPY', flagImage: chileFlag },
-          { label: 'British Pound (GBP)', value: 'gbp', inputLabel: 'GBP', flagImage: chileFlag },
-          { label: 'Australian Dollar (AUD)', value: 'aud', inputLabel: 'AUD', flagImage: chileFlag },
-          { label: 'Canadian Dollar (CAD)', value: 'cad', inputLabel: 'CAD', flagImage: chileFlag },
-          { label: 'Swiss Franc (CHF)', value: 'chf', inputLabel: 'CHF', flagImage: chileFlag },
-          { label: 'Chinese Yuan (CNY)', value: 'cny', inputLabel: 'CNY', flagImage: chileFlag },
-          { label: 'Swedish Krona (SEK)', value: 'sek', inputLabel: 'SEK', flagImage: chileFlag },
+          {
+              label: 'Chilean Peso (CLP)',
+              value: 'clp',
+              extraInfo: {
+                inputLabel: 'CLP',
+                flagImage: chileFlag
+              }
+          },
+          { label: 'US Dollar (USD)', value: 'usd', extraInfo: { inputLabel: 'USD', flagImage: chileFlag } },
+          { label: 'Euro (EUR)', value: 'eur', extraInfo: { inputLabel: 'EUR', flagImage: chileFlag } },
+          { label: 'Japanese Yen (JPY)', value: 'jpy', extraInfo: { inputLabel: 'JPY', flagImage: chileFlag } },
+          { label: 'British Pound (GBP)', value: 'gbp', extraInfo: { inputLabel: 'GBP', flagImage: chileFlag } },
+          { label: 'Australian Dollar (AUD)', value: 'aud', extraInfo: { inputLabel: 'AUD', flagImage: chileFlag } },
+          { label: 'Canadian Dollar (CAD)', value: 'cad', extraInfo: { inputLabel: 'CAD', flagImage: chileFlag } },
+          { label: 'Swiss Franc (CHF)', value: 'chf', extraInfo: { inputLabel: 'CHF', flagImage: chileFlag } },
+          { label: 'Chinese Yuan (CNY)', value: 'cny', extraInfo: { inputLabel: 'CNY', flagImage: chileFlag } },
+          { label: 'Swedish Krona (SEK)', value: 'sek', extraInfo: { inputLabel: 'SEK', flagImage: chileFlag } },
         ]}
         onOptionSelect={(option) => { setCurrencyValue(option.value); }}
         optionComponent={(option) => {
-          const getOptionTextColor = () => {
-            if (text === option.value) {
-              return colors.dark.onSurface
-            }else {
-              return isDarkMode ? colors.dark.onSurface : colors.light.onSurface;
-            }
-          }
           return (
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingHorizontal: 12,
-                paddingVertical: 0,
-              }}
-            >
-              <Image
-                style={{ width: 26, height: 26, marginRight: 8 }}
-                source={chileFlag}
-              />
-              <Text style={{
-                fontSize: 16,
-                color: getOptionTextColor(),
-                paddingVertical: 12,
-              }}>
-                {option.label}
-              </Text>
-            </View>
+            <CurrencyOption
+              currentValue={text}
+              currencyOption={option}
+            />
           )
         }}
       />
@@ -145,49 +130,31 @@ export default function Index() {
         value={text}
         placeholder="Select currency"
         options={[
-          { label: 'Chilean Peso (CLP)', value: 'clp' },
-          { label: 'US Dollar (USD)', value: 'usd' },
-          { label: 'Euro (EUR)', value: 'eur' },
-          { label: 'Japanese Yen (JPY)', value: 'jpy' },
-          { label: 'British Pound (GBP)', value: 'gbp' },
-          { label: 'Australian Dollar (AUD)', value: 'aud' },
-          { label: 'Canadian Dollar (CAD)', value: 'cad' },
-          { label: 'Swiss Franc (CHF)', value: 'chf' },
-          { label: 'Chinese Yuan (CNY)', value: 'cny' },
-          { label: 'Swedish Krona (SEK)', value: 'sek' },
+          {
+              label: 'Chilean Peso (CLP)',
+              value: 'clp',
+              extraInfo: {
+                inputLabel: 'CLP',
+                flagImage: chileFlag
+              }
+          },
+          { label: 'US Dollar (USD)', value: 'usd', extraInfo: { inputLabel: 'USD', flagImage: chileFlag } },
+          { label: 'Euro (EUR)', value: 'eur', extraInfo: { inputLabel: 'EUR', flagImage: chileFlag } },
+          { label: 'Japanese Yen (JPY)', value: 'jpy', extraInfo: { inputLabel: 'JPY', flagImage: chileFlag } },
+          { label: 'British Pound (GBP)', value: 'gbp', extraInfo: { inputLabel: 'GBP', flagImage: chileFlag } },
+          { label: 'Australian Dollar (AUD)', value: 'aud', extraInfo: { inputLabel: 'AUD', flagImage: chileFlag } },
+          { label: 'Canadian Dollar (CAD)', value: 'cad', extraInfo: { inputLabel: 'CAD', flagImage: chileFlag } },
+          { label: 'Swiss Franc (CHF)', value: 'chf', extraInfo: { inputLabel: 'CHF', flagImage: chileFlag } },
+          { label: 'Chinese Yuan (CNY)', value: 'cny', extraInfo: { inputLabel: 'CNY', flagImage: chileFlag } },
+          { label: 'Swedish Krona (SEK)', value: 'sek', extraInfo: { inputLabel: 'SEK', flagImage: chileFlag } },
         ]}
         onOptionSelect={(option) => { setText(option.value); }}
         optionComponent={(option) => {
-
-          const getOptionTextColor = () => {
-            if (text === option.value) {
-              return colors.dark.onSurface
-            }else {
-              return isDarkMode ? colors.dark.onSurface : colors.light.onSurface;
-            }
-          }
-
           return (
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                paddingHorizontal: 12,
-                paddingVertical: 0,
-              }}
-            >
-              <Image
-                style={{ width: 26, height: 26, marginRight: 8 }}
-                source={chileFlag}
-              />
-              <Text style={{
-                fontSize: 16,
-                color: getOptionTextColor(),
-                paddingVertical: 12,
-              }}>
-                {option.label}
-              </Text>
-            </View>
+            <CurrencyOption
+              currentValue={text}
+              currencyOption={option}
+            />
           )
         }}
       />
