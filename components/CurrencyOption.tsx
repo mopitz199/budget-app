@@ -13,7 +13,6 @@ export default function CurrencyOption({
 
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
-  console.log(currencyOption.value, currentValue)
   const isSelected = currentValue == currencyOption.value;
   const styles = makeStyles({ isDarkMode, isSelected });
 

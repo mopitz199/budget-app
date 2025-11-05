@@ -47,7 +47,7 @@ export default function Index() {
       <View style={{ marginVertical: 12 }}></View>
       
       <AmountCurrencyInput
-        value={text}
+        amountValue={text}
         currencyValue={currencyValue}
         placeholder="Monto en CLP"
         onChangeValue={setText}

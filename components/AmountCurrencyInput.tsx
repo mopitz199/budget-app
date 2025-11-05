@@ -8,7 +8,7 @@ import BottomHalfModal from "./BottomHalfModal";
 import { Input } from "./Input";
 
 type InputProps = {
-  value?: string;
+  amountValue?: string;
   placeholder?: string;
   currencyValue: string;
   onChangeValue?: (text: string) => void;
@@ -19,7 +19,7 @@ type InputProps = {
 
 export function AmountCurrencyInput (
   {
-    value = '',
+    amountValue = '',
     currencyValue = 'usd',
     placeholder = 'Enter amount',
     onChangeValue = () => {},
@@ -81,7 +81,7 @@ export function AmountCurrencyInput (
       {buildModalContent()}
       <Input
         textInputProps={{
-          value: value,
+          value: amountValue,
           onChangeText: onChangeValue,
           placeholder: placeholder,
         }}
