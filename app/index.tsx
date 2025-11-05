@@ -56,7 +56,7 @@ export default function Index() {
         optionComponent={(option) => {
           return (
             <CurrencyOption
-              currentValue={text}
+              currentValue={currencyValue}
               currencyOption={option}
             />
           )
