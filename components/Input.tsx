@@ -30,18 +30,7 @@ export function Input (
   const buildLeftComponent = () => {
     return (
       <TouchableOpacity
-        style={{
-          flex: 1,
-          position: 'absolute',
-          left: 0,
-          bottom: 0,
-          top: 0,
-          width: 85,
-          borderColor: isDarkMode ? colors.dark.outline : colors.light.outline,
-          borderRightWidth: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
+        style={style.leftComponent}
         onPress={() => {
           {onLeftPress && onLeftPress()}
         }}
@@ -54,14 +43,7 @@ export function Input (
   const buildRightComponent = () => {
     return (
       <TouchableOpacity
-        style={{
-          position: 'absolute',
-          right: 0,
-          bottom: 0,
-          top: 0,
-          paddingRight: globalStyles.inputPaddingHorizontal,
-          justifyContent: 'center',
-        }}
+        style={style.rightComponent}
         onPress={() => {
           {onRightPress && onRightPress()}
         }}
@@ -72,13 +54,8 @@ export function Input (
   }
 
   return (
-    <View style={{
-      // borderColor: 'blue', borderWidth: 2
-    }}>
-      <View style={{
-        position: 'relative',
-        width: "100%",
-      }}>
+    <View style={style.container}>
+      <View style={style.inputWrapper}>
         <TextInput
           placeholderTextColor={isDarkMode ? colors.dark.placeholder : colors.light.placeholder}
           style={style.input}
@@ -106,6 +83,13 @@ function makeStyles({
   cursorPaddingLeft,
 }: StyleParams) {
   return StyleSheet.create({
+    container: {
+      // borderColor: 'blue', borderWidth: 2
+    },
+    inputWrapper: {
+      position: 'relative',
+      width: "100%",
+    },
     input: {
       borderColor: isDarkMode ? '' : colors.light.loadingBackground,
       borderWidth: isDarkMode ? 0 : 0.5,
@@ -117,6 +101,26 @@ function makeStyles({
       fontSize: 16,
       paddingRight: rightComponent!=undefined ? 50 : globalStyles.inputPaddingHorizontal,
       paddingLeft: leftComponent!=undefined ? cursorPaddingLeft : globalStyles.inputPaddingHorizontal,
+    },
+    leftComponent: {
+      flex: 1,
+      position: 'absolute',
+      left: 0,
+      bottom: 0,
+      top: 0,
+      width: 85,
+      borderColor: isDarkMode ? colors.dark.outline : colors.light.outline,
+      borderRightWidth: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    rightComponent: {
+      position: 'absolute',
+      right: 0,
+      bottom: 0,
+      top: 0,
+      paddingRight: globalStyles.inputPaddingHorizontal,
+      justifyContent: 'center',
     },
   });
 }

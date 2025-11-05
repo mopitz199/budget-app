@@ -27,7 +27,7 @@ export function SelectorInput (
 
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
-  const style = makeStyles({ isDarkMode});
+  const styles = makeStyles({ isDarkMode });
 
   const getCurrentLabel = () => {
     const selectedOption = options.find(option => option.value === value);
@@ -57,13 +57,7 @@ export function SelectorInput (
           {options.map((option) => (
             <TouchableOpacity
               key={option.value}
-              style={{
-                alignItems: 'center',
-                paddingVertical: 12,
-                borderBottomWidth: 1,
-                backgroundColor: getOptionBackgroundColor(option),
-                borderBottomColor: isDarkMode ? colors.dark.outline : colors.light.outline,
-              }}
+              style={StyleSheet.compose(styles.optionItem, { backgroundColor: getOptionBackgroundColor(option)})}
               onPress={() => {
                 setOpen(false);
                 onOptionSelect(option);
@@ -79,17 +73,7 @@ export function SelectorInput (
 
   return (
     <TouchableOpacity
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: globalStyles.inputHeight,
-        paddingHorizontal: globalStyles.inputPaddingHorizontal,
-        justifyContent: 'space-between',
-        borderColor: isDarkMode ? '' : colors.light.outline,
-        borderWidth: isDarkMode ? 0 : 0.5,
-        backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
-        borderRadius: 8,
-      }}
+      style={styles.container}
       onPress={() => {
         setOpen(true);
       }}
@@ -97,10 +81,7 @@ export function SelectorInput (
 
       {buildModalContent()}
 
-      <Text style={{
-        fontSize: 16,
-        color: getTextColor(),
-      }}>
+      <Text style={StyleSheet.compose(styles.text, { color: getTextColor() })}>
         {getCurrentLabel() || placeholder}
       </Text>
       <Ionicons
@@ -113,30 +94,30 @@ export function SelectorInput (
 }
 
 type StyleParams = {
-  isDarkMode: boolean;
-  leftComponent?: () => JSX.Element;
-  rightComponent?: () => JSX.Element;
-  cursorPaddingLeft?: number;
+  isDarkMode: boolean
 };
 
-function makeStyles({
-  isDarkMode,
-  rightComponent,
-  leftComponent,
-  cursorPaddingLeft,
-}: StyleParams) {
+function makeStyles({ isDarkMode }: StyleParams) {
   return StyleSheet.create({
-    input: {
-      borderColor: isDarkMode ? '' : colors.light.loadingBackground,
+    container: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      height: globalStyles.inputHeight,
+      paddingHorizontal: globalStyles.inputPaddingHorizontal,
+      justifyContent: 'space-between',
+      borderColor: isDarkMode ? '' : colors.light.outline,
       borderWidth: isDarkMode ? 0 : 0.5,
-      borderRadius: 8,
-      color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
       backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
-      margin: 0,
-      height: 56,
+      borderRadius: 8,
+    },
+    text: {
       fontSize: 16,
-      paddingRight: rightComponent!=undefined ? 50 : 12,
-      paddingLeft: leftComponent!=undefined ? cursorPaddingLeft : 12,
+    },
+    optionItem: {
+      alignItems: 'center',
+      paddingVertical: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: isDarkMode ? colors.dark.outline : colors.light.outline,
     },
   });
 }

@@ -8,6 +8,7 @@ import {
   PanResponder,
   Platform,
   Pressable,
+  StyleSheet,
   useColorScheme,
   View,
 } from "react-native";
@@ -29,8 +30,6 @@ export default function BottomHalfModal({
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
 
-  const backdropColor = isDarkMode ? colors.dark.loadingBackground : colors.light.loadingBackground;
-
   const screenH = Dimensions.get("window").height;
   const sheetH = Math.max(200, screenH * heightRatio);
 
@@ -39,6 +38,8 @@ export default function BottomHalfModal({
 
   const [dragging, setDragging] = useState(false);
   const dragY = useRef(new Animated.Value(0)).current;
+
+  const styles = makeStyles({ isDarkMode, dragging, sheetH });
 
   const sheetTranslate = Animated.add(
     translateY,
@@ -157,63 +158,91 @@ export default function BottomHalfModal({
       {/* Backdrop clickeable para cerrar */}
       <Pressable
         onPress={() => closeAnim(onClose)}
-        style={{ flex: 1, backgroundColor: "transparent" }}
+        style={styles.backdropPressable}
         accessibilityLabel="Cerrar modal"
         accessibilityRole="button"
       >
         <Animated.View
           pointerEvents="none"
-          style={{ flex: 1, backgroundColor: backdropColor, opacity: backdrop }}
+          style={[styles.backdropView, { opacity: backdrop }]}
         />
       </Pressable>
 
       {/* Sheet */}
       <Animated.View
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: sheetH,
-          transform: [{ translateY: sheetTranslate }],
-          backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
-          borderTopLeftRadius: 24,
-          borderTopRightRadius: 24,
-          paddingBottom: 16,
-          // sombra
-          shadowColor: "#000",
-          shadowOpacity: 0.15,
-          shadowRadius: 12,
-          shadowOffset: { width: 0, height: -2 },
-          elevation: 12,
-        }}
+        style={[
+          styles.sheet,
+          {
+            height: sheetH,
+            transform: [{ translateY: sheetTranslate }],
+          }
+        ]}
         accessibilityViewIsModal
       >
         {/* Área de arrastre (handle zone) */}
         <View
           {...panResponder.panHandlers}
-          style={{
-            paddingTop: 8,
-            paddingBottom: 12,
-            alignItems: "center",
-          }}
+          style={styles.handleZone}
         >
           <View
-            style={{
-              width: 44,
-              height: 5,
-              borderRadius: 3,
-              backgroundColor: isDarkMode ? colors.dark.loadingBackground : colors.light.loadingBackground,
-              opacity: dragging ? 1 : 0.9,
-            }}
+            style={[styles.handle, { opacity: dragging ? 1 : 0.9 }]}
           />
         </View>
 
         {/* Contenido del modal */}
-        <View>
+        <View style={styles.content}>
           {children}
         </View>
       </Animated.View>
     </Modal>
   );
+}
+
+type StyleParams = {
+  isDarkMode: boolean;
+  dragging: boolean;
+  sheetH: number;
+};
+
+function makeStyles({ isDarkMode, dragging, sheetH }: StyleParams) {
+  return StyleSheet.create({
+    backdropPressable: {
+      flex: 1,
+      backgroundColor: "transparent",
+    },
+    backdropView: {
+      flex: 1,
+      backgroundColor: isDarkMode ? colors.dark.loadingBackground : colors.light.loadingBackground,
+    },
+    sheet: {
+      position: "absolute",
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
+      borderTopLeftRadius: 24,
+      borderTopRightRadius: 24,
+      paddingBottom: 16,
+      // sombra
+      shadowColor: "#000",
+      shadowOpacity: 0.15,
+      shadowRadius: 12,
+      shadowOffset: { width: 0, height: -2 },
+      elevation: 12,
+    },
+    handleZone: {
+      paddingTop: 8,
+      paddingBottom: 12,
+      alignItems: "center",
+    },
+    handle: {
+      width: 44,
+      height: 5,
+      borderRadius: 3,
+      backgroundColor: isDarkMode ? colors.dark.loadingBackground : colors.light.loadingBackground,
+    },
+    content: {
+      flex: 1,
+    },
+  });
 }
