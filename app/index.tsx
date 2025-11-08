@@ -1,6 +1,5 @@
 import { colors } from "@/colors";
 import { AmountCurrencyInput } from "@/components/AmountCurrencyInput";
-import BottomHalfModal from "@/components/BottomHalfModal";
 import CurrencyOption from "@/components/CurrencyOption";
 import { Input } from "@/components/Input";
 import MainView from "@/components/MainView";
@@ -8,7 +7,7 @@ import { SelectorInput } from "@/components/SelectorInput";
 import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
-import { currencyOptions } from "@/utils/currencyUtil";
+import { currencyOptions, formatDisplay, formatMask } from "@/utils/currencyUtil";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -33,14 +32,8 @@ export default function Index() {
 
   return (
     <MainView headerShown={screenConf.headerShown}>
-      <BottomHalfModal visible={open} onClose={() => setOpen(false)}>
-        <Text>
-          Contenido aquí… Desliza hacia abajo o toca fuera para cerrar.
-        </Text>
-      </BottomHalfModal>
 
       <Text>Splash</Text>
-      <Button title="Open Modal" onPress={() => {setOpen(true)} }/>
       <Button title="Go to Home" onPress={() => {router.replace('/(auth)/home')}} />
       <Button title="Go to Login" onPress={() => {router.replace('/login')}} />
 
@@ -50,9 +43,14 @@ export default function Index() {
         amountValue={text}
         currencyValue={currencyValue}
         placeholder="Monto en CLP"
-        onChangeValue={setText}
+        onChangeValue={(value) => {
+          setText(formatDisplay(formatMask(value, currencyValue), currencyValue));
+        }}
         currencyOptions={currencyOptions}
-        onOptionSelect={(option) => { setCurrencyValue(option.value); }}
+        onOptionSelect={(previousValue, option) => {
+          setText(formatDisplay(formatMask(text, previousValue), option.value));
+          setCurrencyValue(option.value);
+        }}
         optionComponent={(option) => {
           return (
             <CurrencyOption

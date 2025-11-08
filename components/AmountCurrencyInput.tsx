@@ -14,7 +14,7 @@ type InputProps = {
   onChangeValue?: (text: string) => void;
   currencyOptions?: Array<{ label: string; value: string, extraInfo?: any }>;
   optionComponent: (option: { label: string; value: string, extraInfo?: any }) => JSX.Element;
-  onOptionSelect: (option: { label: string; value: string, extraInfo?: any }) => void;
+  onOptionSelect: (previousValue: string, option: { label: string; value: string, extraInfo?: any }) => void;
 };
 
 export function AmountCurrencyInput (
@@ -65,7 +65,7 @@ export function AmountCurrencyInput (
               })}
               onPress={() => {
                 setOpen(false);
-                onOptionSelect(option);
+                onOptionSelect(currencyValue, option);
               }}
             >
               {optionComponent(option)}
