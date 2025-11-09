@@ -22,7 +22,7 @@ const currencies: Record<string, CurrencyDef> = {
   'clp': {
     code: 'clp',
     symbol: '$',
-    decimalPlaces: 0,
+    decimalPlaces: 1,
     decimalSeparator: ',',
     thousandsSeparator: '.',
   },
@@ -47,22 +47,41 @@ export function formatMask(value: string, currencyCode: string = 'clp'): string 
   const currencyData = currencies[currencyCode];
   
   // Remove all characters except numbers and the decimal separators
-  const regexRemove = new RegExp(`[^0-9${currencyData.decimalSeparator}]`, 'g');
+  let regexRemove = new RegExp(`[^0-9${currencyData.decimalSeparator}]`, 'g');
+  if(currencyData.decimalPlaces === 0){
+    regexRemove = new RegExp(`[^0-9]`, 'g');  
+  }
   let cleanValue = value.replace(regexRemove, '');
 
   // Find the last comma position
   const lastCommaIndex = cleanValue.lastIndexOf(currencyData.decimalSeparator);
   
-  if (lastCommaIndex !== -1) {
-    // Remove all commas except the rightmost one
-    const regexLastComma = new RegExp(`\\${currencyData.decimalSeparator}`, 'g');
-    const beforeLastComma = cleanValue.substring(0, lastCommaIndex).replace(regexLastComma, '');
-    const afterLastComma = cleanValue.substring(lastCommaIndex);
-    cleanValue = beforeLastComma + afterLastComma;
+  const regexLastDecimalSeparator = new RegExp(`\\${currencyData.decimalSeparator}`, 'g');
+  // If there is a decimal separator, remove all others
+  let beforeLastComma = cleanValue.substring(0, lastCommaIndex).replace(regexLastDecimalSeparator, '');
+  let afterLastComma = cleanValue.substring(lastCommaIndex);
+
+  if (lastCommaIndex == -1) {
+    beforeLastComma = afterLastComma
+    afterLastComma = '';
   }
+
+  // Remove leading zeros from the integer part
+  beforeLastComma = beforeLastComma.replace(/^0+/, '');
+  // Keep the last zero if the integer part becomes empty and there is a decimal part (attempt)
+  if(lastCommaIndex !== -1 && beforeLastComma===''){
+    beforeLastComma = '0';
+  }
+
+  cleanValue = beforeLastComma + afterLastComma;
 
   // Set the decimal separator to '.' which is the default for numeric values
   cleanValue = cleanValue.replace(new RegExp(`\\${currencyData.decimalSeparator}`, 'g'), '.');
+
+  // Fallback to '0' if the string is empty after cleaning
+  if(cleanValue==='') {
+    cleanValue = '0';
+  }
 
   return cleanValue;
 }
@@ -81,6 +100,11 @@ export function formatDisplay(value: string, currencyCode: string = 'clp'): stri
   let decimalPart = parts[1];
   if(!decimalPart){
     decimalPart = '';
+  }
+
+  // Truncate decimal part to maximum 2 characters
+  if(decimalPart.length > currencyData.decimalPlaces){
+    decimalPart = decimalPart.substring(0, currencyData.decimalPlaces);
   }
 
   // Add thousands separators to the integer part
