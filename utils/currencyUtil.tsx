@@ -49,8 +49,6 @@ export function formatMask(value: string, currencyCode: string = 'clp'): string 
   // Remove all characters except numbers and the decimal separators
   const regexRemove = new RegExp(`[^0-9${currencyData.decimalSeparator}]`, 'g');
   let cleanValue = value.replace(regexRemove, '');
-  console.log("formatMask", currencyCode)
-  console.log("removed unwanted chars:", cleanValue);
 
   // Find the last comma position
   const lastCommaIndex = cleanValue.lastIndexOf(currencyData.decimalSeparator);
@@ -66,13 +64,11 @@ export function formatMask(value: string, currencyCode: string = 'clp'): string 
   // Set the decimal separator to '.' which is the default for numeric values
   cleanValue = cleanValue.replace(new RegExp(`\\${currencyData.decimalSeparator}`, 'g'), '.');
 
-  console.log("final clean value:", cleanValue);
   return cleanValue;
 }
 
 export function formatDisplay(value: string, currencyCode: string = 'clp'): string {
   const currencyData = currencies[currencyCode];
-  console.log("formatDisplay", currencyCode)
   // Check if the last char is a decimal separator
   const lastCommaIndex = value.lastIndexOf('.');
 
