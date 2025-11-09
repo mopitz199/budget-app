@@ -22,7 +22,7 @@ const currencies: Record<string, CurrencyDef> = {
   'clp': {
     code: 'clp',
     symbol: '$',
-    decimalPlaces: 1,
+    decimalPlaces: 0,
     decimalSeparator: ',',
     thousandsSeparator: '.',
   },
@@ -81,6 +81,7 @@ export function formatDisplay(value: string, currencyCode: string = 'clp'): stri
   // Split into integer and decimal parts
   const parts = value.split('.');
   const integerPart = parts[0];
+
   let decimalPart = parts[1];
   if(!decimalPart){
     decimalPart = '';
@@ -90,7 +91,7 @@ export function formatDisplay(value: string, currencyCode: string = 'clp'): stri
   const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, currencyData.thousandsSeparator);
 
   // Combine with decimal part if it exists
-  if (lastCommaIndex !== -1) {
+  if (lastCommaIndex !== -1 && currencyData.decimalPlaces > 0) {
     value = `${currencyData.symbol}${formattedInteger}${currencyData.decimalSeparator}${decimalPart}`;
   } else {
     value = `${currencyData.symbol}${formattedInteger}`;
