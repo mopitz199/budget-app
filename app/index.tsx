@@ -44,11 +44,11 @@ export default function Index() {
         currencyValue={currencyValue}
         placeholder="Monto en CLP"
         onChangeValue={(value) => {
-          setText(formatDisplay(formatMask(value, currencyValue), currencyValue));
+          setText(formatDisplay(formatMask(value, currencyValue) as string, currencyValue));
         }}
         currencyOptions={currencyOptions}
         onOptionSelect={(previousValue, option) => {
-          setText(formatDisplay(formatMask(text, previousValue), option.value));
+          setText(formatDisplay(formatMask(text, previousValue) as string, option.value));
           setCurrencyValue(option.value);
         }}
         optionComponent={(option) => {
@@ -65,7 +65,7 @@ export default function Index() {
 
       <Input
         textInputProps={{
-          value: text,
+          value: formatMask(text, currencyValue, true).toString(),
           onChangeText: setText,
           placeholder: "Placeholder with right icon",
         }}

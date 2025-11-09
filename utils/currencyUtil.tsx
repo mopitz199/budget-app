@@ -11,7 +11,6 @@ export const currencyOptions = [
 ]
 
 type CurrencyDef = {
-  code: string;
   symbol: string;
   decimalPlaces: number;
   decimalSeparator: string;
@@ -20,21 +19,18 @@ type CurrencyDef = {
 
 const currencies: Record<string, CurrencyDef> = {
   'clp': {
-    code: 'clp',
     symbol: '$',
     decimalPlaces: 1,
     decimalSeparator: ',',
     thousandsSeparator: '.',
   },
   'eur': {
-    code: 'eur',
     symbol: '€',
     decimalPlaces: 2,
     decimalSeparator: '.',
     thousandsSeparator: ',',
   },
   'usd': {
-    code: 'usd',
     symbol: '€',
     decimalPlaces: 2,
     decimalSeparator: '.',
@@ -43,7 +39,11 @@ const currencies: Record<string, CurrencyDef> = {
 };
 
 
-export function formatMask(value: string, currencyCode: string = 'clp'): string {
+export function formatMask(
+  value: string,
+  currencyCode: string = 'clp',
+  returnNumber: boolean = false
+): string | number {
   const currencyData = currencies[currencyCode];
   
   // Remove all characters except numbers and the decimal separators
@@ -68,7 +68,7 @@ export function formatMask(value: string, currencyCode: string = 'clp'): string 
 
   // Remove leading zeros from the integer part
   beforeLastComma = beforeLastComma.replace(/^0+/, '');
-  // Keep the last zero if the integer part becomes empty and there is a decimal part (attempt)
+  // Keep the last zero if the integer part becomempty and there is a decimal part (attempt)
   if(lastCommaIndex !== -1 && beforeLastComma===''){
     beforeLastComma = '0';
   }
@@ -82,8 +82,10 @@ export function formatMask(value: string, currencyCode: string = 'clp'): string 
   if(cleanValue==='') {
     cleanValue = '0';
   }
-
-  return cleanValue;
+  if(returnNumber){
+    console.log(Number(cleanValue))
+  }
+  return returnNumber ? Number(cleanValue) : cleanValue;
 }
 
 export function formatDisplay(value: string, currencyCode: string = 'clp'): string {
