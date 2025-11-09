@@ -5,6 +5,7 @@ import { Input } from "@/components/Input";
 import MainView from "@/components/MainView";
 import { PasswordInput } from "@/components/PasswordInput";
 import { SelectorInput } from "@/components/SelectorInput";
+import { Title } from "@/components/Text";
 import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
@@ -12,7 +13,7 @@ import { currencyOptions, formatDisplay, formatMask } from "@/utils/currencyUtil
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Button, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { Button, StyleSheet, useColorScheme, View } from "react-native";
 
 export default function Index() {
   const screenConf: ScreenConf = {
@@ -33,7 +34,9 @@ export default function Index() {
   return (
     <MainView headerShown={screenConf.headerShown}>
 
-      <Text>Splash</Text>
+
+
+      <Title>Transaction</Title>
       <Button title="Go to Home" onPress={() => {router.replace('/(auth)/home')}} />
       <Button title="Go to Login" onPress={() => {router.replace('/login')}} />
 

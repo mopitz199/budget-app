@@ -1,5 +1,5 @@
 import { colors } from "@/colors";
-import Text from "@/components/Text";
+import { Text } from "@/components/Text";
 import { globalStyles } from "@/global-styles";
 import { JSX } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
@@ -104,8 +104,8 @@ function makeStyles({
       backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
       margin: 0,
       height: globalStyles.inputHeight,
-      fontSize: 16,
-      fontFamily: 'Roboto',
+      fontSize: globalStyles.inputFontSize,
+      fontFamily: globalStyles.fontFamily,
       paddingRight: rightComponent!=undefined ? 50 : globalStyles.inputPaddingHorizontal,
       paddingLeft: leftComponent!=undefined ? cursorPaddingLeft : globalStyles.inputPaddingHorizontal,
     },

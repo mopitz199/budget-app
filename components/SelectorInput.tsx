@@ -1,8 +1,9 @@
 import { colors } from "@/colors";
+import { Text } from "@/components/Text";
 import { globalStyles } from "@/global-styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { JSX, useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, useColorScheme } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
 import BottomHalfModal from "./BottomHalfModal";
 
 type InputProps = {
@@ -81,7 +82,7 @@ export function SelectorInput (
 
       {buildModalContent()}
 
-      <Text style={StyleSheet.compose(styles.text, { color: getTextColor() })}>
+      <Text style={StyleSheet.compose(styles.inputText, { color: getTextColor() })}>
         {getCurrentLabel() || placeholder}
       </Text>
       <Ionicons
@@ -110,14 +111,14 @@ function makeStyles({ isDarkMode }: StyleParams) {
       backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
       borderRadius: 8,
     },
-    text: {
-      fontSize: 16,
-    },
     optionItem: {
       alignItems: 'center',
       paddingVertical: 12,
       borderBottomWidth: 1,
       borderBottomColor: isDarkMode ? colors.dark.outline : colors.light.outline,
     },
+    inputText: {
+      fontSize: globalStyles.inputFontSize,
+    }
   });
 }

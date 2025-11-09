@@ -44,54 +44,12 @@
       [
         "expo-font",
         {
-          "android": {
-            "fonts": [
-              {
-                "fontFamily": "Roboto",
-                "fontDefinitions": [
-                  {
-                    "path": "./assets/fonts/Roboto-Regular.ttf"
-                  },
-                  {
-                    "path": "./assets/fonts/Roboto-Italic.ttf",
-                    "style": "italic"
-                  },
-                  {
-                    "path": "./assets/fonts/Roboto-Bold.ttf",
-                    "weight": 800
-                  },
-                  {
-                    "path": "./assets/fonts/Roboto-SemiBold.ttf",
-                    "weight": 500
-                  }
-                ]
-              }
-            ]
-          },
-          "ios": {
-            "fonts": [
-              {
-                "fontFamily": "Roboto",
-                "fontDefinitions": [
-                  {
-                    "path": "./assets/fonts/Roboto-Regular.ttf"
-                  },
-                  {
-                    "path": "./assets/fonts/Roboto-Italic.ttf",
-                    "style": "italic"
-                  },
-                  {
-                    "path": "./assets/fonts/Roboto-Bold.ttf",
-                    "weight": 800
-                  },
-                  {
-                    "path": "./assets/fonts/Roboto-SemiBold.ttf",
-                    "weight": 500
-                  }
-                ]
-              }
-            ]
-          }
+          "fonts": [
+            "./assets/fonts/Roboto-Regular.ttf",
+            "./assets/fonts/Roboto-Italic.ttf",
+            "./assets/fonts/Roboto-Bold.ttf",
+            "./assets/fonts/Roboto-SemiBold.ttf"
+          ]
         }
       ]
     ],

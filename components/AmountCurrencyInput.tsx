@@ -1,6 +1,6 @@
 import { colors } from "@/colors";
 import { Input } from "@/components/Input";
-import Text from "@/components/Text";
+import { Text } from "@/components/Text";
 import { globalStyles } from "@/global-styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "expo-image";
@@ -159,6 +159,7 @@ function makeStyles({ isDarkMode }: StyleParams) {
     },
     viewLeftTextComponent: {
       color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
+      fontSize: globalStyles.inputFontSize,
       fontWeight: '500'
     },
     viewRightComponent: {

@@ -104,9 +104,6 @@ export function formatMask(
   if(cleanValue==='') {
     cleanValue = '0';
   }
-  if(returnNumber){
-    console.log(Number(cleanValue))
-  }
   return returnNumber ? Number(cleanValue) : cleanValue;
 }
 

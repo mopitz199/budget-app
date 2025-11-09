@@ -1,5 +1,6 @@
 import { colors } from "@/colors";
-import Text from "@/components/Text";
+import { Text } from "@/components/Text";
+import { globalStyles } from "@/global-styles";
 import { Image, StyleSheet, useColorScheme, View } from "react-native";
 
 type CurrencyOptionProps = {
@@ -59,8 +60,8 @@ function makeStyles({ isDarkMode, isSelected }: StyleParams) {
       marginRight: 8,
     },
     label: {
-      fontSize: 16,
       color: getOptionTextColor(),
+      fontSize: globalStyles.textFontSize,
       paddingVertical: 12,
     },
   });
