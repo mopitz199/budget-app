@@ -1,11 +1,12 @@
 import { colors } from "@/colors";
+import { Input } from "@/components/Input";
+import Text from "@/components/Text";
 import { globalStyles } from "@/global-styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "expo-image";
 import { JSX, useState } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
 import BottomHalfModal from "./BottomHalfModal";
-import { Input } from "./Input";
 
 type InputProps = {
   amountValue?: string;
@@ -15,6 +16,7 @@ type InputProps = {
   currencyOptions?: Array<{ label: string; value: string, extraInfo?: any }>;
   optionComponent: (option: { label: string; value: string, extraInfo?: any }) => JSX.Element;
   onOptionSelect: (previousValue: string, option: { label: string; value: string, extraInfo?: any }) => void;
+  errorMessage?: string;
 };
 
 export function AmountCurrencyInput (
@@ -26,6 +28,7 @@ export function AmountCurrencyInput (
     currencyOptions = [],
     optionComponent,
     onOptionSelect,
+    errorMessage = '',
   }: InputProps
 ){
 
@@ -127,6 +130,7 @@ export function AmountCurrencyInput (
         onRightPress={() => {
           setPositive(!positive);
         }}
+        errorMessage={errorMessage}
       />
     </>
   )
@@ -155,7 +159,6 @@ function makeStyles({ isDarkMode }: StyleParams) {
     },
     viewLeftTextComponent: {
       color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
-      fontFamily: 'Roboto',
       fontWeight: '500'
     },
     viewRightComponent: {
@@ -165,5 +168,9 @@ function makeStyles({ isDarkMode }: StyleParams) {
       paddingLeft: globalStyles.inputPaddingHorizontal,
       borderLeftWidth: 1,
     },
+    errorMessage: {
+      marginTop: 4,
+      color: isDarkMode ? colors.dark.error : colors.light.error
+    }
   });
 }

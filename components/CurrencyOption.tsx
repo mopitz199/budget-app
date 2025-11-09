@@ -1,5 +1,6 @@
 import { colors } from "@/colors";
-import { Image, StyleSheet, Text, useColorScheme, View } from "react-native";
+import Text from "@/components/Text";
+import { Image, StyleSheet, useColorScheme, View } from "react-native";
 
 type CurrencyOptionProps = {
   currentValue: string;

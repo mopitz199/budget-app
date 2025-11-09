@@ -1,4 +1,5 @@
 import { colors } from "@/colors";
+import Text from "@/components/Text";
 import { globalStyles } from "@/global-styles";
 import { JSX } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
@@ -10,6 +11,7 @@ type InputProps = {
   onRightPress?: () => void;
   cursorPaddingLeft?: number;
   textInputProps?: object;
+  errorMessage?: string;
 };
 
 export function Input (
@@ -20,6 +22,7 @@ export function Input (
     onRightPress = undefined,
     cursorPaddingLeft = 0,
     textInputProps = {},
+    errorMessage = '',
   }: InputProps
 ) {
 
@@ -64,6 +67,9 @@ export function Input (
         {leftComponent != undefined && buildLeftComponent()}
         {rightComponent != undefined && buildRightComponent()}
       </View>
+      <Text style={style.errorMessage}>
+        {errorMessage}
+      </Text>
     </View>
   )
 }
@@ -99,6 +105,7 @@ function makeStyles({
       margin: 0,
       height: globalStyles.inputHeight,
       fontSize: 16,
+      fontFamily: 'Roboto',
       paddingRight: rightComponent!=undefined ? 50 : globalStyles.inputPaddingHorizontal,
       paddingLeft: leftComponent!=undefined ? cursorPaddingLeft : globalStyles.inputPaddingHorizontal,
     },
@@ -122,5 +129,9 @@ function makeStyles({
       paddingRight: globalStyles.inputPaddingHorizontal,
       justifyContent: 'center',
     },
+    errorMessage: {
+      marginTop: 4,
+      color: isDarkMode ? colors.dark.error : colors.light.error,
+    }
   });
 }

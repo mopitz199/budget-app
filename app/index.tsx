@@ -3,6 +3,7 @@ import { AmountCurrencyInput } from "@/components/AmountCurrencyInput";
 import CurrencyOption from "@/components/CurrencyOption";
 import { Input } from "@/components/Input";
 import MainView from "@/components/MainView";
+import { PasswordInput } from "@/components/PasswordInput";
 import { SelectorInput } from "@/components/SelectorInput";
 import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
@@ -25,7 +26,6 @@ export default function Index() {
   
   const styles = makeStyles({ isDarkMode: isDarkMode });
 
-  const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [currencyValue, setCurrencyValue] = useState('clp');
@@ -59,6 +59,7 @@ export default function Index() {
             />
           )
         }}
+        errorMessage="The amount must be greater than zero"
       />
 
       <View style={{ marginVertical: 12 }}></View>
@@ -76,6 +77,7 @@ export default function Index() {
             color={isDarkMode ? colors.dark.onSurface : colors.light.onSurface}
           />
         )}
+        errorMessage="The amount must be greater than zero"
       />
 
       <View style={{ marginVertical: 12 }}></View>
@@ -90,20 +92,11 @@ export default function Index() {
 
       <View style={{ marginVertical: 12 }}></View>
 
-      <Input
-        textInputProps={{
-          value: text,
-          onChangeText: setText,
-          placeholder: "Placeholder password",
-        }}
-        rightComponent={() => (
-          <Ionicons
-            name={showPassword ? 'eye-off-outline' : 'eye-outline'}
-            size={globalStyles.inputRightIconSize}
-            color={isDarkMode ? colors.dark.onSurface : colors.light.onSurface}
-          />
-        )}
-        onRightPress={() => {setShowPassword(!showPassword)}}
+
+      <PasswordInput
+        value={text}
+        onChangeValue={setText}
+        placeholder="Placeholder password"
       />
 
       <View style={{ marginVertical: 12 }}></View>
