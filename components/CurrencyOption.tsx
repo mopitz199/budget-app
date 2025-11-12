@@ -1,5 +1,5 @@
 import { colors } from "@/colors";
-import { Text } from "@/components/Text";
+import { Text } from "@/components/Texts";
 import { globalStyles } from "@/global-styles";
 import { Image, StyleSheet, useColorScheme, View } from "react-native";
 

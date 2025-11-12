@@ -5,7 +5,7 @@ import { Input } from "@/components/inputs/Input";
 import { PasswordInput } from "@/components/inputs/PasswordInput";
 import { SelectorInput } from "@/components/inputs/SelectorInput";
 import MainView from "@/components/MainView";
-import { Title } from "@/components/Text";
+import { Title } from "@/components/Texts";
 import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
