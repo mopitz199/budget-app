@@ -12,6 +12,7 @@ type InputProps = {
   options?: Array<{ label: string; value: string; extraInfo?: any }>;
   optionComponent: (option: { label: string; value: string; extraInfo?: any }) => JSX.Element;
   onOptionSelect: (option: { label: string; value: string; extraInfo?: any }) => void;
+  errorMessage?: string;
 };
 
 export function SelectorInput (
@@ -21,6 +22,7 @@ export function SelectorInput (
     options = [],
     optionComponent,
     onOptionSelect,
+    errorMessage = '',
   }: InputProps
 ) {
 
@@ -73,24 +75,29 @@ export function SelectorInput (
   }
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => {
-        setOpen(true);
-      }}
-    >
+    <>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => {
+          setOpen(true);
+        }}
+      >
 
-      {buildModalContent()}
+        {buildModalContent()}
 
-      <Text style={StyleSheet.compose(styles.inputText, { color: getTextColor() })}>
-        {getCurrentLabel() || placeholder}
+        <Text style={StyleSheet.compose(styles.inputText, { color: getTextColor() })}>
+          {getCurrentLabel() || placeholder}
+        </Text>
+        <Ionicons
+          name={'caret-down-outline'}
+          size={globalStyles.inputRightIconSize}
+          color={isDarkMode ? colors.dark.onSurface : colors.light.onSurface}
+        />
+      </TouchableOpacity>
+      <Text style={styles.errorMessage}>
+        {errorMessage}
       </Text>
-      <Ionicons
-        name={'caret-down-outline'}
-        size={globalStyles.inputRightIconSize}
-        color={isDarkMode ? colors.dark.onSurface : colors.light.onSurface}
-      />
-    </TouchableOpacity>
+    </>
   )
 }
 
@@ -119,6 +126,10 @@ function makeStyles({ isDarkMode }: StyleParams) {
     },
     inputText: {
       fontSize: globalStyles.inputFontSize,
+    },
+    errorMessage: {
+      marginTop: 4,
+      color: isDarkMode ? colors.dark.error : colors.light.error,
     }
   });
 }
