@@ -1,12 +1,12 @@
 import { colors } from "@/colors";
-import { Input } from "@/components/Input";
+import { Input } from "@/components/inputs/Input";
 import { Text } from "@/components/Text";
 import { globalStyles } from "@/global-styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "expo-image";
 import { JSX, useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
-import BottomHalfModal from "./BottomHalfModal";
+import BottomHalfModal from "../BottomHalfModal";
 
 type InputProps = {
   amountValue?: string;

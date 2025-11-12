@@ -4,7 +4,7 @@ import { globalStyles } from "@/global-styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { JSX, useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
-import BottomHalfModal from "./BottomHalfModal";
+import BottomHalfModal from "../BottomHalfModal";
 
 type InputProps = {
   value?: string;

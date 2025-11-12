@@ -6,7 +6,7 @@ export const globalStyles = {
   textFontSize: 14,
 
   // Title Text
-  titleFontSize: 42,
+  titleFontSize: 24,
   titleFontFamily: 'Roboto-Bold',
 
   // Input styles

@@ -1,5 +1,5 @@
 import { colors } from "@/colors";
-import { Input } from "@/components/Input";
+import { Input } from "@/components/inputs/Input";
 import { globalStyles } from "@/global-styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";

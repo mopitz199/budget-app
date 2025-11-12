@@ -1,10 +1,10 @@
 import { colors } from "@/colors";
-import { AmountCurrencyInput } from "@/components/AmountCurrencyInput";
 import CurrencyOption from "@/components/CurrencyOption";
-import { Input } from "@/components/Input";
+import { AmountCurrencyInput } from "@/components/inputs/AmountCurrencyInput";
+import { Input } from "@/components/inputs/Input";
+import { PasswordInput } from "@/components/inputs/PasswordInput";
+import { SelectorInput } from "@/components/inputs/SelectorInput";
 import MainView from "@/components/MainView";
-import { PasswordInput } from "@/components/PasswordInput";
-import { SelectorInput } from "@/components/SelectorInput";
 import { Title } from "@/components/Text";
 import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
