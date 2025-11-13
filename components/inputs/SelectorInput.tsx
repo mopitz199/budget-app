@@ -116,7 +116,7 @@ function makeStyles({ isDarkMode }: StyleParams) {
       borderColor: isDarkMode ? '' : colors.light.outline,
       borderWidth: isDarkMode ? 0 : 0.5,
       backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
-      borderRadius: 8,
+      borderRadius: globalStyles.inputBorderRadius,
     },
     optionItem: {
       alignItems: 'center',

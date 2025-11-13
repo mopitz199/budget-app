@@ -1,4 +1,5 @@
 import { colors } from "@/colors";
+import { GoogleButton, PrincipalButton, SecondaryButton } from "@/components/Buttons";
 import CurrencyOption from "@/components/CurrencyOption";
 import { AmountCurrencyInput } from "@/components/inputs/AmountCurrencyInput";
 import { Input } from "@/components/inputs/Input";
@@ -13,7 +14,7 @@ import { currencyOptions, formatDisplay, formatMask } from "@/utils/currencyUtil
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Button, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
+import { ScrollView, StyleSheet, useColorScheme, View } from "react-native";
 
 export default function Index() {
   const screenConf: ScreenConf = {
@@ -119,8 +120,17 @@ export default function Index() {
           errorMessage="The amount must be greater than zero"
         />
 
-        <Button title="Go to Home" onPress={() => {router.replace('/(auth)/home')}} />
-        <Button title="Go to Login" onPress={() => {router.replace('/login')}} />
+        <View style={{ marginVertical: 12 }}></View>
+
+        <PrincipalButton title="Primary" onPress={() => {router.replace('/(auth)/home')}} />
+
+        <View style={{ marginVertical: 12 }}></View>
+
+        <SecondaryButton title="Secondary" onPress={() => {router.replace('/login')}}/>
+
+        <View style={{ marginVertical: 12 }}></View>
+
+        <GoogleButton title="Continue with Google" onPress={() => {router.replace('/login')}}/>
 
       </ScrollView>
 

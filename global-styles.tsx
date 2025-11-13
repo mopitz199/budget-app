@@ -14,4 +14,10 @@ export const globalStyles = {
   inputFontSize: 14,
   inputPaddingHorizontal: 12,
   inputRightIconSize: 24,
+  inputBorderRadius: 8,
+
+  //Button styles
+  buttonMinHeight: 56,
+  buttonBorderRadius: 8,
+  buttonTextFontSize: 16,
 }

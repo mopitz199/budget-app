@@ -13,7 +13,6 @@ export function Title({ children, style }: { children: string; style?: any }) {
   )
 }
 
-
 const styles = StyleSheet.create({
   text: {
     fontFamily: globalStyles.fontFamily,

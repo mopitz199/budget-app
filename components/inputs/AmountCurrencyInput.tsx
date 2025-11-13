@@ -155,7 +155,7 @@ function makeStyles({ isDarkMode }: StyleParams) {
     viewLeftImageComponent: {
       width: 26,
       height: 26,
-      marginRight: 8
+      marginRight: globalStyles.inputBorderRadius,
     },
     viewLeftTextComponent: {
       color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,

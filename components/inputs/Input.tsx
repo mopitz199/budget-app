@@ -99,7 +99,7 @@ function makeStyles({
     input: {
       borderColor: isDarkMode ? '' : colors.light.loadingBackground,
       borderWidth: isDarkMode ? 0 : 0.5,
-      borderRadius: 8,
+      borderRadius: globalStyles.inputBorderRadius,
       color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
       backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
       margin: 0,
