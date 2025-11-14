@@ -19,6 +19,23 @@ export function PrincipalButton({ title, onPress, ...props }: { title: string; o
   )
 }
 
+export function DeleteButton({ title, onPress, ...props }: { title: string; onPress: () => void; [key: string]: any }) {
+
+  const theme = useColorScheme();
+  const isDarkMode = theme === 'dark';
+  const styles = makeStyles(isDarkMode);
+
+  return (
+    <TouchableOpacity
+      {...props}
+      style={styles.deleteButton}
+      onPress={onPress}
+    >
+      <Text style={styles.deleteButtonText}>{title}</Text>
+    </TouchableOpacity>
+  )
+}
+
 export function SecondaryButton({ title, onPress, ...props }: { title: string; onPress: () => void; [key: string]: any }) {
 
   const theme = useColorScheme();
@@ -100,6 +117,18 @@ function makeStyles(isDarkMode: boolean) {
       },
       googleButtonText: {
         color: colors.light.onSurface,
+        fontFamily: globalStyles.fontFamily,
+        fontSize: globalStyles.buttonTextFontSize,
+      },
+      deleteButton: {
+        backgroundColor: isDarkMode ? colors.dark.error : colors.light.error,
+        borderRadius: globalStyles.buttonBorderRadius,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: globalStyles.buttonMinHeight,
+      },
+      deleteButtonText: {
+        color: colors.dark.onSurface,
         fontFamily: globalStyles.fontFamily,
         fontSize: globalStyles.buttonTextFontSize,
       }

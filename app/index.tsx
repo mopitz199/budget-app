@@ -1,5 +1,5 @@
 import { colors } from "@/colors";
-import { GoogleButton, PrincipalButton, SecondaryButton } from "@/components/Buttons";
+import { DeleteButton, GoogleButton, PrincipalButton, SecondaryButton } from "@/components/Buttons";
 import CurrencyOption from "@/components/CurrencyOption";
 import { AmountCurrencyInput } from "@/components/inputs/AmountCurrencyInput";
 import { Input } from "@/components/inputs/Input";
@@ -138,6 +138,10 @@ export default function Index() {
         <View style={{ marginVertical: 12 }}></View>
 
         <GoogleButton title="Continue with Google" onPress={() => {router.replace('/login')}}/>
+          
+        <View style={{ marginVertical: 12 }}></View>
+
+        <DeleteButton title="Delete" onPress={() => {router.replace('/(auth)/home')}} />
 
         <LoginLine>or</LoginLine>
 
