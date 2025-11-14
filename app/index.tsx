@@ -6,7 +6,7 @@ import { Input } from "@/components/inputs/Input";
 import { PasswordInput } from "@/components/inputs/PasswordInput";
 import { SelectorInput } from "@/components/inputs/SelectorInput";
 import MainView from "@/components/MainView";
-import { Text, Title } from "@/components/Texts";
+import { LinkText, Text, Title } from "@/components/Texts";
 import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
@@ -37,6 +37,7 @@ export default function Index() {
       <ScrollView>
         <Title>Main title</Title>
         <Text>Regular text</Text>
+        <LinkText>Link Text</LinkText>
 
         <View style={{ marginVertical: 12 }}></View>
         
