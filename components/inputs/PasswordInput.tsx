@@ -10,6 +10,7 @@ type InputProps = {
   placeholder?: string;
   onChangeValue: (text: string) => void;
   errorMessage?: string;
+  labelMessage?: string;
 }
 
 export function PasswordInput (
@@ -17,6 +18,7 @@ export function PasswordInput (
     placeholder = '',
     onChangeValue,
     errorMessage = '',
+    labelMessage = '',
   }: InputProps
 ){
 
@@ -42,6 +44,7 @@ export function PasswordInput (
       )}
       onRightPress={() => {setShowPassword(!showPassword)}}
       errorMessage={errorMessage}
+      labelMessage={labelMessage}
     />
   )
 }

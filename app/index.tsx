@@ -61,6 +61,7 @@ export default function Index() {
             )
           }}
           errorMessage="The amount must be greater than zero"
+          labelMessage="Selector input"
         />
 
         <View style={{ marginVertical: 12 }}></View>
@@ -79,6 +80,7 @@ export default function Index() {
             />
           )}
           errorMessage="The amount must be greater than zero"
+          labelMessage="Label input"
         />
 
         <View style={{ marginVertical: 12 }}></View>
@@ -90,6 +92,7 @@ export default function Index() {
             placeholder: "Placeholder with no icons",
           }}
           errorMessage="The amount must be greater than zero"
+          labelMessage="Label input"
         />
 
         <View style={{ marginVertical: 12 }}></View>
@@ -100,6 +103,7 @@ export default function Index() {
           onChangeValue={setText}
           placeholder="Placeholder password"
           errorMessage="The amount must be greater than zero"
+          labelMessage="Password input"
         />
 
         <View style={{ marginVertical: 12 }}></View>
@@ -118,6 +122,7 @@ export default function Index() {
             )
           }}
           errorMessage="The amount must be greater than zero"
+          labelMessage="Selector input"
         />
 
         <View style={{ marginVertical: 12 }}></View>

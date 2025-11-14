@@ -12,6 +12,7 @@ type InputProps = {
   cursorPaddingLeft?: number;
   textInputProps?: object;
   errorMessage?: string;
+  labelMessage?: string;
 };
 
 export function Input (
@@ -23,6 +24,7 @@ export function Input (
     cursorPaddingLeft = 0,
     textInputProps = {},
     errorMessage = '',
+    labelMessage = '',
   }: InputProps
 ) {
 
@@ -58,6 +60,7 @@ export function Input (
 
   return (
     <View style={style.container}>
+      {labelMessage !== '' && <Text style={style.labelMessage}>{labelMessage}</Text>}
       <View style={style.inputWrapper}>
         <TextInput
           placeholderTextColor={isDarkMode ? colors.dark.placeholder : colors.light.placeholder}
@@ -132,6 +135,10 @@ function makeStyles({
     errorMessage: {
       marginTop: 4,
       color: isDarkMode ? colors.dark.error : colors.light.error,
+    },
+    labelMessage: {
+      marginBottom: 4,
+      color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
     }
   });
 }

@@ -17,6 +17,7 @@ type InputProps = {
   optionComponent: (option: { label: string; value: string, extraInfo?: any }) => JSX.Element;
   onOptionSelect: (previousValue: string, option: { label: string; value: string, extraInfo?: any }) => void;
   errorMessage?: string;
+  labelMessage?: string;
 };
 
 export function AmountCurrencyInput (
@@ -29,6 +30,7 @@ export function AmountCurrencyInput (
     optionComponent,
     onOptionSelect,
     errorMessage = '',
+    labelMessage = '',
   }: InputProps
 ){
 
@@ -131,6 +133,7 @@ export function AmountCurrencyInput (
           setPositive(!positive);
         }}
         errorMessage={errorMessage}
+        labelMessage={labelMessage}
       />
     </>
   )

@@ -13,6 +13,7 @@ type InputProps = {
   optionComponent: (option: { label: string; value: string; extraInfo?: any }) => JSX.Element;
   onOptionSelect: (option: { label: string; value: string; extraInfo?: any }) => void;
   errorMessage?: string;
+  labelMessage?: string;
 };
 
 export function SelectorInput (
@@ -23,6 +24,7 @@ export function SelectorInput (
     optionComponent,
     onOptionSelect,
     errorMessage = '',
+    labelMessage = '',
   }: InputProps
 ) {
 
@@ -76,6 +78,7 @@ export function SelectorInput (
 
   return (
     <>
+      {labelMessage !== '' && <Text style={styles.labelMessage}>{labelMessage}</Text>}
       <TouchableOpacity
         style={styles.container}
         onPress={() => {
@@ -130,6 +133,10 @@ function makeStyles({ isDarkMode }: StyleParams) {
     errorMessage: {
       marginTop: 4,
       color: isDarkMode ? colors.dark.error : colors.light.error,
+    },
+    labelMessage: {
+      marginBottom: 4,
+      color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
     }
   });
 }
