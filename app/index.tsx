@@ -5,6 +5,7 @@ import { AmountCurrencyInput } from "@/components/inputs/AmountCurrencyInput";
 import { Input } from "@/components/inputs/Input";
 import { PasswordInput } from "@/components/inputs/PasswordInput";
 import { SelectorInput } from "@/components/inputs/SelectorInput";
+import LoginLine from "@/components/LoginLine";
 import MainView from "@/components/MainView";
 import { LinkText, Text, Title } from "@/components/Texts";
 import { globalStyles } from "@/global-styles";
@@ -14,7 +15,7 @@ import { currencyOptions, formatDisplay, formatMask } from "@/utils/currencyUtil
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, useColorScheme, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
 
 export default function Index() {
   const screenConf: ScreenConf = {
@@ -37,7 +38,7 @@ export default function Index() {
       <ScrollView>
         <Title>Main title</Title>
         <Text>Regular text</Text>
-        <LinkText>Link Text</LinkText>
+        <LinkText onPress={() => { Alert.alert("Pressed!"); }}>Link Text</LinkText>
 
         <View style={{ marginVertical: 12 }}></View>
         
@@ -137,6 +138,8 @@ export default function Index() {
         <View style={{ marginVertical: 12 }}></View>
 
         <GoogleButton title="Continue with Google" onPress={() => {router.replace('/login')}}/>
+
+        <LoginLine>or</LoginLine>
 
       </ScrollView>
 

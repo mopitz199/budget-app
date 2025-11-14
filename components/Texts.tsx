@@ -24,14 +24,14 @@ export function Title({ children, style }: { children: string; style?: any }) {
   )
 }
 
-export function LinkText({ children, style }: { children: string; style?: any }) {
+export function LinkText({ children, onPress, style }: { children: string; onPress?: () => void; style?: any }) {
 
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
   const styles = makeStyles({ isDarkMode });
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <RNText style={StyleSheet.compose(style, styles.linkText)}>{children}</RNText>
     </TouchableOpacity>
   )
@@ -46,10 +46,12 @@ function makeStyles({ isDarkMode }: StyleParams) {
     text: {
       fontFamily: globalStyles.fontFamily,
       fontSize: globalStyles.textFontSize,
+      color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
     },
     title: {
       fontFamily: globalStyles.titleFontFamily,
       fontSize: globalStyles.titleFontSize,
+      color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
     },
     linkText: {
       fontFamily: globalStyles.fontFamily,
