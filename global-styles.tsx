@@ -16,6 +16,10 @@ export const globalStyles = {
   inputRightIconSize: 24,
   inputBorderRadius: 8,
 
+  // Alert styles
+  alertTitleFontSize: 16,
+  alertTitleFontFamily: 'Roboto-Bold',
+
   //Button styles
   buttonMinHeight: 56,
   buttonBorderRadius: 8,

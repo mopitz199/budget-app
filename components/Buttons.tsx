@@ -11,7 +11,7 @@ export function PrincipalButton({ title, onPress, ...props }: { title: string; o
   return (
     <TouchableOpacity
       {...props}
-      style={styles.principalButton}
+      style={StyleSheet.compose(styles.principalButton, props.style)}
       onPress={onPress}
     >
       <Text style={styles.principalButtonText}>{title}</Text>
@@ -28,7 +28,7 @@ export function DeleteButton({ title, onPress, ...props }: { title: string; onPr
   return (
     <TouchableOpacity
       {...props}
-      style={styles.deleteButton}
+      style={StyleSheet.compose(styles.deleteButton, props.style)}
       onPress={onPress}
     >
       <Text style={styles.deleteButtonText}>{title}</Text>
@@ -45,7 +45,7 @@ export function SecondaryButton({ title, onPress, ...props }: { title: string; o
   return (
     <TouchableOpacity
       {...props}
-      style={styles.secondaryButton}
+      style={StyleSheet.compose(styles.secondaryButton, props.style)}
       onPress={onPress}
     >
       <Text style={styles.secondaryButtonText}>{title}</Text>
@@ -62,7 +62,7 @@ export function GoogleButton({ title, onPress, ...props }: { title: string; onPr
   return (
     <TouchableOpacity
       {...props}
-      style={styles.googleButton}
+      style={StyleSheet.compose(styles.googleButton, props.style)}
       onPress={onPress}
     >
       <Image source={require('../assets/images/search.png')} style={styles.googleImage} />

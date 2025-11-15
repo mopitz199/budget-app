@@ -1,4 +1,5 @@
 import { colors } from "@/colors";
+import Alert from "@/components/Alert";
 import { DeleteButton, GoogleButton, PrincipalButton, SecondaryButton } from "@/components/Buttons";
 import CurrencyOption from "@/components/CurrencyOption";
 import { AmountCurrencyInput } from "@/components/inputs/AmountCurrencyInput";
@@ -16,7 +17,7 @@ import { currencyOptions, formatDisplay, formatMask } from "@/utils/currencyUtil
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
+import { Alert as AlertRN, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
 
 export default function Index() {
   const screenConf: ScreenConf = {
@@ -29,17 +30,17 @@ export default function Index() {
   useHeaderBehavior({ headerShown: screenConf.headerShown });
   
   const styles = makeStyles({ isDarkMode: isDarkMode });
-
   const [text, setText] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const [currencyValue, setCurrencyValue] = useState('clp');
 
   return (
     <MainView headerShown={screenConf.headerShown}>
-
+      
       <ScrollView>
         <Title>Main title</Title>
         <Text>Regular text</Text>
-        <LinkText onPress={() => { Alert.alert("Pressed!"); }}>Link Text</LinkText>
+        <LinkText onPress={() => { setShowModal(true); }}>Link Text</LinkText>
 
         <View style={{ marginVertical: 12 }}></View>
         
@@ -151,6 +152,29 @@ export default function Index() {
       <StartAddingTransaction
         manualTransactionText="Manually"
         fileTransactionText="From File"
+        onClose={() => AlertRN.alert("close")}
+        onOpen={() => AlertRN.alert("open")}
+        onManualTransaction={() => AlertRN.alert("manual")}
+        onFileTransaction={() => AlertRN.alert("file")}
+      />
+
+      <Alert
+        title="Alert Title"
+        message="Alert Messageee"
+        onOutsidePress={() => {
+          setShowModal(false)
+        }}
+        leftButton={
+          <SecondaryButton style={{ paddingHorizontal: 12 }} title="Cancel" onPress={() => {
+            setShowModal(false)
+          }}/>
+        }
+        rightButton={
+          <SecondaryButton style={{ paddingHorizontal: 12 }} title="Confirm" onPress={() => {
+            setShowModal(false)
+          }}/>
+        }
+        visible={showModal}
       />
 
     </MainView>

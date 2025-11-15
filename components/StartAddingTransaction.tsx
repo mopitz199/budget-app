@@ -6,6 +6,7 @@ import { StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native
 
 type StartAddingTransactionProps = {
   onClose?: () => void;
+  onOpen?: () => void;
   manualTransactionText?: string;
   fileTransactionText?: string;
   onManualTransaction?: () => void;
@@ -15,6 +16,7 @@ type StartAddingTransactionProps = {
 
 export default function StartAddingTransaction({
   onClose,
+  onOpen,
   manualTransactionText='',
   fileTransactionText='',
   onManualTransaction,
@@ -45,6 +47,13 @@ export default function StartAddingTransaction({
     if (onFileTransaction) {
       onFileTransaction();
     }
+  }
+
+  const openTransaction = () => {
+    if (onOpen) {
+      onOpen();
+    }
+    setShowCloseButton(true)
   }
 
   const closeTransaction = () => {
@@ -87,7 +96,7 @@ export default function StartAddingTransaction({
     return (
       <View style={StyleSheet.compose(styles.container, style)}>
         <View style={styles.transactionRow}>
-          <TouchableOpacity activeOpacity={1} onPress={() => {setShowCloseButton(true)}} style={styles.closeButton}>
+          <TouchableOpacity activeOpacity={1} onPress={openTransaction} style={styles.closeButton}>
             <Ionicons
               name={'add-outline'}
               size={36}

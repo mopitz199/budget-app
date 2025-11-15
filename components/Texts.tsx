@@ -24,6 +24,17 @@ export function Title({ children, style }: { children: string; style?: any }) {
   )
 }
 
+export function AlertTitle({ children, style }: { children: string; style?: any }) {
+
+  const theme = useColorScheme();
+  const isDarkMode = theme === 'dark';
+  const styles = makeStyles({ isDarkMode });
+
+  return (
+    <RNText style={StyleSheet.compose(style, styles.alertTitle)}>{children}</RNText>
+  )
+}
+
 export function LinkText({ children, onPress, style }: { children: string; onPress?: () => void; style?: any }) {
 
   const theme = useColorScheme();
@@ -51,6 +62,11 @@ function makeStyles({ isDarkMode }: StyleParams) {
     title: {
       fontFamily: globalStyles.titleFontFamily,
       fontSize: globalStyles.titleFontSize,
+      color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
+    },
+    alertTitle: {
+      fontFamily: globalStyles.alertTitleFontFamily,
+      fontSize: globalStyles.alertTitleFontSize,
       color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
     },
     linkText: {
