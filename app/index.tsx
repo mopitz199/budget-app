@@ -148,7 +148,10 @@ export default function Index() {
 
       </ScrollView>
 
-      <StartAddingTransaction />
+      <StartAddingTransaction
+        manualTransactionText="Manually"
+        fileTransactionText="From File"
+      />
 
     </MainView>
   );

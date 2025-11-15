@@ -6,6 +6,8 @@ import { StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native
 
 type StartAddingTransactionProps = {
   onClose?: () => void;
+  manualTransactionText?: string;
+  fileTransactionText?: string;
   onManualTransaction?: () => void;
   onFileTransaction?: () => void;
   style?: any;
@@ -13,6 +15,8 @@ type StartAddingTransactionProps = {
 
 export default function StartAddingTransaction({
   onClose,
+  manualTransactionText='',
+  fileTransactionText='',
   onManualTransaction,
   onFileTransaction,
   style
@@ -47,7 +51,7 @@ export default function StartAddingTransaction({
     return (
       <View style={StyleSheet.compose(styles.container, style)}>
         <View style={styles.transactionRow}>
-          <Text>Add Manual Transaction</Text>
+          <Text>{manualTransactionText}</Text>
           <TouchableOpacity activeOpacity={0.9} onPress={onManualTransactionPress} style={styles.iconButton}>
             <Ionicons
               name={'hand-right-outline'}
@@ -57,7 +61,7 @@ export default function StartAddingTransaction({
           </TouchableOpacity>
         </View>
         <View style={styles.transactionRow}>
-          <Text>Add File Transaction</Text>
+          <Text>{fileTransactionText}</Text>
           <TouchableOpacity activeOpacity={0.9} onPress={onFileTransactionPress} style={styles.iconButton}>
             <Ionicons
               name={'document-outline'}
