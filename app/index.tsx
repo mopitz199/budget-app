@@ -7,6 +7,7 @@ import { PasswordInput } from "@/components/inputs/PasswordInput";
 import { SelectorInput } from "@/components/inputs/SelectorInput";
 import LoginLine from "@/components/LoginLine";
 import MainView from "@/components/MainView";
+import StartAddingTransaction from "@/components/StartAddingTransaction";
 import { LinkText, Text, Title } from "@/components/Texts";
 import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
@@ -147,7 +148,8 @@ export default function Index() {
 
       </ScrollView>
 
-      
+      <StartAddingTransaction />
+
     </MainView>
   );
 }

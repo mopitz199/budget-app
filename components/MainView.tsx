@@ -53,6 +53,7 @@ function makeStyles({ isDarkMode }: StyleParams) {
   return StyleSheet.create({
     container: {
       flex: 1,
+      position: 'relative',
       backgroundColor: isDarkMode ? colors.dark.background : colors.light.background,
       padding: 20,
     },
