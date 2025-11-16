@@ -4,7 +4,6 @@ import { colors } from '@/colors';
 import { AlertTitle, Text } from '@/components/Texts';
 import React from 'react';
 import { Modal, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
-import { PrincipalButton, SecondaryButton } from './Buttons';
 
 export function Alert ({ 
   title, 
@@ -58,53 +57,22 @@ export function Alert ({
               flexDirection: 'row',
               gap: 10,
             }}>
-              <View style={{ flex: 1 }}>
-                {leftButton}
-              </View>
-              <View style={{ flex: 1 }}>
-                {rightButton}
-              </View>
+              {leftButton && (
+                <View style={{ flex: 1 }}>
+                  {leftButton}
+                </View>
+              )}
+              {rightButton && (
+                <View style={{ flex: 1 }}>
+                  {rightButton}
+                </View>
+              )}
             </View>
           </View>
         </TouchableOpacity>
       </TouchableOpacity>
     </Modal>
   );
-}
-
-
-export function ConfirmAlert (
-  { 
-    title, 
-    message, 
-    visible, 
-    onCancel=() => {},
-    onAccept=() => {},
-  }: { 
-    title: string; 
-    message: string; 
-    visible: boolean;
-    onCancel?: () => void;
-    onAccept?: () => void;
-  }
-){
-  return (
-    <Alert
-      title="Order Confirmation"
-      message="You are about to place an order. Do you wish to continue?"
-      leftButton={
-        <SecondaryButton style={{ height: 40 }} title="Cancel" onPress={() => {
-          onCancel()
-        }}/>
-      }
-      rightButton={
-        <PrincipalButton style={{ height: 40 }} title="Confirm" onPress={() => {
-          onAccept()
-        }}/>
-      }
-      visible={visible}
-    />
-  )
 }
 
 

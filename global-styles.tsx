@@ -19,6 +19,7 @@ export const globalStyles = {
   // Alert styles
   alertTitleFontSize: 16,
   alertTitleFontFamily: 'Roboto-Bold',
+  alertButtonHeight: 40,
 
   //Button styles
   buttonMinHeight: 56,

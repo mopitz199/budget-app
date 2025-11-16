@@ -1,5 +1,5 @@
 import { colors } from "@/colors";
-import { ConfirmAlert } from "@/components/Alert";
+import { Alert } from "@/components/Alert";
 import { DeleteButton, GoogleButton, PrincipalButton, SecondaryButton } from "@/components/Buttons";
 import CurrencyOption from "@/components/CurrencyOption";
 import { AmountCurrencyInput } from "@/components/inputs/AmountCurrencyInput";
@@ -40,7 +40,7 @@ export default function Index() {
       <ScrollView>
         <Title>Main title</Title>
         <Text>Regular text</Text>
-        <LinkText onPress={() => { setShowModal(true); }}>Link Text</LinkText>
+        <LinkText onPress={() => { setShowModal(true); }}>Alert Text</LinkText>
 
         <View style={{ marginVertical: 12 }}></View>
         
@@ -158,12 +158,20 @@ export default function Index() {
         onFileTransaction={() => AlertRN.alert("file")}
       />
 
-      <ConfirmAlert
-        title="Confirm Action"
-        message="Are you sure you want to proceed?"
+      <Alert
+        title="Order Confirmation"
+        message="You are about to place an order. Do you wish to continue?"
+        leftButton={
+          <SecondaryButton style={{ height: globalStyles.alertButtonHeight }} title="Cancel" onPress={() => {
+            setShowModal(false);
+          }}/>
+        }
+        rightButton={
+          <PrincipalButton style={{ height: globalStyles.alertButtonHeight }} title="Confirm" onPress={() => {
+            setShowModal(false);
+          }}/>
+        }
         visible={showModal}
-        onCancel={() => setShowModal(false)}
-        onAccept={() => setShowModal(false)}
       />
 
     </MainView>
