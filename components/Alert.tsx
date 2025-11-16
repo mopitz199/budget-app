@@ -6,16 +6,16 @@ import React from 'react';
 import { Modal, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 
 export function Alert ({ 
-  title, 
-  message, 
+  title='', 
+  message='', 
   visible, 
   onClose=() => {},
   onOutsidePress=() => {},
   leftButton=null,
   rightButton=null
 }: { 
-  title: string; 
-  message: string; 
+  title?: string; 
+  message?: string; 
   visible: boolean;
   onClose?: () => void;
   onOutsidePress?: () => void;
@@ -46,24 +46,17 @@ export function Alert ({
           activeOpacity={1}
           onPress={(e) => e.stopPropagation()}
         >
-          <View style={{
-            alignItems: 'center',
-          }}>
-            <AlertTitle>{title}</AlertTitle>
-            <Text style={{ textAlign: 'center', marginTop: 5 }}>{message}</Text>
-            <View style={{
-              width: '100%',
-              marginTop: 12,
-              flexDirection: 'row',
-              gap: 10,
-            }}>
+          <View style={style.contentContainer}>
+            {title && <AlertTitle>{title}</AlertTitle>}
+            {message && <Text style={style.messageText}>{message}</Text>}
+            <View style={style.buttonContainer}>
               {leftButton && (
-                <View style={{ flex: 1 }}>
+                <View style={style.buttonWrapper}>
                   {leftButton}
                 </View>
               )}
               {rightButton && (
-                <View style={{ flex: 1 }}>
+                <View style={style.buttonWrapper}>
                   {rightButton}
                 </View>
               )}
@@ -101,6 +94,22 @@ function makeStyles({ isDarkMode }: StyleParams) {
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
+    },
+    contentContainer: {
+      alignItems: 'center',
+    },
+    messageText: {
+      textAlign: 'center',
+      marginTop: 5,
+    },
+    buttonContainer: {
+      width: '100%',
+      marginTop: 12,
+      flexDirection: 'row',
+      gap: 10,
+    },
+    buttonWrapper: {
+      flex: 1,
     },
   });
 }
