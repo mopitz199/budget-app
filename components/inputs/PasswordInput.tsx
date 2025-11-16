@@ -35,11 +35,11 @@ export function PasswordInput (
         value: value,
         onChangeText: onChangeValue,
         placeholder: placeholder,
-        secureTextEntry: showPassword,
+        secureTextEntry: !showPassword,
       }}
       rightComponent={() => (
         <Ionicons
-          name={showPassword ? 'eye-off-outline' : 'eye-outline'}
+          name={showPassword ? 'eye-outline' : 'eye-off-outline'}
           size={globalStyles.inputRightIconSize}
           color={isDarkMode ? colors.dark.onSurface : colors.light.onSurface}
         />

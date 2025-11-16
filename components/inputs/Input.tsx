@@ -141,6 +141,7 @@ function makeStyles({
     labelMessage: {
       marginBottom: 4,
       color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
+      fontSize: globalStyles.inputLabelFontSize,
     }
   });
 }

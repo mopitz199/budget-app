@@ -7,6 +7,8 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   en: {
     translation: {
+      "isTimeForSaving": "¡It's time for saving!",
+      "welcome": "Welcome",
       "continueWithGoogle": "Continue with Google",
       "forgotPassword": "Forgot Password?",
       "or": "or",
@@ -14,6 +16,8 @@ const resources = {
       "signUp": "Sign Up",
       "signOut": "Sign Out",
       "logIn": "Log In",
+      "enterYourEmail": "Enter your email",
+      "enterYourPassword": "Enter your password",
       "email": "Email",
       "password": "Password",
       "repeatPassword": "Repeat Password",
@@ -83,6 +87,8 @@ const resources = {
       "signUp": "Registrate",
       "signOut": "Salir",
       "logIn": "Ingresar",
+      "enterYourEmail": "Ingresa tu correo",
+      "enterYourPassword": "Ingresa tu contraseña",
       "email": "Correo",
       "password": "Contraseña",
       "repeatPassword": "Repite la contraseña",
@@ -141,6 +147,8 @@ const resources = {
       "important": "Importante",
       "changingDefaultCurrencyWarning": "Al cambiar la moneda por defecto, puede afectar los cálculos de su presupuesto.",
       "ok": "Ok",
+      "welcome": "Bienvenido",
+      "isTimeForSaving": "¡Es hora de ahorrar!",
     }
   }
 };
