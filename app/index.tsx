@@ -1,5 +1,5 @@
 import { colors } from "@/colors";
-import Alert from "@/components/Alert";
+import { ConfirmAlert } from "@/components/Alert";
 import { DeleteButton, GoogleButton, PrincipalButton, SecondaryButton } from "@/components/Buttons";
 import CurrencyOption from "@/components/CurrencyOption";
 import { AmountCurrencyInput } from "@/components/inputs/AmountCurrencyInput";
@@ -16,7 +16,7 @@ import { ScreenConf } from "@/types/screen-conf";
 import { currencyOptions, formatDisplay, formatMask } from "@/utils/currencyUtil";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Alert as AlertRN, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
 
 export default function Index() {
@@ -158,23 +158,12 @@ export default function Index() {
         onFileTransaction={() => AlertRN.alert("file")}
       />
 
-      <Alert
-        title="Alert Title"
-        message="Alert Messageee"
-        onOutsidePress={() => {
-          setShowModal(false)
-        }}
-        leftButton={
-          <SecondaryButton style={{ paddingHorizontal: 12 }} title="Cancel" onPress={() => {
-            setShowModal(false)
-          }}/>
-        }
-        rightButton={
-          <SecondaryButton style={{ paddingHorizontal: 12 }} title="Confirm" onPress={() => {
-            setShowModal(false)
-          }}/>
-        }
+      <ConfirmAlert
+        title="Confirm Action"
+        message="Are you sure you want to proceed?"
         visible={showModal}
+        onCancel={() => setShowModal(false)}
+        onAccept={() => setShowModal(false)}
       />
 
     </MainView>

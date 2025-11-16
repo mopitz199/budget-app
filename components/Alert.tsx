@@ -4,8 +4,9 @@ import { colors } from '@/colors';
 import { AlertTitle, Text } from '@/components/Texts';
 import React from 'react';
 import { Modal, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { PrincipalButton, SecondaryButton } from './Buttons';
 
-export default function Alert ({ 
+export function Alert ({ 
   title, 
   message, 
   visible, 
@@ -42,17 +43,25 @@ export default function Alert ({
         }}
       >
         <TouchableOpacity 
+          style={style.alertContainer}
           activeOpacity={1}
           onPress={(e) => e.stopPropagation()}
         >
-          <View style={style.alertContainer}>
+          <View style={{
+            alignItems: 'center',
+          }}>
             <AlertTitle>{title}</AlertTitle>
-            <Text>{message}</Text>
-            <View style={{ marginVertical: 12, flexDirection: 'row' }}>
-              <View>
+            <Text style={{ textAlign: 'center', marginTop: 5 }}>{message}</Text>
+            <View style={{
+              width: '100%',
+              marginTop: 12,
+              flexDirection: 'row',
+              gap: 10,
+            }}>
+              <View style={{ flex: 1 }}>
                 {leftButton}
               </View>
-              <View>
+              <View style={{ flex: 1 }}>
                 {rightButton}
               </View>
             </View>
@@ -62,6 +71,42 @@ export default function Alert ({
     </Modal>
   );
 }
+
+
+export function ConfirmAlert (
+  { 
+    title, 
+    message, 
+    visible, 
+    onCancel=() => {},
+    onAccept=() => {},
+  }: { 
+    title: string; 
+    message: string; 
+    visible: boolean;
+    onCancel?: () => void;
+    onAccept?: () => void;
+  }
+){
+  return (
+    <Alert
+      title="Order Confirmation"
+      message="You are about to place an order. Do you wish to continue?"
+      leftButton={
+        <SecondaryButton style={{ height: 40 }} title="Cancel" onPress={() => {
+          onCancel()
+        }}/>
+      }
+      rightButton={
+        <PrincipalButton style={{ height: 40 }} title="Confirm" onPress={() => {
+          onAccept()
+        }}/>
+      }
+      visible={visible}
+    />
+  )
+}
+
 
 type StyleParams = {
   isDarkMode: boolean;
@@ -77,10 +122,10 @@ function makeStyles({ isDarkMode }: StyleParams) {
       zIndex: 9999,
     },
     alertContainer: {
-      width: '80%',
+      maxWidth: '80%',
       justifyContent: "center",
       alignItems: "center",
-      padding: 20,
+      padding: 15,
       backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
       borderRadius: 10,
       shadowColor: '#000',
