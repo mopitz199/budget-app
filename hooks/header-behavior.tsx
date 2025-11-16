@@ -14,15 +14,29 @@ type Options = {
   iconName?: any;
   onPressIconName?: () => void;
   navigationOptions?: Partial<NativeStackNavigationOptions>;
+  backgroundColor?: string;
+  headerTintColor?: string;
 };
 
-export function useHeaderBehavior({ headerShown, loading = false, iconName = "", onPressIconName, navigationOptions }: Options) {
+export function useHeaderBehavior({
+  headerShown,
+  loading = false,
+  iconName = "",
+  onPressIconName,
+  navigationOptions,
+  backgroundColor='',
+  headerTintColor='',
+}: Options) {
   const navigation = useNavigation();
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
 
   const getBackgroundColor = () => {
     return isDarkMode ? colors.dark.background : colors.light.background;
+  }
+
+  const getHeaderTintColor = () => {
+    return isDarkMode ? colors.dark.onSurface : colors.light.onSurface;
   }
 
   let baseNavigationOptions: Partial<NativeStackNavigationOptions> = {
@@ -32,9 +46,9 @@ export function useHeaderBehavior({ headerShown, loading = false, iconName = "",
     headerShown: headerShown,
     headerBackVisible: !loading,
     gestureEnabled: !loading,
-    headerTintColor: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
+    headerTintColor: headerTintColor || getHeaderTintColor(),
     headerStyle: {
-      backgroundColor: getBackgroundColor(),
+      backgroundColor: backgroundColor || getBackgroundColor(),
     },
     ...navigationOptions
   }
