@@ -13,6 +13,7 @@ type InputProps = {
   textInputProps?: object;
   errorMessage?: string;
   labelMessage?: string;
+  style?: any;
 };
 
 export function Input (
@@ -25,17 +26,18 @@ export function Input (
     textInputProps = {},
     errorMessage = '',
     labelMessage = '',
+    style = {},
   }: InputProps
 ) {
 
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
-  const style = makeStyles({ isDarkMode, leftComponent, rightComponent, cursorPaddingLeft });
+  const styles = makeStyles({ isDarkMode, leftComponent, rightComponent, cursorPaddingLeft });
 
   const buildLeftComponent = () => {
     return (
       <TouchableOpacity
-        style={style.leftComponent}
+        style={styles.leftComponent}
         onPress={() => {
           {onLeftPress && onLeftPress()}
         }}
@@ -48,7 +50,7 @@ export function Input (
   const buildRightComponent = () => {
     return (
       <TouchableOpacity
-        style={style.rightComponent}
+        style={styles.rightComponent}
         onPress={() => {
           {onRightPress && onRightPress()}
         }}
@@ -59,18 +61,18 @@ export function Input (
   }
 
   return (
-    <View style={style.container}>
-      {labelMessage !== '' && <Text style={style.labelMessage}>{labelMessage}</Text>}
-      <View style={style.inputWrapper}>
+    <View style={StyleSheet.compose(styles.container, style)}>
+      {labelMessage !== '' && <Text style={styles.labelMessage}>{labelMessage}</Text>}
+      <View style={styles.inputWrapper}>
         <TextInput
           placeholderTextColor={isDarkMode ? colors.dark.placeholder : colors.light.placeholder}
-          style={style.input}
+          style={styles.input}
           {...textInputProps}
         />
         {leftComponent != undefined && buildLeftComponent()}
         {rightComponent != undefined && buildRightComponent()}
       </View>
-      <Text style={style.errorMessage}>
+      <Text style={styles.errorMessage}>
         {errorMessage}
       </Text>
     </View>

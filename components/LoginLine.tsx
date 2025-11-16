@@ -2,14 +2,14 @@ import { colors } from "@/colors";
 import { Text } from "@/components/Texts";
 import { StyleSheet, useColorScheme, View } from "react-native";
 
-export default function LoginLine({ children }: { children: string }) {
+export default function LoginLine({ children, style }: { children: string, style?: any }) {
 
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
   const styles = makeStyles({ isDarkMode });
 
   return (
-    <View style={styles.container}>
+    <View style={StyleSheet.compose(styles.container, style)}>
       <View style={styles.line} />
       <Text style={styles.text}>{children}</Text>
       <View style={styles.line}></View>

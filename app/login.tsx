@@ -3,13 +3,13 @@ import { Input } from "@/components/inputs/Input";
 import { PasswordInput } from "@/components/inputs/PasswordInput";
 import LoginLine from "@/components/LoginLine";
 import MainView from "@/components/MainView";
-import { LinkText, Text } from "@/components/Texts";
+import { LinkText, Text, Title } from "@/components/Texts";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
-import { Button, View } from "react-native";
+import { View } from "react-native";
 
 export default function LoginScreen() {
   const screenConf: ScreenConf = {
@@ -26,34 +26,34 @@ export default function LoginScreen() {
 
   return (
     <MainView headerShown={screenConf.headerShown}>
-      <View style={{ flex: 1, justifyContent: 'center', borderWidth: 4 }}>
+      <View style={{ flex: 1, borderWidth: 0, paddingTop: '20%' }}>
+        <Title style={{ alignSelf: 'center', marginBottom: 40 }}>Bienvenido</Title>
         <Input
           textInputProps={{
             value: email,
             onChangeText: setEmail,
-            placeholder: "Placeholder with no icons",
+            placeholder: "Enter your email",
           }}
-          errorMessage="The amount must be greater than zero"
-          labelMessage="Label input"
+          //errorMessage="The amount must be greater than zero"
+          labelMessage="Email"
         />
         <PasswordInput
+          style={{marginTop: 20}}
           value={password}
           onChangeValue={setPassword}
-          placeholder="Placeholder password"
-          errorMessage="The amount must be greater than zero"
-          labelMessage="Password input"
+          placeholder="Enter your password"
+          //errorMessage="The amount must be greater than zero"
+          labelMessage="Password"
         />
+        <PrincipalButton style={{ marginTop: 40 }} title={t('logIn')} onPress={() => {router.replace('/(auth)/home')}} />
+        <Text style={{ marginTop: 10, alignSelf: 'flex-end' }}>{t('forgotPassword')}</Text>
+        <LoginLine style={{marginVertical: 10}}>or</LoginLine>
+        <GoogleButton title={t('continueWithGoogle')} onPress={() => {router.replace('/login')}}/>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 8, marginTop: 10 }}>
+          <Text>{t("doesNotHaveAnAccount")}</Text>
+          <LinkText onPress={() => {router.navigate('/register')}}>{t("signUp")}</LinkText>
+        </View>
       </View>
-      <PrincipalButton title={t('logIn')} onPress={() => {router.replace('/(auth)/home')}} />
-      <Text>{t('forgotPassword')}</Text>
-      <LoginLine>or</LoginLine>
-      <GoogleButton title={t('continueWithGoogle')} onPress={() => {router.replace('/login')}}/>
-      <View>
-        <Text>{t("doesNotHaveAnAccount")}</Text>
-        <LinkText onPress={() => {router.navigate('/register')}}>{t("signUp")}</LinkText>
-      </View>
-      <Button title="Go to Register Account" onPress={() => {router.navigate('/register')}} />
-      <Button title="Go to Recover Account" onPress={() => {router.navigate('/recover-account')}} />
     </MainView>
   );
 }
