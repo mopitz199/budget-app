@@ -4,6 +4,7 @@ export default function RootLayout() {
   return (
     <Stack>
       <Stack.Screen name="login"/>
+      <Stack.Screen name="component-example"/>
       <Stack.Screen name="recover-account"/>
       <Stack.Screen name="register"/>
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
