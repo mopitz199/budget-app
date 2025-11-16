@@ -26,7 +26,7 @@ export default function LoginScreen() {
 
   const handleLogin = () => {
     // Handle login logic here
-
+    router.replace('/(auth)/home')
   };
 
   return (
@@ -50,7 +50,7 @@ export default function LoginScreen() {
           //errorMessage="The amount must be greater than zero"
           labelMessage={t('password')}
         />
-        <PrincipalButton style={{ marginTop: 40 }} title={t('logIn')} onPress={() => {router.replace('/(auth)/home')}} />
+        <PrincipalButton style={{ marginTop: 40 }} title={t('logIn')} onPress={handleLogin} />
         <TouchableOpacity onPress={() => {router.navigate('/recover-account')}}>
           <Text style={{ marginTop: 10, alignSelf: 'flex-end' }}>{t('forgotPassword')}</Text>
         </TouchableOpacity>
