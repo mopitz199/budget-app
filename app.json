@@ -51,7 +51,8 @@
             "./assets/fonts/Roboto-SemiBold.ttf"
           ]
         }
-      ]
+      ],
+      "expo-build-properties"
     ],
     "experiments": {
       "typedRoutes": true,
