@@ -5,7 +5,7 @@ import MainView from "@/components/MainView";
 import { Title } from "@/components/Texts";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
-import { createUserWithEmailAndPassword, getAuth } from '@react-native-firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from '@react-native-firebase/auth';
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
@@ -21,7 +21,9 @@ export default function RegisterScreen() {
   const isDarkMode = theme === 'dark';
   const styles = makeStyles({ isDarkMode });
   const { t, i18n } = useTranslation();
-  
+  const auth = getAuth()
+
+
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
 
@@ -74,14 +76,18 @@ export default function RegisterScreen() {
     return isValid
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     const isValid = handleValidations();
     if(isValid){
-      createUserWithEmailAndPassword(getAuth(), email, password)
-      .then(() => {
-        console.log('User account created & signed in!');
-      })
-      .catch(error => {
+      try {
+        const {user} = await createUserWithEmailAndPassword(auth, email, password);
+        try {
+          sendEmailVerification(user);
+          console.log("all good!")
+        } catch (error) {
+          console.error("Error sending email verification:", error);
+        }
+      } catch (error: any) {
         if (error.code === 'auth/email-already-in-use') {
           console.log('That email address is already in use!');
         }
@@ -91,7 +97,7 @@ export default function RegisterScreen() {
         }
 
         console.error(error);
-      });
+      }
     }
   }
 

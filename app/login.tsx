@@ -15,7 +15,7 @@ import { Image, ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View }
 
 export default function LoginScreen() {
   const screenConf: ScreenConf = {
-    headerShown: false
+    headerShown: true
   };
 
   const router = useRouter();
@@ -117,7 +117,7 @@ function makeStyles({
       flex: 1,
     },
     scrollView: {
-      paddingTop: 40,
+      //paddingTop: 40,
     },
     headerContainer: {
       flexDirection: 'row',
