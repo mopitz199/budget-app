@@ -6,6 +6,8 @@ import MainView from "@/components/MainView";
 import { LinkText, Text, Title } from "@/components/Texts";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
+import { getAuth, GoogleAuthProvider, signInWithCredential } from "@react-native-firebase/auth";
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
@@ -19,6 +21,10 @@ export default function LoginScreen() {
   const router = useRouter();
   useHeaderBehavior({ headerShown: screenConf.headerShown });
   
+  GoogleSignin.configure({
+    webClientId: '',
+  });
+
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
   const styles = makeStyles({ isDarkMode });
@@ -31,6 +37,26 @@ export default function LoginScreen() {
     // Handle login logic here
     router.replace('/(auth)/home')
   };
+
+  async function onGoogleButtonPress() {
+    // Check if your device supports Google Play
+    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    // Trigger Google sign-in flow
+    const signInResult = await GoogleSignin.signIn();
+
+    // Get tokens (idToken is returned from getTokens())
+    const tokens = await GoogleSignin.getTokens();
+    const idToken = tokens.idToken;
+    if (!idToken) {
+      throw new Error('No ID token found');
+    }
+
+    // Create a Google credential with the token
+    const googleCredential = GoogleAuthProvider.credential(idToken);
+
+    // Sign-in the user with the credential
+    return signInWithCredential(getAuth(), googleCredential);
+  }
 
   return (
     <MainView headerShown={screenConf.headerShown}>
@@ -48,6 +74,7 @@ export default function LoginScreen() {
               value: email,
               onChangeText: setEmail,
               placeholder: t('enterYourEmail'),
+              autoCapitalize: "none"
             }}
             //errorMessage="The amount must be greater than zero"
             labelMessage={t('email')}
@@ -65,7 +92,9 @@ export default function LoginScreen() {
             <Text style={styles.forgotPasswordText}>{t('forgotPassword')}</Text>
           </TouchableOpacity>
           <LoginLine style={styles.loginLine}>or</LoginLine>
-          <GoogleButton title={t('continueWithGoogle')} onPress={() => {router.replace('/login')}}/>
+          <GoogleButton title={t('continueWithGoogle')} onPress={
+            onGoogleButtonPress
+          }/>
           <View style={styles.signUpContainer}>
             <Text>{t("doesNotHaveAnAccount")}</Text>
             <LinkText onPress={() => {router.navigate('/register')}}>{t("signUp")}</LinkText>

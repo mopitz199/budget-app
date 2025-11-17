@@ -5,6 +5,7 @@ import MainView from "@/components/MainView";
 import { Title } from "@/components/Texts";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
+import { createUserWithEmailAndPassword, getAuth } from '@react-native-firebase/auth';
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
@@ -22,12 +23,77 @@ export default function RegisterScreen() {
   const { t, i18n } = useTranslation();
   
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [repeatPasswordError, setRepeatPasswordError] = useState("");
+
+  const checkPasswordRequirements = () => {
+    const hasMinLength = password.length >= 6;
+    const hasNumber = /\d/.test(password);
+    const hasLower = /[a-z]/.test(password);
+    const hasUpper = /[A-Z]/.test(password);
+
+    const valid = hasMinLength && hasNumber && (hasLower || hasUpper);
+    return valid
+  }
+
+  const checkPasswordsMatch = () => {
+    return password === repeatPassword;
+  }
+
+  const checkEmail = () => {
+    return email.includes('@');
+  }
+
+  const handleValidations = () => {
+    let isValid = true;
+    if (!checkPasswordRequirements()) {
+      setPasswordError(t('invalidPassword'));
+      isValid = false;
+    }else{
+      setPasswordError('');
+    }
+
+    if (!checkPasswordsMatch()) {
+      setRepeatPasswordError(t('invalidRepeatedPassword'));
+      isValid = false;
+    }else{
+      setRepeatPasswordError('');
+    }
+    
+    if (!checkEmail()) {
+      setEmailError(t('invalidEmail'));
+      isValid = false;
+    } else {
+      setEmailError('');
+    }
+    return isValid
+  };
 
   const handleRegister = () => {
-    // Handle login logic here
-  };
+    const isValid = handleValidations();
+    if(isValid){
+      createUserWithEmailAndPassword(getAuth(), email, password)
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+
+        console.error(error);
+      });
+    }
+  }
 
   return (
     <MainView headerShown={screenConf.headerShown}>
@@ -49,8 +115,9 @@ export default function RegisterScreen() {
               value: email,
               onChangeText: setEmail,
               placeholder: t('enterYourEmail'),
+              autoCapitalize: "none"
             }}
-            //errorMessage="The amount must be greater than zero"
+            errorMessage={emailError}
             labelMessage={t('email')}
           />
           <PasswordInput
@@ -58,7 +125,7 @@ export default function RegisterScreen() {
             value={password}
             onChangeValue={setPassword}
             placeholder={t('enterYourPassword')}
-            //errorMessage="The amount must be greater than zero"
+            errorMessage={passwordError}
             labelMessage={t('password')}
           />
             <PasswordInput
@@ -66,7 +133,7 @@ export default function RegisterScreen() {
               value={repeatPassword}
               onChangeValue={setRepeatPassword}
               placeholder={t('repeatPassword')}
-              //errorMessage="The amount must be greater than zero"
+              errorMessage={repeatPasswordError}
               labelMessage={t('repeatPassword')}
             />
           <PrincipalButton style={styles.registerButton} title={t('signUp')} onPress={handleRegister} />
