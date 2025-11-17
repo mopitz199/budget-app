@@ -14,9 +14,7 @@ export default function RegisterScreen() {
     headerShown: true
   };
 
-  useHeaderBehavior({
-    headerShown: screenConf.headerShown,
-  });
+  useHeaderBehavior({ headerShown: screenConf.headerShown })
 
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
