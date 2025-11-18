@@ -8,6 +8,7 @@ import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from '@react-native-firebase/auth';
+import crashlytics from '@react-native-firebase/crashlytics';
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
@@ -95,7 +96,8 @@ export default function RegisterScreen() {
           setAlertMessage(t('errorSendingVerificationEmail'));
           setShowAlert(true);
 
-          console.error("Error sending email verification:", error);
+          crashlytics().log('error_sending_email_verification: ' + error);
+          crashlytics().crash()
         }
       } catch (error: any) {        
 
@@ -103,7 +105,6 @@ export default function RegisterScreen() {
           setAlertTitle(t('error'));
           setAlertMessage(t('emailAlreadyInUse'));
           setShowAlert(true);
-          console.log('That email address is already in use!');
         } else if (error.code === 'auth/invalid-email') {
           setAlertTitle(t('error'));
           setAlertMessage(t('invalidEmail'));
@@ -113,6 +114,8 @@ export default function RegisterScreen() {
           setAlertTitle(t('error'));
           setAlertMessage(t('errorCreatingUser'));
           setShowAlert(true);
+          crashlytics().log('error_creating_user: ' + error);
+          crashlytics().crash()
         }
 
         console.error(error);
