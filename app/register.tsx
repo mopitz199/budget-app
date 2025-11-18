@@ -86,7 +86,10 @@ export default function RegisterScreen() {
   const handleRegister = async () => {
     const isValid = handleValidations();
     if(isValid){
-      try {        
+      try {
+        if(1==1){
+          throw new Error('Probando el test crashlytics');
+        }
         const {user} = await createUserWithEmailAndPassword(auth, email, password);
         try {          
           sendEmailVerification(user);
