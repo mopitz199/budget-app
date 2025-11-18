@@ -7,6 +7,10 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   en: {
     translation: {
+      "error": "Error",
+      "errorCreatingUser": "Error creating the user. Please try again later.",
+      "errorSendingVerificationEmail": "Error sending verification email. Please try again later.",
+      "emailAlreadyInUse": "The email address is already in use by another account.",
       "isTimeForSaving": "¡It's time for saving!",
       "welcome": "Welcome",
       "continueWithGoogle": "Continue with Google",
@@ -149,6 +153,10 @@ const resources = {
       "ok": "Ok",
       "welcome": "Bienvenido",
       "isTimeForSaving": "¡Es hora de ahorrar!",
+      "error": "Error",
+      "errorCreatingUser": "Error al crear el usuario. Por favor, inténtalo de nuevo más tarde.",
+      "errorSendingVerificationEmail": "Error al enviar el correo de verificación. Por favor, inténtalo de nuevo más tarde.",
+      "emailAlreadyInUse": "La dirección de correo ya está en uso por otra cuenta."
     }
   }
 };

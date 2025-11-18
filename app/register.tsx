@@ -1,8 +1,10 @@
-import { PrincipalButton } from "@/components/Buttons";
+import { Alert } from "@/components/Alert";
+import { PrincipalButton, SecondaryButton } from "@/components/Buttons";
 import { Input } from "@/components/inputs/Input";
 import { PasswordInput } from "@/components/inputs/PasswordInput";
 import MainView from "@/components/MainView";
 import { Title } from "@/components/Texts";
+import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from '@react-native-firebase/auth';
@@ -32,6 +34,10 @@ export default function RegisterScreen() {
 
   const [repeatPassword, setRepeatPassword] = useState("");
   const [repeatPasswordError, setRepeatPasswordError] = useState("");
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
 
   const checkPasswordRequirements = () => {
     const hasMinLength = password.length >= 6;
@@ -79,21 +85,34 @@ export default function RegisterScreen() {
   const handleRegister = async () => {
     const isValid = handleValidations();
     if(isValid){
-      try {
+      try {        
         const {user} = await createUserWithEmailAndPassword(auth, email, password);
-        try {
+        try {          
           sendEmailVerification(user);
-          console.log("all good!")
         } catch (error) {
+
+          setAlertTitle(t('error'));
+          setAlertMessage(t('errorSendingVerificationEmail'));
+          setShowAlert(true);
+
           console.error("Error sending email verification:", error);
         }
-      } catch (error: any) {
-        if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
-        }
+      } catch (error: any) {        
 
-        if (error.code === 'auth/invalid-email') {
+        if (error.code === 'auth/email-already-in-use') {
+          setAlertTitle(t('error'));
+          setAlertMessage(t('emailAlreadyInUse'));
+          setShowAlert(true);
+          console.log('That email address is already in use!');
+        } else if (error.code === 'auth/invalid-email') {
+          setAlertTitle(t('error'));
+          setAlertMessage(t('invalidEmail'));
+          setShowAlert(true);
           console.log('That email address is invalid!');
+        } else {
+          setAlertTitle(t('error'));
+          setAlertMessage(t('errorCreatingUser'));
+          setShowAlert(true);
         }
 
         console.error(error);
@@ -103,6 +122,19 @@ export default function RegisterScreen() {
 
   return (
     <MainView headerShown={screenConf.headerShown}>
+
+      <Alert
+        title={alertTitle}
+        message={alertMessage}
+        leftButton={
+          <SecondaryButton style={{ height: globalStyles.alertButtonHeight }} title="Ok" onPress={() => {
+            setShowAlert(false);
+          }}/>
+        }
+        visible={showAlert}
+      />
+      
+
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
