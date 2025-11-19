@@ -8,7 +8,7 @@ import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from '@react-native-firebase/auth';
-import crashlytics from '@react-native-firebase/crashlytics';
+import { getCrashlytics, log, recordError } from '@react-native-firebase/crashlytics';
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
@@ -25,7 +25,7 @@ export default function RegisterScreen() {
   const styles = makeStyles({ isDarkMode });
   const { t, i18n } = useTranslation();
   const auth = getAuth()
-
+  const crashlyticsInstance = getCrashlytics();
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -84,12 +84,13 @@ export default function RegisterScreen() {
   };
 
   const handleRegister = async () => {
+
+    log(crashlyticsInstance, 'Test error recorded with recordError function');
+    recordError(crashlyticsInstance, new Error('Test error recorded with recordError function'));
+
     const isValid = handleValidations();
     if(isValid){
       try {
-        if(1==1){
-          throw new Error('Probando el test crashlytics');
-        }
         const {user} = await createUserWithEmailAndPassword(auth, email, password);
         try {          
           sendEmailVerification(user);
@@ -99,8 +100,8 @@ export default function RegisterScreen() {
           setAlertMessage(t('errorSendingVerificationEmail'));
           setShowAlert(true);
 
-          crashlytics().log('error_sending_email_verification: ' + error);
-          crashlytics().crash()
+          log(crashlyticsInstance, 'error_sending_email_verification: ' + error);
+          recordError(crashlyticsInstance, new Error('Error sending email verification: ' + error));
         }
       } catch (error: any) {        
 
@@ -117,8 +118,8 @@ export default function RegisterScreen() {
           setAlertTitle(t('error'));
           setAlertMessage(t('errorCreatingUser'));
           setShowAlert(true);
-          crashlytics().log('error_creating_user: ' + error);
-          crashlytics().crash()
+          log(crashlyticsInstance, 'error_creating_user: ' + error);
+          recordError(crashlyticsInstance, new Error('Error creating user: ' + error));
         }
 
         console.error(error);
