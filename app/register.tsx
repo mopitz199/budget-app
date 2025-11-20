@@ -7,8 +7,9 @@ import { Title } from "@/components/Texts";
 import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
+import { log } from "@/utils/logUtils";
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from '@react-native-firebase/auth';
-import { getCrashlytics, log, recordError } from '@react-native-firebase/crashlytics';
+import { getCrashlytics, recordError } from '@react-native-firebase/crashlytics';
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
@@ -85,8 +86,7 @@ export default function RegisterScreen() {
 
   const handleRegister = async () => {
 
-    log(crashlyticsInstance, 'Test error recorded with recordError function');
-    recordError(crashlyticsInstance, new Error('Test error recorded with recordError function'));
+    recordError(crashlyticsInstance, new Error('error_with_user: '));
 
     const isValid = handleValidations();
     if(isValid){
@@ -100,8 +100,7 @@ export default function RegisterScreen() {
           setAlertMessage(t('errorSendingVerificationEmail'));
           setShowAlert(true);
 
-          log(crashlyticsInstance, 'error_sending_email_verification: ' + error);
-          recordError(crashlyticsInstance, new Error('Error sending email verification: ' + error));
+          recordError(crashlyticsInstance, new Error('error_sending_verification_email: ' + error));
         }
       } catch (error: any) {        
 
@@ -113,13 +112,12 @@ export default function RegisterScreen() {
           setAlertTitle(t('error'));
           setAlertMessage(t('invalidEmail'));
           setShowAlert(true);
-          console.log('That email address is invalid!');
         } else {
           setAlertTitle(t('error'));
           setAlertMessage(t('errorCreatingUser'));
           setShowAlert(true);
           log(crashlyticsInstance, 'error_creating_user: ' + error);
-          recordError(crashlyticsInstance, new Error('Error creating user: ' + error));
+          recordError(crashlyticsInstance, new Error('error_creating_user: ' + error));
         }
 
         console.error(error);

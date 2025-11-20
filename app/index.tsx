@@ -4,16 +4,16 @@ import { Text } from "@/components/Texts";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import { getAuth, onAuthStateChanged, signOut } from '@react-native-firebase/auth';
+import { getCrashlytics, recordError, setUserId } from '@react-native-firebase/crashlytics';
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { useColorScheme } from "react-native";
-
 export default function Index() {
   const screenConf: ScreenConf = {
     headerShown: false
   };
   const router = useRouter();
-  const theme = useColorScheme();
+  const auth = getAuth()
+  const crashlyticsInstance = getCrashlytics();
   
   useHeaderBehavior({ headerShown: screenConf.headerShown });
 
@@ -35,14 +35,15 @@ export default function Index() {
 
   // Handle user state changes
   function handleAuthStateChanged(user: any) {
-    console.log('Auth state changed:', user);
-    console.log('Is authorized:', isAuthorized());
+    if(user){
+      setUserId(crashlyticsInstance, user.uid);
+    }
     setUser(user);
     if (initializing) setInitializing(false);
   }
 
   useEffect(() => {
-    const subscriber = onAuthStateChanged(getAuth(), handleAuthStateChanged);
+    const subscriber = onAuthStateChanged(auth, handleAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
 
@@ -51,10 +52,13 @@ export default function Index() {
       <Text>{isAuthorized() ? 'Welcome back!' : 'Please log in.'}</Text>
       {isAuthorized() && (
         <PrincipalButton title="Logout" onPress={() => {
-          signOut(getAuth()).then(() => console.log('User signed out!'));
+          signOut(auth).then(() => console.log('User signed out!'));
         }} />
       )}
-      <PrincipalButton title="Components" onPress={() => {router.replace('/component-example')}} />
+      <PrincipalButton title="Components" onPress={() => {
+        recordError(crashlyticsInstance, new Error('error_at_index: '));
+        router.replace('/component-example')}
+      } />
       <PrincipalButton title="Login" onPress={() => {router.replace('/login')}} />
     </MainView>
   );
