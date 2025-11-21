@@ -51,26 +51,20 @@ export default function LoginScreen() {
 
     // Trigger Google sign-in flow
     try {
-      await GoogleSignin.signOut(); // Ensure a fresh login
-    } catch (err) {
-      recordError(crashlyticsInstance, new Error('error_google_signout: ' + err));
-    }
+      let signInResult = await GoogleSignin.signIn();
+      let idToken = signInResult.data?.idToken;
+      if (!idToken) {
+        recordError(crashlyticsInstance, new Error('error_google_token_not_found: Token is null'));
+      }
 
-    // Get tokens (idToken is returned from getTokens())
-    const tokens = await GoogleSignin.getTokens();
-    const idToken = tokens.idToken;
-    if (!idToken) {
-      recordError(crashlyticsInstance, new Error('error_google_token: No ID token found'));
-    }
-
-    // Create a Google credential with the token
-    const googleCredential = GoogleAuthProvider.credential(idToken);
-
-    // Sign-in the user with the credential
-    try{
-      await signInWithCredential(auth, googleCredential);
+      const googleCredential = GoogleAuthProvider.credential(idToken);
+      try{
+        await signInWithCredential(auth, googleCredential);
+      }catch (error) {
+        recordError(crashlyticsInstance, new Error('error_sign_in_with_credential: ' + error));
+      }
     }catch (error) {
-      recordError(crashlyticsInstance, new Error('error_google_signin: ' + error));
+      recordError(crashlyticsInstance, new Error('error_google_signin_flow: ' + error));
     }
     router.replace('/')
   }
