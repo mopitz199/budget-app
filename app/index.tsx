@@ -100,7 +100,6 @@ export default function Index() {
   }
 
   function loadingIndex() {
-    console.log("user: ", user);
     if(isAuthenticated()){
       if(isAuthorized()){
         return authorizedScreen()

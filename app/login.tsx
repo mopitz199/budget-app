@@ -14,6 +14,7 @@ import { useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
 
+
 export default function LoginScreen() {
   const screenConf: ScreenConf = {
     headerShown: true
@@ -23,7 +24,7 @@ export default function LoginScreen() {
   useHeaderBehavior({ headerShown: screenConf.headerShown });
   
   GoogleSignin.configure({
-    webClientId: '949802301207-bvu4mdr8k2qqhq1qnk0etlv6rtct1n3e.apps.googleusercontent.com',
+    webClientId: process.env.EXPO_PUBLIC_WEBCLIENTID,
   });
 
   const theme = useColorScheme();
@@ -35,6 +36,7 @@ export default function LoginScreen() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
     // Handle login logic here
@@ -43,10 +45,12 @@ export default function LoginScreen() {
 
   async function onGoogleButtonPress() {
     // Check if your device supports Google Play
+    setLoading(true);
     try {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
     } catch (err) {
       recordError(crashlyticsInstance, new Error('error_google_play_services: ' + err));
+      setLoading(false);
     }
 
     // Trigger Google sign-in flow
@@ -55,6 +59,7 @@ export default function LoginScreen() {
       let idToken = signInResult.data?.idToken;
       if (!idToken) {
         recordError(crashlyticsInstance, new Error('error_google_token_not_found: Token is null'));
+        setLoading(false);
       }
 
       const googleCredential = GoogleAuthProvider.credential(idToken);
@@ -62,15 +67,18 @@ export default function LoginScreen() {
         await signInWithCredential(auth, googleCredential);
       }catch (error) {
         recordError(crashlyticsInstance, new Error('error_sign_in_with_credential: ' + error));
+        setLoading(false);
       }
     }catch (error) {
       recordError(crashlyticsInstance, new Error('error_google_signin_flow: ' + error));
+      setLoading(false);
     }
+    setLoading(false);
     router.replace('/')
   }
 
   return (
-    <MainView headerShown={screenConf.headerShown}>
+    <MainView headerShown={screenConf.headerShown} loading={loading}>
       <View style={styles.container}>
         <ScrollView style={styles.scrollView}>
           <View style={styles.headerContainer}>
