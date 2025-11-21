@@ -33,6 +33,10 @@ export default function Index() {
     }
   }
 
+  function isAuthenticated() {
+    return user != null
+  }
+
   // Handle user state changes
   function handleAuthStateChanged(user: any) {
     if(user){
@@ -47,19 +51,70 @@ export default function Index() {
     return subscriber; // unsubscribe on unmount
   }, []);
 
+
+  function unauthenticatedScreen(){
+    return (
+      <>
+        <Text>{isAuthorized() ? 'Welcome back!' : 'Please log in.'}</Text>
+        {isAuthorized() && (
+          <PrincipalButton title="Logout" onPress={() => {
+            signOut(auth).then(() => console.log('User signed out!'));
+          }} />
+        )}
+        <PrincipalButton title="Components" onPress={() => {
+          recordError(crashlyticsInstance, new Error('error_at_index: '));
+          router.replace('/component-example')}
+        } />
+        <PrincipalButton title="Login" onPress={() => {router.replace('/login')}} />
+      </>
+    )
+  }
+
+  function unauthorizedScreen(){
+    return (
+      <>
+        <Text>Register your email</Text>
+        <PrincipalButton title="Sign out" onPress={async () => {
+          await signOut(auth);
+          console.log('User signed out!');
+        }} />
+      </>
+    )
+  }
+
+  function authorizedScreen(){
+    return (
+      <>
+        <Text>{isAuthorized() ? 'Welcome back!' : 'Please log in.'}</Text>
+        {isAuthorized() && (
+          <PrincipalButton title="Sign out" onPress={() => {
+            signOut(auth).then(() => console.log('User signed out!'));
+          }} />
+        )}
+        <PrincipalButton title="Components" onPress={() => {
+          recordError(crashlyticsInstance, new Error('error_at_index: '));
+          router.replace('/component-example')}
+        } />
+      </>
+    )
+  }
+
+  function loadingIndex() {
+    console.log("user: ", user);
+    if(isAuthenticated()){
+      if(isAuthorized()){
+        return authorizedScreen()
+      }else{
+        return unauthorizedScreen()
+      }
+    }else{
+      return unauthenticatedScreen()
+    }
+  }
+
   return (
     <MainView headerShown={screenConf.headerShown}>
-      <Text>{isAuthorized() ? 'Welcome back!' : 'Please log in.'}</Text>
-      {isAuthorized() && (
-        <PrincipalButton title="Logout" onPress={() => {
-          signOut(auth).then(() => console.log('User signed out!'));
-        }} />
-      )}
-      <PrincipalButton title="Components" onPress={() => {
-        recordError(crashlyticsInstance, new Error('error_at_index: '));
-        router.replace('/component-example')}
-      } />
-      <PrincipalButton title="Login" onPress={() => {router.replace('/login')}} />
+      {loadingIndex()}
     </MainView>
   );
 }

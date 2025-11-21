@@ -1,6 +1,6 @@
 import { log as crashlyticsLog } from '@react-native-firebase/crashlytics';
 
-const useCrashlytics = true
+const useCrashlytics = false
 
 export function log(crashlyticsInstance: any, message: string) {
   if(useCrashlytics){

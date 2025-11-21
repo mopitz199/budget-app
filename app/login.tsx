@@ -7,6 +7,7 @@ import { LinkText, Text, Title } from "@/components/Texts";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import { getAuth, GoogleAuthProvider, signInWithCredential } from "@react-native-firebase/auth";
+import { getCrashlytics, recordError } from "@react-native-firebase/crashlytics";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -22,13 +23,15 @@ export default function LoginScreen() {
   useHeaderBehavior({ headerShown: screenConf.headerShown });
   
   GoogleSignin.configure({
-    webClientId: '',
+    webClientId: '949802301207-bvu4mdr8k2qqhq1qnk0etlv6rtct1n3e.apps.googleusercontent.com',
   });
 
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
   const styles = makeStyles({ isDarkMode });
   const { t, i18n } = useTranslation();
+  const auth = getAuth()
+  const crashlyticsInstance = getCrashlytics();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,22 +43,36 @@ export default function LoginScreen() {
 
   async function onGoogleButtonPress() {
     // Check if your device supports Google Play
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    try {
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    } catch (err) {
+      recordError(crashlyticsInstance, new Error('error_google_play_services: ' + err));
+    }
+
     // Trigger Google sign-in flow
-    const signInResult = await GoogleSignin.signIn();
+    try {
+      await GoogleSignin.signOut(); // Ensure a fresh login
+    } catch (err) {
+      recordError(crashlyticsInstance, new Error('error_google_signout: ' + err));
+    }
 
     // Get tokens (idToken is returned from getTokens())
     const tokens = await GoogleSignin.getTokens();
     const idToken = tokens.idToken;
     if (!idToken) {
-      throw new Error('No ID token found');
+      recordError(crashlyticsInstance, new Error('error_google_token: No ID token found'));
     }
 
     // Create a Google credential with the token
     const googleCredential = GoogleAuthProvider.credential(idToken);
 
     // Sign-in the user with the credential
-    return signInWithCredential(getAuth(), googleCredential);
+    try{
+      await signInWithCredential(auth, googleCredential);
+    }catch (error) {
+      recordError(crashlyticsInstance, new Error('error_google_signin: ' + error));
+    }
+    router.replace('/')
   }
 
   return (
