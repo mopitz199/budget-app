@@ -15,6 +15,7 @@ import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import { currencyOptions, formatDisplay, formatMask } from "@/utils/currencyUtil";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Alert as AlertRN, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
@@ -34,6 +35,17 @@ export default function Index() {
   const [showModal, setShowModal] = useState(false);
   const [currencyValue, setCurrencyValue] = useState('clp');
 
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState<'date' | 'time'>('date');
+  const [show, setShow] = useState(false);
+
+  const onChange = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+
   return (
     <MainView headerShown={screenConf.headerShown}>
       
@@ -41,6 +53,7 @@ export default function Index() {
         <Title>Main title</Title>
         <Text>Regular text</Text>
         <LinkText onPress={() => { setShowModal(true); }}>Alert Text</LinkText>
+        <LinkText onPress={() => { setShow(true); }}>Show DatePicker</LinkText>
 
         <View style={{ marginVertical: 12 }}></View>
         
@@ -128,6 +141,19 @@ export default function Index() {
           errorMessage="The amount must be greater than zero"
           labelMessage="Selector input"
         />
+
+        <View style={{ marginVertical: 12 }}></View>
+
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode={mode}
+            is24Hour={true}
+            onChange={onChange}
+          />
+        )}
+
 
         <View style={{ marginVertical: 12 }}></View>
 
