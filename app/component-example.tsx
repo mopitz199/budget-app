@@ -2,6 +2,7 @@ import { colors } from "@/colors";
 import { Alert } from "@/components/Alert";
 import { DeleteButton, GoogleButton, PrincipalButton, SecondaryButton } from "@/components/Buttons";
 import CurrencyOption from "@/components/CurrencyOption";
+import DateTimePicker from '@/components/DatePicker';
 import { AmountCurrencyInput } from "@/components/inputs/AmountCurrencyInput";
 import { Input } from "@/components/inputs/Input";
 import { PasswordInput } from "@/components/inputs/PasswordInput";
@@ -15,7 +16,6 @@ import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import { currencyOptions, formatDisplay, formatMask } from "@/utils/currencyUtil";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Alert as AlertRN, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
@@ -144,16 +144,13 @@ export default function Index() {
 
         <View style={{ marginVertical: 12 }}></View>
 
-        {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode={mode}
-            is24Hour={true}
-            onChange={onChange}
-          />
-        )}
-
+        <DateTimePicker
+          testID="dateTimePicker"
+          initialValue={date}
+          mode={mode}
+          is24Hour={true}
+          onFinalValueChange={(finalDate) => {console.log(finalDate)}}
+        />
 
         <View style={{ marginVertical: 12 }}></View>
 
