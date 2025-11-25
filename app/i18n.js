@@ -8,6 +8,7 @@ const resources = {
   en: {
     translation: {
       "error": "Error",
+      "errorUnableToLoginPleaseCheckCredentials": "Unable to login. Please check your credentials.",
       "errorCreatingUser": "Error creating the user. Please try again later.",
       "errorSendingVerificationEmail": "Error sending verification email. Please try again later.",
       "emailAlreadyInUse": "The email address is already in use by another account.",
@@ -156,7 +157,8 @@ const resources = {
       "error": "Error",
       "errorCreatingUser": "Error al crear el usuario. Por favor, inténtalo de nuevo más tarde.",
       "errorSendingVerificationEmail": "Error al enviar el correo de verificación. Por favor, inténtalo de nuevo más tarde.",
-      "emailAlreadyInUse": "La dirección de correo ya está en uso por otra cuenta."
+      "emailAlreadyInUse": "La dirección de correo ya está en uso por otra cuenta.",
+      "errorUnableToLoginPleaseCheckCredentials": "No se puede iniciar sesión. Por favor, verifica tus credenciales."
     }
   }
 };

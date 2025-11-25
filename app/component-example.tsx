@@ -35,17 +35,6 @@ export default function Index() {
   const [showModal, setShowModal] = useState(false);
   const [currencyValue, setCurrencyValue] = useState('clp');
 
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [mode, setMode] = useState<'date' | 'time'>('date');
-  const [show, setShow] = useState(false);
-
-  const onChange = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate;
-    setShow(false);
-    setDate(currentDate);
-  };
-
-
   return (
     <MainView headerShown={screenConf.headerShown}>
       
@@ -145,10 +134,12 @@ export default function Index() {
 
         <DateTimePicker
           testID="dateTimePicker"
-          initialValue={date}
-          mode={mode}
+          initialValue={new Date(1598051730000)}
+          mode='date'
           is24Hour={true}
-          onFinalValueChange={(finalDate) => {console.log(finalDate)}}
+          onFinalValueChange={(finalDate) => {
+            console.log(finalDate)
+          }}
         />
 
         <View style={{ marginVertical: 12 }}></View>

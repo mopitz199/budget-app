@@ -1,15 +1,18 @@
-import { GoogleButton, PrincipalButton } from "@/components/Buttons";
+import { Alert } from "@/components/Alert";
+import { GoogleButton, PrincipalButton, SecondaryButton } from "@/components/Buttons";
 import { Input } from "@/components/inputs/Input";
 import { PasswordInput } from "@/components/inputs/PasswordInput";
 import LoginLine from "@/components/LoginLine";
 import MainView from "@/components/MainView";
 import { LinkText, Text, Title } from "@/components/Texts";
+import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
-import { getAuth, GoogleAuthProvider, signInWithCredential } from "@react-native-firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithCredential, signInWithEmailAndPassword } from "@react-native-firebase/auth";
 import { getCrashlytics, recordError } from "@react-native-firebase/crashlytics";
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useRouter } from "expo-router";
+import { FirebaseError } from 'firebase/app';
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
@@ -38,10 +41,34 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [showAlert, setShowAlert] = useState(false);
+  const [titleAlert, setTitleAlert] = useState("");
+  const [messageAlert, setMessageAlert] = useState("");
+
   const handleLogin = () => {
-    // Handle login logic here
-    router.replace('/(auth)/home')
+    signIn();
   };
+
+  const signIn = async () => {
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      // Only navigate on successful login
+      router.replace('/(auth)/home');
+    } catch (e: any) {
+      const err = e as FirebaseError;
+      recordError(crashlyticsInstance, new Error('error_email_password_signin: ' + err.message));
+      displayAlert(t('error'), t('errorUnableToLoginPleaseCheckCredentials'));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const displayAlert = (title: string, message: string) => {
+    setTitleAlert(title);
+    setMessageAlert(message);
+    setShowAlert(true);
+  }
 
   async function onGoogleButtonPress() {
     // Check if your device supports Google Play
@@ -79,6 +106,18 @@ export default function LoginScreen() {
 
   return (
     <MainView headerShown={screenConf.headerShown} loading={loading}>
+
+      <Alert
+        title={titleAlert}
+        message={messageAlert}
+        leftButton={
+          <SecondaryButton style={{ height: globalStyles.alertButtonHeight }} title={t('close')} onPress={() => {
+            setShowAlert(false);
+          }}/>
+        }
+        visible={showAlert}
+      />
+
       <View style={styles.container}>
         <ScrollView style={styles.scrollView}>
           <View style={styles.headerContainer}>
