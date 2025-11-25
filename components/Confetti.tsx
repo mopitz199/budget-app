@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Animated, Dimensions, StyleSheet, useColorScheme, View } from "react-native";
 
-export default function Confetti({}){
+export default function Confetti({show}: {show: boolean}) {
 
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
   const styles = makeStyles({ isDarkMode });
 
-  const [showConfetti, setShowConfetti] = useState(false);
   const [confettiPieces, setConfettiPieces] = useState<any[]>([]);
 
   const createConfettiPiece = (index: number) => {
@@ -17,7 +16,7 @@ export default function Confetti({}){
     return {
       id: index,
       x: new Animated.Value(Math.random() * width),
-      y: new Animated.Value(-10),
+      y: new Animated.Value(-50 - Math.random() * 100), // Start higher above screen with randomized positions
       rotation: new Animated.Value(0),
       opacity: new Animated.Value(1),
       color: colors[Math.floor(Math.random() * colors.length)],
@@ -29,34 +28,31 @@ export default function Confetti({}){
   const startConfetti = () => {
     const pieces = Array.from({ length: 80 }, (_, i) => createConfettiPiece(i));
     setConfettiPieces(pieces);
-    setShowConfetti(true);
 
-    pieces.forEach((piece) => {
+    pieces.forEach((piece, index) => {
       const { height } = Dimensions.get('window');
       
-      Animated.parallel([
-        Animated.timing(piece.y, {
-          toValue: height + 50,
-          duration: 3000 + Math.random() * 2000,
-          useNativeDriver: false,
-        }),
-        Animated.timing(piece.rotation, {
-          toValue: 360,
-          duration: 2000 + Math.random() * 1000,
-          useNativeDriver: false,
-        }),
-        Animated.timing(piece.opacity, {
-          toValue: 0,
-          duration: 3000,
-          useNativeDriver: false,
-        }),
-      ]).start();
+      // Add slight delay to create more natural falling effect
+      setTimeout(() => {
+        Animated.parallel([
+          Animated.timing(piece.y, {
+            toValue: height + 50,
+            duration: 3000 + Math.random() * 2000,
+            useNativeDriver: false,
+          }),
+          Animated.timing(piece.rotation, {
+            toValue: 360 * (Math.random() > 0.5 ? 1 : -1), // Random rotation direction
+            duration: 2000 + Math.random() * 1000,
+            useNativeDriver: false,
+          }),
+          Animated.timing(piece.opacity, {
+            toValue: 0,
+            duration: 3000,
+            useNativeDriver: false,
+          }),
+        ]).start();
+      }, Math.random() * 500); // Stagger the start times
     });
-
-    // Hide confetti after animation
-    setTimeout(() => {
-      setShowConfetti(false);
-    }, 5000);
   };
 
   // Logic runs AFTER the component renders
@@ -65,6 +61,10 @@ export default function Confetti({}){
     console.log('Component rendered');
     startConfetti();
   }, []); // Empty dependency - runs once after initial render
+
+  if(!show){
+    return null;
+  }
 
   return (
     <View style={styles.confettiContainer}>
@@ -106,13 +106,10 @@ function makeStyles({
 }: StyleParams) {
   return StyleSheet.create({
     confettiContainer: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
+      ...StyleSheet.absoluteFillObject, // This ensures full screen coverage
+      top: 0, // Start from the very top of the screen
       pointerEvents: 'none',
-      zIndex: 1000,
+      zIndex: 2000,
     },
     confettiPiece: {
       position: 'absolute',

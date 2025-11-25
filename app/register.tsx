@@ -1,6 +1,5 @@
 import { Alert } from "@/components/Alert";
 import { PrincipalButton, SecondaryButton } from "@/components/Buttons";
-import Confetti from "@/components/Confetti";
 import { Input } from "@/components/inputs/Input";
 import { PasswordInput } from "@/components/inputs/PasswordInput";
 import MainView from "@/components/MainView";
@@ -125,7 +124,8 @@ export default function RegisterScreen() {
   }
 
   return (
-    <MainView headerShown={screenConf.headerShown}>
+    <MainView headerShown={screenConf.headerShown} showConfetti={showConfetti}>
+      {/* <Confetti show={showConfetti} /> */}
 
       <Alert
         title={alertTitle}
@@ -137,8 +137,6 @@ export default function RegisterScreen() {
         }
         visible={showAlert}
       />
-
-      {showConfetti && <Confetti />}
       
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}

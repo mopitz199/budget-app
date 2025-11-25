@@ -1,10 +1,12 @@
 import { colors } from "@/colors";
 import { ActivityIndicator, Modal, StyleSheet, useColorScheme, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Confetti from "./Confetti";
 
 export interface MainViewProps {
   headerShown?: boolean;
   loading?: boolean;
+  showConfetti?: boolean;
   children: React.ReactNode;
 }
 
@@ -12,7 +14,7 @@ type StyleParams = {
   isDarkMode: boolean;
 };
 
-export default function MainView({ headerShown = true, loading = false, children }: MainViewProps) {
+export default function MainView({ headerShown = true, loading = false, showConfetti = false,children }: MainViewProps) {
 
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
@@ -31,6 +33,7 @@ export default function MainView({ headerShown = true, loading = false, children
   if (headerShown) {
     return (
       <>
+        <Confetti show={showConfetti} />
         <View style={style.container}>
           {loading && loadingScreen()}
           {children}
@@ -40,6 +43,7 @@ export default function MainView({ headerShown = true, loading = false, children
   } else {
     return (
       <>
+        <Confetti show={showConfetti} />
         <SafeAreaView style={style.container}>
           {loading && loadingScreen()}
           {children}
