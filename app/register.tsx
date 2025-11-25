@@ -1,5 +1,6 @@
 import { Alert } from "@/components/Alert";
 import { PrincipalButton, SecondaryButton } from "@/components/Buttons";
+import Confetti from "@/components/Confetti";
 import { Input } from "@/components/inputs/Input";
 import { PasswordInput } from "@/components/inputs/PasswordInput";
 import MainView from "@/components/MainView";
@@ -40,6 +41,8 @@ export default function RegisterScreen() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertTitle, setAlertTitle] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const checkPasswordRequirements = () => {
     const hasMinLength = password.length >= 6;
@@ -84,38 +87,34 @@ export default function RegisterScreen() {
     return isValid
   };
 
+  const displayAlert = (title: string, message: string) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setShowAlert(true);
+  }
+
   const handleRegister = async () => {
-
-    recordError(crashlyticsInstance, new Error('error_with_user: '));
-
+    // Trigger confetti on successful registration
     const isValid = handleValidations();
+    setShowConfetti(true);
     if(isValid){
       try {
         const {user} = await createUserWithEmailAndPassword(auth, email, password);
+        
         try {          
           sendEmailVerification(user);
         } catch (error) {
-
-          setAlertTitle(t('error'));
-          setAlertMessage(t('errorSendingVerificationEmail'));
-          setShowAlert(true);
-
+          displayAlert(t('error'), t('errorSendingVerificationEmail'));
           recordError(crashlyticsInstance, new Error('error_sending_verification_email: ' + error));
         }
       } catch (error: any) {        
 
         if (error.code === 'auth/email-already-in-use') {
-          setAlertTitle(t('error'));
-          setAlertMessage(t('emailAlreadyInUse'));
-          setShowAlert(true);
+          displayAlert(t('error'), t('emailAlreadyInUse'));
         } else if (error.code === 'auth/invalid-email') {
-          setAlertTitle(t('error'));
-          setAlertMessage(t('invalidEmail'));
-          setShowAlert(true);
+          displayAlert(t('error'), t('invalidEmail'));
         } else {
-          setAlertTitle(t('error'));
-          setAlertMessage(t('errorCreatingUser'));
-          setShowAlert(true);
+          displayAlert(t('error'), t('errorCreatingUser'));
           log(crashlyticsInstance, 'error_creating_user: ' + error);
           recordError(crashlyticsInstance, new Error('error_creating_user: ' + error));
         }
@@ -138,8 +137,9 @@ export default function RegisterScreen() {
         }
         visible={showAlert}
       />
-      
 
+      {showConfetti && <Confetti />}
+      
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -217,6 +217,6 @@ function makeStyles({
     },
     registerButton: {
       marginTop: 40,
-    },
+    }
   });
 }
