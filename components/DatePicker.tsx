@@ -4,6 +4,7 @@ import { globalStyles } from "@/global-styles";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as DateTimePickerLibrary from '@react-native-community/datetimepicker';
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Modal, Platform, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 import { PrincipalButton, SecondaryButton } from "./Buttons";
 
@@ -21,10 +22,12 @@ export default function DateTimePicker({
   [key: string]: any
 }) {  
 
+  const { t, i18n } = useTranslation();
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
-  const styles = makeStyles({ isDarkMode });
 
+  const styles = makeStyles({ isDarkMode });
+  
   const [show, setShow] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(initialValue); // To handle the iOS picker intermediate value
   const [finalDate, setFinalDate] = useState<Date>(initialValue); // The confirmed selected date that will be used in the input display
@@ -72,10 +75,7 @@ export default function DateTimePicker({
       return (
         <Modal visible={show} transparent animationType="none">
           <View style={styles.backdrop}>
-            <View style={{
-              backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
-              borderRadius: 12, padding: 16,
-            }}>
+            <View style={styles.modalContainer}>
               <DateTimePickerLibrary.default
                 value={selectedDate}
                 mode={mode}
@@ -84,19 +84,15 @@ export default function DateTimePicker({
                 accentColor={isDarkMode ? colors.dark.primary : colors.light.primary}
                 {...props}
               />
-              <View style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                marginTop: 12
-              }}>
+              <View style={styles.buttonContainer}>
                 <SecondaryButton
-                  style={{ marginRight: 8, width: 80, height: 40 }}
-                  title="Cancel"
+                  style={styles.cancelButton}
+                  title={t('cancel')}
                   onPress={() => {onIOSCancelPress()}}
                 />
                 <PrincipalButton
-                  style={{ width: 80, height: 40 }}
-                  title="Ok"
+                  style={styles.okButton}
+                  title={t('ok')}
                   onPress={() => {onIOSOkPress()}}
                 />
               </View>
@@ -174,6 +170,27 @@ function makeStyles({ isDarkMode }: StyleParams) {
       justifyContent: "center",
       alignItems: "center",
       zIndex: 9999,
-    }
+    },
+    modalContainer: {
+      backgroundColor: isDarkMode ? colors.dark.surface : colors.light.surface,
+      borderRadius: 12,
+      padding: 16,
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      marginTop: 12,
+    },
+    cancelButton: {
+      marginRight: 8,
+      width: globalStyles.datePickerWeight,
+      height: globalStyles.datePickerHeight,
+      fontSize: globalStyles.datePickerButtonFontSize,
+    },
+    okButton: {
+      width: globalStyles.datePickerWeight,
+      height: globalStyles.datePickerHeight,
+      fontSize: globalStyles.datePickerButtonFontSize,
+    },
   });
 }

@@ -53,7 +53,6 @@ export default function Index() {
         <Title>Main title</Title>
         <Text>Regular text</Text>
         <LinkText onPress={() => { setShowModal(true); }}>Alert Text</LinkText>
-        <LinkText onPress={() => { setShow(true); }}>Show DatePicker</LinkText>
 
         <View style={{ marginVertical: 12 }}></View>
         

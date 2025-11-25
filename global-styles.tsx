@@ -17,6 +17,11 @@ export const globalStyles = {
   inputRightIconSize: 24,
   inputBorderRadius: 8,
 
+  // Date Picker styles
+  datePickerHeight: 40,
+  datePickerWeight: 90,
+  datePickerButtonFontSize: 18,
+
   // Alert styles
   alertTitleFontSize: 16,
   alertTitleFontFamily: 'Roboto-Bold',
