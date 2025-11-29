@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { Animated, Dimensions, StyleSheet, useColorScheme, View } from "react-native";
 
-export default function Confetti({show}: {show: boolean}) {
+export interface ConfettiRef {
+  startConfettiFromParent: () => void;
+}
+
+const Confetti = forwardRef<ConfettiRef, {}>((props, ref) => {
 
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
@@ -37,17 +41,17 @@ export default function Confetti({show}: {show: boolean}) {
         Animated.parallel([
           Animated.timing(piece.y, {
             toValue: height + 50,
-            duration: 3000 + Math.random() * 2000,
+            duration: 2000 + Math.random() * 2000,
             useNativeDriver: false,
           }),
           Animated.timing(piece.rotation, {
             toValue: 360 * (Math.random() > 0.5 ? 1 : -1), // Random rotation direction
-            duration: 2000 + Math.random() * 1000,
+            duration: 1000 + Math.random() * 1000,
             useNativeDriver: false,
           }),
           Animated.timing(piece.opacity, {
             toValue: 0,
-            duration: 3000,
+            duration: 2000,
             useNativeDriver: false,
           }),
         ]).start();
@@ -55,16 +59,10 @@ export default function Confetti({show}: {show: boolean}) {
     });
   };
 
-  // Logic runs AFTER the component renders
-  useEffect(() => {
-    // This runs after render
-    console.log('Component rendered');
-    startConfetti();
-  }, []); // Empty dependency - runs once after initial render
-
-  if(!show){
-    return null;
-  }
+  // Expose startConfetti method to parent components via ref
+  useImperativeHandle(ref, () => ({
+    startConfettiFromParent: startConfetti,
+  }));
 
   return (
     <View style={styles.confettiContainer}>
@@ -94,8 +92,10 @@ export default function Confetti({show}: {show: boolean}) {
         />
       ))}
     </View>
-  )
-}
+  );
+});
+
+export default Confetti;
 
 type StyleParams = {
   isDarkMode: boolean;

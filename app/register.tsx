@@ -1,5 +1,6 @@
 import { Alert } from "@/components/Alert";
 import { PrincipalButton, SecondaryButton } from "@/components/Buttons";
+import Confetti, { ConfettiRef } from "@/components/Confetti";
 import { Input } from "@/components/inputs/Input";
 import { PasswordInput } from "@/components/inputs/PasswordInput";
 import MainView from "@/components/MainView";
@@ -10,7 +11,7 @@ import { ScreenConf } from "@/types/screen-conf";
 import { log } from "@/utils/logUtils";
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from '@react-native-firebase/auth';
 import { getCrashlytics, recordError } from '@react-native-firebase/crashlytics';
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
 
@@ -41,7 +42,7 @@ export default function RegisterScreen() {
   const [alertTitle, setAlertTitle] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
 
-  const [showConfetti, setShowConfetti] = useState(false);
+  const confettiRef = useRef<ConfettiRef>(null);
 
   const checkPasswordRequirements = () => {
     const hasMinLength = password.length >= 6;
@@ -95,7 +96,7 @@ export default function RegisterScreen() {
   const handleRegister = async () => {
     // Trigger confetti on successful registration
     const isValid = handleValidations();
-    setShowConfetti(true);
+    confettiRef.current?.startConfettiFromParent();
     if(isValid){
       try {
         const {user} = await createUserWithEmailAndPassword(auth, email, password);
@@ -124,8 +125,8 @@ export default function RegisterScreen() {
   }
 
   return (
-    <MainView headerShown={screenConf.headerShown} showConfetti={showConfetti}>
-      {/* <Confetti show={showConfetti} /> */}
+    <MainView headerShown={screenConf.headerShown}>
+      <Confetti ref={confettiRef} />
 
       <Alert
         title={alertTitle}
