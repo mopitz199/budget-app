@@ -11,6 +11,7 @@ import { ScreenConf } from "@/types/screen-conf";
 import { log } from "@/utils/logUtils";
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from '@react-native-firebase/auth';
 import { getCrashlytics, recordError } from '@react-native-firebase/crashlytics';
+import { router } from "expo-router";
 import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
@@ -95,6 +96,7 @@ export default function RegisterScreen() {
 
   const handleRegister = async () => {
     // Trigger confetti on successful registration
+    router.replace('/(auth)/register-success');
     const isValid = handleValidations();
     confettiRef.current?.startConfettiFromParent();
     if(isValid){
@@ -102,7 +104,7 @@ export default function RegisterScreen() {
         const {user} = await createUserWithEmailAndPassword(auth, email, password);
         
         try {          
-          sendEmailVerification(user);
+          await sendEmailVerification(user);
         } catch (error) {
           displayAlert(t('error'), t('errorSendingVerificationEmail'));
           recordError(crashlyticsInstance, new Error('error_sending_verification_email: ' + error));

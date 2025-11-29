@@ -2,7 +2,7 @@ import { colors } from "@/colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   NativeStackHeaderLeftProps,
-  NativeStackNavigationOptions
+  NativeStackNavigationOptions,
 } from "@react-navigation/native-stack";
 import { useNavigation } from "expo-router";
 import { useLayoutEffect } from "react";
@@ -50,7 +50,14 @@ export function useHeaderBehavior({
     headerStyle: {
       backgroundColor: backgroundColor || getBackgroundColor(),
     },
-    ...navigationOptions
+  }
+
+  // Merge navigationOptions, allowing them to override base options
+  if (navigationOptions) {
+    baseNavigationOptions = {
+      ...baseNavigationOptions,
+      ...navigationOptions,
+    };
   }
 
   if(iconName!=""){

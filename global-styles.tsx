@@ -9,6 +9,10 @@ export const globalStyles = {
   titleFontSize: 24,
   titleFontFamily: 'Roboto-Bold',
 
+  // Confirmation Title Text
+  confirmationTitleFontSize: 34,
+  confirmationTitleFontFamily: 'Roboto-Bold',
+
   // Input styles
   inputLabelFontSize: 16,
   inputHeight: 56,

@@ -2,6 +2,7 @@ import { colors } from "@/colors";
 import { globalStyles } from "@/global-styles";
 import { Text as RNText, StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
 
+// Text component for regular text
 export function Text({ children, style }: { children: string; style?: any }) {
 
   const theme = useColorScheme();
@@ -13,6 +14,7 @@ export function Text({ children, style }: { children: string; style?: any }) {
   )
 }
 
+// Title to describe a main section in the screen
 export function Title({ children, style }: { children: string; style?: any }) {
 
   const theme = useColorScheme();
@@ -20,10 +22,23 @@ export function Title({ children, style }: { children: string; style?: any }) {
   const styles = makeStyles({ isDarkMode });
 
   return (
-    <RNText style={StyleSheet.compose(style, styles.title)}>{children}</RNText>
+    <RNText style={StyleSheet.compose(styles.title, style)}>{children}</RNText>
   )
 }
 
+// Title to describe a main section in the screen
+export function ConfirmationTitle({ children, style }: { children: string; style?: any }) {
+
+  const theme = useColorScheme();
+  const isDarkMode = theme === 'dark';
+  const styles = makeStyles({ isDarkMode });
+
+  return (
+    <RNText style={StyleSheet.compose(styles.confirmationTitle, style)}>{children}</RNText>
+  )
+}
+
+// Title to use in the modal alert
 export function AlertTitle({ children, style }: { children: string; style?: any }) {
 
   const theme = useColorScheme();
@@ -31,10 +46,11 @@ export function AlertTitle({ children, style }: { children: string; style?: any 
   const styles = makeStyles({ isDarkMode });
 
   return (
-    <RNText style={StyleSheet.compose(style, styles.alertTitle)}>{children}</RNText>
+    <RNText style={StyleSheet.compose(styles.alertTitle, style)}>{children}</RNText>
   )
 }
 
+// Text that acts as a link
 export function LinkText({ children, onPress, style }: { children: string; onPress?: () => void; style?: any }) {
 
   const theme = useColorScheme();
@@ -43,7 +59,7 @@ export function LinkText({ children, onPress, style }: { children: string; onPre
 
   return (
     <TouchableOpacity onPress={onPress}>
-      <RNText style={StyleSheet.compose(style, styles.linkText)}>{children}</RNText>
+      <RNText style={StyleSheet.compose(styles.linkText, style)}>{children}</RNText>
     </TouchableOpacity>
   )
 }
@@ -62,6 +78,11 @@ function makeStyles({ isDarkMode }: StyleParams) {
     title: {
       fontFamily: globalStyles.titleFontFamily,
       fontSize: globalStyles.titleFontSize,
+      color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
+    },
+    confirmationTitle: {
+      fontFamily: globalStyles.confirmationTitleFontFamily,
+      fontSize: globalStyles.confirmationTitleFontSize,
       color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
     },
     alertTitle: {
