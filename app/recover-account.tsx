@@ -6,6 +6,8 @@ import { Title } from "@/components/Texts";
 import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
+import { getAuth, sendPasswordResetEmail } from '@react-native-firebase/auth';
+import { router } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, StyleSheet, useColorScheme, View } from "react-native";
@@ -21,6 +23,7 @@ export default function RecoverAccountScreen() {
   const isDarkMode = theme === 'dark';
   const styles = makeStyles({ isDarkMode });
   const { t, i18n } = useTranslation();
+  const auth = getAuth()
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertTitle, setAlertTitle] = useState("");
@@ -28,13 +31,25 @@ export default function RecoverAccountScreen() {
 
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleRegister = () => {
-    // Implement registration logic here
-  };
+  const recoverPassword = async () => {
+    setLoading(true)
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setAlertTitle(t('checkYourEmail'));
+      setAlertMessage(t('emailSentForPasswordRecovery'));
+      setShowAlert(true);
+    } catch (error: any) {
+      setAlertTitle(t('error'));
+      setAlertMessage(error.message);
+      setShowAlert(true);
+    }
+    setLoading(false)
+  }
 
   return (
-    <MainView headerShown={screenConf.headerShown}>
+    <MainView headerShown={screenConf.headerShown} loading={loading}>
 
       <Alert
         title={alertTitle}
@@ -42,6 +57,7 @@ export default function RecoverAccountScreen() {
         leftButton={
           <SecondaryButton style={{ height: globalStyles.alertButtonHeight }} title="Ok" onPress={() => {
             setShowAlert(false);
+            router.back();
           }}/>
         }
         visible={showAlert}
@@ -64,7 +80,7 @@ export default function RecoverAccountScreen() {
         errorMessage={emailError}
         labelMessage={t('email')}
       />
-      <PrincipalButton style={styles.registerButton} title={t('signUp')} onPress={handleRegister} />
+      <PrincipalButton style={styles.registerButton} title={t('sendEmail')} onPress={recoverPassword} />
 
     </MainView>
   );
