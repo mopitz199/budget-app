@@ -36,7 +36,7 @@ const resources = {
       "emailSent": "Email sent.",
       "verifyAgain": "Verify Again",
       "notVerifiedCheckEmail": "Not verified yet. check your inbox or spam.",
-      "weHaveSentYouVerificationLink": "We have sent you a verification link.",
+      "weHaveSentYouVerificationLink": "We have sent you a verification link. Check your email.",
       "checkYourEmail": "Check your email",
       "resendEmail": "Resend Email",
       "passwordRecovery": "Password Recovery",
@@ -81,6 +81,8 @@ const resources = {
       "important": "Important",
       "changingDefaultCurrencyWarning": "By changing the default currency, you may affect your budget calculations.",
       "ok": "Ok",
+      "yourAccountHasBeenCreated": "Your account has been created successfully.",
+      "almostDone": "Almost done!"
     }
   },
   es: {
@@ -107,7 +109,7 @@ const resources = {
       "emailSent": "Correo enviado.",
       "notVerifiedCheckEmail": "No verificado aun. Revisa tu correo o tu bandeja de spam",
       "verifyAgain": "Verificar de nuevo",
-      "weHaveSentYouVerificationLink": "Te hemos enviado un correo de verificación",
+      "weHaveSentYouVerificationLink": "Te hemos enviado un correo de verificación. Revisa tu correo.",
       "checkYourEmail": "Revisa tu correo",
       "resendEmail": "Reenviar Correo",
       "passwordRecovery": "Recuperación de Contraseña",
@@ -158,7 +160,9 @@ const resources = {
       "errorCreatingUser": "Error al crear el usuario. Por favor, inténtalo de nuevo más tarde.",
       "errorSendingVerificationEmail": "Error al enviar el correo de verificación. Por favor, inténtalo de nuevo más tarde.",
       "emailAlreadyInUse": "La dirección de correo ya está en uso por otra cuenta.",
-      "errorUnableToLoginPleaseCheckCredentials": "No se puede iniciar sesión. Por favor, verifica tus credenciales."
+      "errorUnableToLoginPleaseCheckCredentials": "No se puede iniciar sesión. Por favor, verifica tus credenciales.",
+      "yourAccountHasBeenCreated": "Tu cuenta ha sido creada exitosamente.",
+      "almostDone": "¡Casi listo!"
     }
   }
 };

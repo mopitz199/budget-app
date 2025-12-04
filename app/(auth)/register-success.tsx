@@ -7,7 +7,8 @@ import { ScreenConf } from "@/types/screen-conf";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
-import { useColorScheme, View } from "react-native";
+import { useTranslation } from "react-i18next";
+import { StyleSheet, useColorScheme, View } from "react-native";
 
 export default function RegisterSuccessScreen() {
   const screenConf: ScreenConf = {
@@ -15,8 +16,10 @@ export default function RegisterSuccessScreen() {
   };
 
   const router = useRouter();
+  const { t, i18n } = useTranslation();
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
+  const styles = makeStyles({ isDarkMode });
 
   const confettiRef = useRef<ConfettiRef>(null);
 
@@ -39,16 +42,40 @@ export default function RegisterSuccessScreen() {
     <MainView headerShown={screenConf.headerShown}>
       <Confetti ref={confettiRef} />
 
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={styles.container}>
         <Ionicons
           name={ "checkmark-circle"}
           size={110}
           color={isDarkMode ? colors.light.primary : colors.dark.primary}
-          style={{ position: 'absolute', transform: [{ translateY: -100 }] }}
+          style={styles.icon}
         />
-        <ConfirmationTitle>Awesome!</ConfirmationTitle>
-        <Text style={{marginTop: 20}}>Your account has been created successfully.</Text>
+        <ConfirmationTitle>{t('almostDone')}</ConfirmationTitle>
+        <Text style={styles.description}>{t('weHaveSentYouVerificationLink')}</Text>
       </View>
     </MainView>
   );
+}
+
+type StyleParams = {
+  isDarkMode: boolean;
+};
+
+function makeStyles({
+  isDarkMode,
+}: StyleParams) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    icon: {
+      position: 'absolute',
+      transform: [{ translateY: -100 }],
+    },
+    description: {
+      marginTop: 20,
+      textAlign: 'center',
+    },
+  });
 }
