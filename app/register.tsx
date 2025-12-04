@@ -43,6 +43,8 @@ export default function RegisterScreen() {
   const [alertTitle, setAlertTitle] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const confettiRef = useRef<ConfettiRef>(null);
 
   const checkPasswordRequirements = () => {
@@ -95,22 +97,19 @@ export default function RegisterScreen() {
   }
 
   const handleRegister = async () => {
-    // Trigger confetti on successful registration
-    router.replace('/(auth)/register-success');
+    setLoading(true);
     const isValid = handleValidations();
-    confettiRef.current?.startConfettiFromParent();
     if(isValid){
       try {
         const {user} = await createUserWithEmailAndPassword(auth, email, password);
-        
         try {          
           await sendEmailVerification(user);
+          router.replace('/(auth)/register-success');
         } catch (error) {
           displayAlert(t('error'), t('errorSendingVerificationEmail'));
           recordError(crashlyticsInstance, new Error('error_sending_verification_email: ' + error));
         }
-      } catch (error: any) {        
-
+      } catch (error: any) {
         if (error.code === 'auth/email-already-in-use') {
           displayAlert(t('error'), t('emailAlreadyInUse'));
         } else if (error.code === 'auth/invalid-email') {
@@ -120,14 +119,13 @@ export default function RegisterScreen() {
           log(crashlyticsInstance, 'error_creating_user: ' + error);
           recordError(crashlyticsInstance, new Error('error_creating_user: ' + error));
         }
-
-        console.error(error);
       }
     }
+    setLoading(false);
   }
 
   return (
-    <MainView headerShown={screenConf.headerShown}>
+    <MainView headerShown={screenConf.headerShown} loading={loading}>
       <Confetti ref={confettiRef} />
 
       <Alert
