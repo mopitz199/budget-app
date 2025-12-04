@@ -39,7 +39,7 @@ const resources = {
       "weHaveSentYouVerificationLink": "We have sent you a verification link. Check your email.",
       "checkYourEmail": "Check your email",
       "resendEmail": "Resend Email",
-      "passwordRecovery": "Password Recovery",
+      "passwordRecovery": "Recover your password",
       "sendEmail": "Send email",
       "sendingEmail": "Sending email...",
       "emailSentForPasswordRecovery": "We've sent you a link to recover your password",
@@ -82,7 +82,8 @@ const resources = {
       "changingDefaultCurrencyWarning": "By changing the default currency, you may affect your budget calculations.",
       "ok": "Ok",
       "yourAccountHasBeenCreated": "Your account has been created successfully.",
-      "almostDone": "Almost done!"
+      "almostDone": "Almost done!",
+      "registerYourAccount": "Register your account"
     }
   },
   es: {
@@ -112,7 +113,7 @@ const resources = {
       "weHaveSentYouVerificationLink": "Te hemos enviado un correo de verificación. Revisa tu correo.",
       "checkYourEmail": "Revisa tu correo",
       "resendEmail": "Reenviar Correo",
-      "passwordRecovery": "Recuperación de Contraseña",
+      "passwordRecovery": "Recupera tu contraseña",
       "sendEmail": "Enviar correo",
       "sendingEmail": "Enviando correo...",
       "emailSentForPasswordRecovery": "Te enviamos un enlace para restablecer tu contraseña.",
@@ -162,7 +163,8 @@ const resources = {
       "emailAlreadyInUse": "La dirección de correo ya está en uso por otra cuenta.",
       "errorUnableToLoginPleaseCheckCredentials": "No se puede iniciar sesión. Por favor, verifica tus credenciales.",
       "yourAccountHasBeenCreated": "Tu cuenta ha sido creada exitosamente.",
-      "almostDone": "¡Casi listo!"
+      "almostDone": "¡Casi listo!",
+      "registerYourAccount": "Registra tu cuenta"
     }
   }
 };

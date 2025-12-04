@@ -1,6 +1,5 @@
 import { Alert } from "@/components/Alert";
 import { PrincipalButton, SecondaryButton } from "@/components/Buttons";
-import Confetti, { ConfettiRef } from "@/components/Confetti";
 import { Input } from "@/components/inputs/Input";
 import { PasswordInput } from "@/components/inputs/PasswordInput";
 import MainView from "@/components/MainView";
@@ -8,11 +7,10 @@ import { Title } from "@/components/Texts";
 import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
-import { log } from "@/utils/logUtils";
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from '@react-native-firebase/auth';
 import { getCrashlytics, recordError } from '@react-native-firebase/crashlytics';
 import { router } from "expo-router";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
 
@@ -44,8 +42,6 @@ export default function RegisterScreen() {
   const [alertMessage, setAlertMessage] = useState("");
 
   const [loading, setLoading] = useState(false);
-
-  const confettiRef = useRef<ConfettiRef>(null);
 
   const checkPasswordRequirements = () => {
     const hasMinLength = password.length >= 6;
@@ -116,7 +112,6 @@ export default function RegisterScreen() {
           displayAlert(t('error'), t('invalidEmail'));
         } else {
           displayAlert(t('error'), t('errorCreatingUser'));
-          log(crashlyticsInstance, 'error_creating_user: ' + error);
           recordError(crashlyticsInstance, new Error('error_creating_user: ' + error));
         }
       }
@@ -126,8 +121,6 @@ export default function RegisterScreen() {
 
   return (
     <MainView headerShown={screenConf.headerShown} loading={loading}>
-      <Confetti ref={confettiRef} />
-
       <Alert
         title={alertTitle}
         message={alertMessage}
@@ -146,7 +139,7 @@ export default function RegisterScreen() {
       >
         <ScrollView>
           <View style={styles.headerContainer}>
-            <Title style={styles.titleText}>{t('isTimeForSaving')}</Title>
+            <Title style={styles.titleText}>{t('registerYourAccount')}</Title>
             <Image
               source={require('@/assets/images/squirrle.png')}
               style={styles.squirrelImage}
