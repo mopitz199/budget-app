@@ -100,7 +100,7 @@ export default function RegisterScreen() {
         const {user} = await createUserWithEmailAndPassword(auth, email, password);
         try {          
           await sendEmailVerification(user);
-          router.replace('/(auth)/register-success');
+          router.replace('/(auth)/account-not-verified');
         } catch (error) {
           displayAlert(t('error'), t('errorSendingVerificationEmail'));
           recordError(crashlyticsInstance, new Error('error_sending_verification_email: ' + error));

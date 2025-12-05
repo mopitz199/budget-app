@@ -1,14 +1,14 @@
 import { colors } from "@/colors";
-import { PrincipalButton } from "@/components/Buttons";
-import { ConfettiRef } from "@/components/Confetti";
+import { PrincipalButton, SecondaryButton } from "@/components/Buttons";
+import Confetti, { ConfettiRef } from "@/components/Confetti";
 import MainView from "@/components/MainView";
 import { ConfirmationTitle, Text } from "@/components/Texts";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { getAuth, signOut } from "@react-native-firebase/auth";
-import { useRouter } from "expo-router";
-import { useRef, useState } from "react";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, useColorScheme, View } from "react-native";
 
@@ -26,11 +26,20 @@ export default function AccountNotVerifiedScreen() {
   const [loading, setLoading] = useState(false);
 
   const confettiRef = useRef<ConfettiRef>(null);
+  const params = useLocalSearchParams<{ enableConfetti: string }>();
 
   useHeaderBehavior({headerShown: screenConf.headerShown});
 
+  useEffect(() => {
+    if(params.enableConfetti !== 'false'){
+      confettiRef.current?.startConfettiFromParent();
+    }
+  }, []);
+
   return (
     <MainView headerShown={screenConf.headerShown} loading={loading}>
+      <Confetti ref={confettiRef} />
+
       <View style={styles.container}>
         <Ionicons
           name={ "checkmark-circle"}
@@ -40,12 +49,15 @@ export default function AccountNotVerifiedScreen() {
         />
         <ConfirmationTitle>{t('almostDone')}</ConfirmationTitle>
         <Text style={styles.description}>{t('weHaveSentYouVerificationLink')}</Text>
-        <PrincipalButton style={{alignSelf: 'stretch'}} title="Sign out" onPress={() => {
+        <SecondaryButton style={{alignSelf: 'stretch', marginBottom: 20}} title="Sign out" onPress={() => {
           setLoading(true);
           signOut(auth).then(() => {
             setLoading(false);
             router.replace('/login');
           });
+        }} />
+        <PrincipalButton style={{alignSelf: 'stretch'}} title="Verificate Again" onPress={() => {
+          router.replace('/');
         }} />
       </View>
     </MainView>
@@ -67,7 +79,7 @@ function makeStyles({
     },
     icon: {
       position: 'absolute',
-      transform: [{ translateY: -165 }],
+      transform: [{ translateY: -195 }],
     },
     description: {
       marginTop: 20,

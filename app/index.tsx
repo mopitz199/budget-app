@@ -1,10 +1,8 @@
-import { PrincipalButton } from "@/components/Buttons";
 import MainView from "@/components/MainView";
-import { Text } from "@/components/Texts";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
-import { getAuth, onAuthStateChanged, signOut } from '@react-native-firebase/auth';
-import { getCrashlytics, recordError, setUserId } from '@react-native-firebase/crashlytics';
+import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth';
+import { getCrashlytics, setUserId } from '@react-native-firebase/crashlytics';
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 export default function Index() {
@@ -51,61 +49,16 @@ export default function Index() {
     return subscriber; // unsubscribe on unmount
   }, []);
 
-
-  function unauthenticatedScreen(){
-    return (
-      <>
-        <Text>{isAuthorized() ? 'Welcome back!' : 'Please log in.'}</Text>
-        {isAuthorized() && (
-          <PrincipalButton title="Logout" onPress={() => {
-            signOut(auth).then(() => console.log('User signed out!'));
-          }} />
-        )}
-        <PrincipalButton title="Components" onPress={() => {
-          recordError(crashlyticsInstance, new Error('error_at_index: '));
-          router.replace('/component-example')}
-        } />
-        <PrincipalButton title="Login" onPress={() => {router.replace('/login')}} />
-      </>
-    )
-  }
-
-  function unauthorizedScreen(){
-    return (
-      <>
-        <Text>Register your email</Text>
-        <PrincipalButton title="Sign out" onPress={async () => {
-          await signOut(auth);
-          console.log('User signed out!');
-        }} />
-      </>
-    )
-  }
-
-  function authorizedScreen(){
-    return (
-      <>
-        <Text>{isAuthorized() ? 'Welcome back!' : 'Please log in.'}</Text>
-        {isAuthorized() && (
-          <PrincipalButton title="Sign out" onPress={() => {
-            signOut(auth).then(() => console.log('User signed out!'));
-          }} />
-        )}
-        <PrincipalButton title="Components" onPress={() => {
-          recordError(crashlyticsInstance, new Error('error_at_index: '));
-          router.replace('/component-example')}
-        } />
-      </>
-    )
-  }
-
   useEffect(() => {
     if(!initializing){
       if(isAuthenticated()){
         if(isAuthorized()){
           router.replace('/(auth)/home');
         }else{
-          router.replace('/(auth)/account-not-verified');
+          router.replace({
+            pathname: '/(auth)/account-not-verified',
+            params: { enableConfetti: 'false' }
+          });
           //router.replace('/(auth)/home');
         }
       }else{

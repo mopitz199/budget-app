@@ -5,7 +5,6 @@ export default function RootLayout() {
   return (
     <Stack>
       <Stack.Screen name="home" options={{animation: 'none'}}/>
-      <Stack.Screen name="register-success"/>
       <Stack.Screen name="account-not-verified"/>
       <Stack.Screen name="settings"/>
       <Stack.Screen name="transactions"/>
