@@ -54,7 +54,7 @@ export default function LoginScreen() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       // Only navigate on successful login
-      router.replace('/(auth)/home');
+      router.replace('/');
     } catch (e: any) {
       const err = e as FirebaseError;
       recordError(crashlyticsInstance, new Error('error_email_password_signin: ' + err.message));

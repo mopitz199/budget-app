@@ -1,6 +1,8 @@
+import { PrincipalButton } from "@/components/Buttons";
 import MainView from "@/components/MainView";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
+import { getAuth, signOut } from "@react-native-firebase/auth";
 import { useRouter } from "expo-router";
 import { Button, Text } from "react-native";
 
@@ -13,6 +15,8 @@ export default function HomeScreen() {
   const router = useRouter();
   useHeaderBehavior({ headerShown: screenConf.headerShown });
 
+  const auth = getAuth()
+
   return (
     <MainView headerShown={screenConf.headerShown}>
       <Text>Home Page</Text>
@@ -20,6 +24,9 @@ export default function HomeScreen() {
       <Button title="Go to Manual Transaction" onPress={() => router.navigate('/(auth)/manual-transaction')} />
       <Button title="Go to Settings" onPress={() => router.navigate('/(auth)/settings')} />
       <Button title="Go to Transactions" onPress={() => router.navigate('/(auth)/transactions')} />
+      <PrincipalButton title="Sign out" onPress={() => {
+        signOut(auth).then(() => console.log('User signed out!'));
+      }} />
     </MainView>
   );
 }

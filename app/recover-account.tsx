@@ -57,7 +57,9 @@ export default function RecoverAccountScreen() {
         leftButton={
           <SecondaryButton style={{ height: globalStyles.alertButtonHeight }} title="Ok" onPress={() => {
             setShowAlert(false);
-            router.back();
+            if(alertTitle === t('checkYourEmail')){
+              router.back();
+            }
           }}/>
         }
         visible={showAlert}

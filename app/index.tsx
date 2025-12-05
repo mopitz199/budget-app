@@ -99,21 +99,24 @@ export default function Index() {
     )
   }
 
-  function loadingIndex() {
-    if(isAuthenticated()){
-      if(isAuthorized()){
-        return authorizedScreen()
+  useEffect(() => {
+    if(!initializing){
+      if(isAuthenticated()){
+        if(isAuthorized()){
+          router.replace('/(auth)/home');
+        }else{
+          router.replace('/(auth)/register-success');
+          //router.replace('/(auth)/home');
+        }
       }else{
-        return unauthorizedScreen()
+        router.replace('/login');
       }
-    }else{
-      return unauthenticatedScreen()
     }
-  }
+  }, [initializing]);
 
   return (
-    <MainView headerShown={screenConf.headerShown}>
-      {loadingIndex()}
+    <MainView headerShown={screenConf.headerShown} loading={false}>
+      <></>
     </MainView>
   );
 }
