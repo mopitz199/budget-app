@@ -105,7 +105,7 @@ export default function Index() {
         if(isAuthorized()){
           router.replace('/(auth)/home');
         }else{
-          router.replace('/(auth)/register-success');
+          router.replace('/(auth)/account-not-verified');
           //router.replace('/(auth)/home');
         }
       }else{
