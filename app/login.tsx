@@ -13,10 +13,14 @@ import { getCrashlytics, recordError } from "@react-native-firebase/crashlytics"
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useRouter } from "expo-router";
 import { FirebaseError } from 'firebase/app';
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Image, ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
 
+// It must be called only once in the app lifecycle
+GoogleSignin.configure({
+  webClientId: process.env.EXPO_PUBLIC_WEBCLIENTID,
+});
 
 export default function LoginScreen() {
   const screenConf: ScreenConf = {
@@ -25,10 +29,6 @@ export default function LoginScreen() {
 
   const router = useRouter();
   useHeaderBehavior({ headerShown: screenConf.headerShown });
-  
-  GoogleSignin.configure({
-    webClientId: process.env.EXPO_PUBLIC_WEBCLIENTID,
-  });
 
   const theme = useColorScheme();
   const isDarkMode = theme === 'dark';
@@ -44,6 +44,9 @@ export default function LoginScreen() {
   const [showAlert, setShowAlert] = useState(false);
   const [titleAlert, setTitleAlert] = useState("");
   const [messageAlert, setMessageAlert] = useState("");
+
+  // Use this to prevent multiple simultaneous sign-in attempts
+  const isSigningInRef = useRef(false);
 
   const handleLogin = () => {
     signIn();
@@ -71,37 +74,56 @@ export default function LoginScreen() {
   }
 
   async function onGoogleButtonPress() {
-    // Check if your device supports Google Play
+    // Prevent multiple simultaneous sign-in attempts
+    if (isSigningInRef.current) {
+      recordError(
+        crashlyticsInstance,
+        new Error('error_google_signin_in_progress: Google sign-in is already in progress')
+      );
+      return;
+    }
+
+    isSigningInRef.current = true;
     setLoading(true);
+
     try {
+      // 1. Verify Google Play services (Android)
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-    } catch (err) {
-      recordError(crashlyticsInstance, new Error('error_google_play_services: ' + err));
-      setLoading(false);
-    }
 
-    // Trigger Google sign-in flow
-    try {
-      let signInResult = await GoogleSignin.signIn();
-      let idToken = signInResult.data?.idToken;
+      // 2. Start Google sign-in flow
+      const signInResult = await GoogleSignin.signIn();
+
+      // Depending on the version, the token may come in idToken or inside data
+      const idToken =
+        (signInResult as any).idToken ??
+        (signInResult as any).data?.idToken;
+
       if (!idToken) {
-        recordError(crashlyticsInstance, new Error('error_google_token_not_found: Token is null'));
-        setLoading(false);
+        recordError(
+          crashlyticsInstance,
+          new Error('error_google_token_not_found: Token is null')
+        );
+        return; // important: do not proceed if there's no token
       }
 
+      // 3. Create Firebase credential
       const googleCredential = GoogleAuthProvider.credential(idToken);
-      try{
-        await signInWithCredential(auth, googleCredential);
-      }catch (error) {
-        recordError(crashlyticsInstance, new Error('error_sign_in_with_credential: ' + error));
-        setLoading(false);
-      }
-    }catch (error) {
-      recordError(crashlyticsInstance, new Error('error_google_signin_flow: ' + error));
+
+      // 4. Sign in with Firebase
+      await signInWithCredential(auth, googleCredential);
+
+      // 5. If we reach here, login is successful → navigate
+      router.replace('/');
+    } catch (error: any) {
+      recordError(
+        crashlyticsInstance,
+        new Error('error_google_signin_flow: ' + JSON.stringify(error))
+      );
+      // Optional: show nice Alert
+    } finally {
       setLoading(false);
+      isSigningInRef.current = false;
     }
-    setLoading(false);
-    router.replace('/')
   }
 
   return (
