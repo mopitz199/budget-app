@@ -52,11 +52,62 @@ Join our community of developers creating universal apps.
 
 ## Setting Up Screen
 
-Here we will describe all the configuration that any screen should have.
+This part shows how to configure each screen in order to make them consistently like
+
+### Using the MainView
+
+Each screen must contain the MainView component like:
+
+```html
+<MainView headerShown={true} loading={false}>
+   ...
+</MainView>
+```
+
+Where basically the MainView must receive the param:
+
+- headerShown(bool): To describe if the screen will have a header or not. According to this param, it will create a main container using the right space considering the safe area or not.
+- loading(bool): To describe if the screen is loading something. If it's true, it will display a loading modal
+
+
+### Setting up the useHeaderBehavior
+
+Here we will describe all the configuration that our header should have
 
 ```tsx
 const screenConf: ScreenConf = {
-   headerShown: false,
-   navigation: useNavigation()
+   headerShown: false
 };
+useHeaderBehavior({
+   headerShown: bool, # Show the header or not
+   iconName: string, # Set the right icon to use. This will hide the left back icon
+   onPressIconName: func, # When the right icon is pressed
+   loading: bool, # It will hide all the header icons
+});
+```
+
+### Complete example
+
+```tsx
+import { useHeaderBehavior } from "@/hooks/header-behavior";
+import { ScreenConf } from "@/types/screen-conf";
+import { useState } from "react";
+import MainView from "@/components/MainView";
+
+export default function ExampleScreen() {
+
+  const screenConf: ScreenConf = {
+    headerShown: true
+  };
+
+  useHeaderBehavior({ headerShown: screenConf.headerShown })
+
+  const [loading, setLoading] = useState(false);
+
+  return (
+    <MainView headerShown={screenConf.headerShown} loading={loading}>
+      <>
+    </MainView>
+  )
+}
 ```
