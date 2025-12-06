@@ -25,7 +25,7 @@ export default function HomeScreen() {
       <Button title="Go to Settings" onPress={() => router.navigate('/(auth)/settings')} />
       <Button title="Go to Transactions" onPress={() => router.navigate('/(auth)/transactions')} />
       <PrincipalButton title="Sign out" onPress={() => {
-        signOut(auth).then(() => console.log('User signed out!'));
+        signOut(auth).then(() => router.replace('/login'));
       }} />
     </MainView>
   );
