@@ -116,6 +116,53 @@ export default function ExampleScreen() {
 
 ![App Screenshot](./assets/images/login-diagram.drawio.png)
 
+### How the Authentication Flow Works
+
+The authentication flow is handled in `app/index.tsx` and works as follows:
+
+1. **Initial State**: The app starts with `initializing = true` while Firebase connects.
+
+2. **Auth State Listener**: On mount, `onAuthStateChanged()` listens for authentication state changes:
+   ```tsx
+   useEffect(() => {
+     const subscriber = onAuthStateChanged(auth, handleAuthStateChanged);
+     return subscriber; // unsubscribe on unmount
+   }, []);
+   ```
+
+3. **User State Handler**: When auth state changes, the app:
+   - Sets the user in Crashlytics if authenticated (`setUserId()`)
+   - Updates local user state
+   - Sets `initializing = false`
+
+4. **Navigation Logic**: Once initialization completes, the app routes based on authentication status:
+   ```tsx
+   useEffect(() => {
+     if(!initializing){
+       if(isAuthenticated()){           // User logged in?
+         if(isAuthorized()){             // Email verified?
+           router.replace('/(auth)/home');
+         }else{
+           router.replace('/(auth)/account-not-verified');
+         }
+       }else{                            // Not logged in
+         router.replace('/login');
+       }
+     }
+   }, [initializing]);
+   ```
+
+5. **Three Possible Routes**:
+   - **Not Authenticated** → `/login` - User must sign in
+   - **Authenticated but Not Verified** → `/(auth)/account-not-verified` - Email verification required
+   - **Authenticated and Verified** → `/(auth)/home` - Full access granted
+
+**Key Functions**:
+- `isAuthenticated()`: Returns `true` if user exists
+- `isAuthorized()`: Returns `true` if user exists AND email is verified (`user.emailVerified`)
+
+
+
 ## Using the Alert Component
 
 The `Alert` component is a custom modal dialog that supports dark/light themes and flexible button layouts.
