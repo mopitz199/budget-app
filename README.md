@@ -112,6 +112,10 @@ export default function ExampleScreen() {
 }
 ```
 
+## Login flow
+
+![App Screenshot](./assets/images/login-diagram.drawio.png)
+
 ## Using the Alert Component
 
 The `Alert` component is a custom modal dialog that supports dark/light themes and flexible button layouts.
