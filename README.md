@@ -111,3 +111,82 @@ export default function ExampleScreen() {
   )
 }
 ```
+
+## Using the Alert Component
+
+The `Alert` component is a custom modal dialog that supports dark/light themes and flexible button layouts.
+
+### Basic Usage
+
+```tsx
+import { Alert } from '@/components/Alert';
+import { PrincipalButton } from '@/components/Buttons';
+import { useState } from 'react';
+
+function MyComponent() {
+  const [alertVisible, setAlertVisible] = useState(false);
+
+  return (
+    <>
+      <PrincipalButton 
+        title="Show Alert" 
+        onPress={() => setAlertVisible(true)} 
+      />
+
+      <Alert
+        visible={alertVisible}
+        title="Alert Title"
+        message="This is the alert message"
+        onClose={() => setAlertVisible(false)}
+        rightButton={
+          <PrincipalButton 
+            title="OK" 
+            onPress={() => setAlertVisible(false)} 
+          />
+        }
+      />
+    </>
+  );
+}
+```
+
+### Props
+
+- **visible** (required): `boolean` - Controls whether the alert is shown
+- **title**: `string` - Optional title displayed at the top
+- **message**: `string` - Optional message text below the title
+- **onClose**: `() => void` - Callback when the backdrop is pressed
+- **onOutsidePress**: `() => void` - Additional callback when pressing outside the alert
+- **leftButton**: `React.ReactNode` - Optional button on the left side
+- **rightButton**: `React.ReactNode` - Optional button on the right side
+
+### Two-Button Layout
+
+```tsx
+<Alert
+  visible={confirmVisible}
+  title="Confirm Action"
+  message="Are you sure you want to proceed?"
+  onClose={() => setConfirmVisible(false)}
+  leftButton={
+    <SecondaryButton 
+      title="Cancel" 
+      onPress={() => setConfirmVisible(false)} 
+    />
+  }
+  rightButton={
+    <PrincipalButton 
+      title="Confirm" 
+      onPress={handleConfirm} 
+    />
+  }
+/>
+```
+
+### Features
+
+- Automatically themed for dark/light mode
+- Backdrop dismissal support
+- Centered modal with max 80% screen width
+- Flexible button layout (one or two buttons)
+- Touch events properly handled to prevent backdrop dismissal when pressing the alert content
