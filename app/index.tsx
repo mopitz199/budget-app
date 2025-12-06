@@ -1,7 +1,7 @@
 import MainView from "@/components/MainView";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
-import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth';
+import { getAuth, onAuthStateChanged, reload } from '@react-native-firebase/auth';
 import { getCrashlytics, setUserId } from '@react-native-firebase/crashlytics';
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -35,6 +35,23 @@ export default function Index() {
     return user != null
   }
 
+  // Reload user data from Firebase to check for email verification updates
+  async function refreshUser() {
+    if (user) {
+      try {
+        await reload(auth.currentUser!);
+        // After reload, get the fresh user data
+        const refreshedUser = auth.currentUser;
+        setUser(refreshedUser);
+        return refreshedUser;
+      } catch (error) {
+        console.error('Error refreshing user:', error);
+        return null;
+      }
+    }
+    return null;
+  }
+
   // Handle user state changes
   function handleAuthStateChanged(user: any) {
     if(user){
@@ -59,7 +76,6 @@ export default function Index() {
             pathname: '/(auth)/account-not-verified',
             params: { enableConfetti: 'false' }
           });
-          //router.replace('/(auth)/home');
         }
       }else{
         router.replace('/login');

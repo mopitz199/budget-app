@@ -6,7 +6,8 @@ import { ConfirmationTitle, Text } from "@/components/Texts";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { getAuth, signOut } from "@react-native-firebase/auth";
+import { getAuth, reload, signOut } from "@react-native-firebase/auth";
+import { getCrashlytics, recordError } from "@react-native-firebase/crashlytics";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -23,6 +24,8 @@ export default function AccountNotVerifiedScreen() {
   const auth = getAuth()
   const isDarkMode = theme === 'dark';
   const styles = makeStyles({ isDarkMode });
+  const crashlyticsInstance = getCrashlytics();
+
   const [loading, setLoading] = useState(false);
 
   const confettiRef = useRef<ConfettiRef>(null);
@@ -35,6 +38,20 @@ export default function AccountNotVerifiedScreen() {
       confettiRef.current?.startConfettiFromParent();
     }
   }, []);
+
+  // Reload user data from Firebase to check for email verification updates
+  async function refreshUser() {
+    try {
+      await reload(auth.currentUser!);
+      // After reload, get the fresh user data
+      const refreshedUser = auth.currentUser;
+      if(refreshedUser?.emailVerified){
+        router.replace('/home');
+      }
+    } catch (error) {
+      recordError(crashlyticsInstance, new Error('error_refreshing_user_account_not_verified: ' + error));
+    }
+  }
 
   return (
     <MainView headerShown={screenConf.headerShown} loading={loading}>
@@ -49,15 +66,15 @@ export default function AccountNotVerifiedScreen() {
         />
         <ConfirmationTitle>{t('almostDone')}</ConfirmationTitle>
         <Text style={styles.description}>{t('weHaveSentYouVerificationLink')}</Text>
-        <SecondaryButton style={{alignSelf: 'stretch', marginBottom: 20}} title="Sign out" onPress={() => {
+        <SecondaryButton style={styles.signOutButton} title="Sign out" onPress={() => {
           setLoading(true);
           signOut(auth).then(() => {
             setLoading(false);
             router.replace('/login');
           });
         }} />
-        <PrincipalButton style={{alignSelf: 'stretch'}} title="Verificate Again" onPress={() => {
-          router.replace('/');
+        <PrincipalButton style={styles.verifyButton} title="Verificate Again" onPress={() => {
+          refreshUser()
         }} />
       </View>
     </MainView>
@@ -85,6 +102,13 @@ function makeStyles({
       marginTop: 20,
       marginBottom: 40,
       textAlign: 'center',
+    },
+    signOutButton: {
+      alignSelf: 'stretch',
+      marginBottom: 20,
+    },
+    verifyButton: {
+      alignSelf: 'stretch',
     },
   });
 }
