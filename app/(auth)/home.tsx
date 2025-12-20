@@ -1,5 +1,6 @@
 import { PrincipalButton } from "@/components/Buttons";
 import MainView from "@/components/MainView";
+import { useUserSettings } from "@/contexts";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import { getAuth, signOut } from "@react-native-firebase/auth";
@@ -19,10 +20,13 @@ export default function HomeScreen() {
   useHeaderBehavior({ headerShown: screenConf.headerShown });
 
   const auth = getAuth()
+  const userSettings = useUserSettings();
 
   return (
     <MainView headerShown={screenConf.headerShown}>
       <Text>Home Page</Text>
+      <Text>{userSettings.userSettingsData?.defaultCurrency}</Text>
+      <Text>Chao</Text>
       <Button title="Go to UploadFile" onPress={() => router.navigate('/(auth)/upload-file')} />
       <Button title="Go to Manual Transaction" onPress={() => router.navigate('/(auth)/manual-transaction')} />
       <Button title="Go to Settings" onPress={() => router.navigate('/(auth)/settings')} />
