@@ -1,6 +1,7 @@
 import { colors } from "@/colors";
-import { ActivityIndicator, Modal, StyleSheet, useColorScheme, View } from "react-native";
+import { StyleSheet, useColorScheme, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import LoadingModal from "./LoadingModal";
 
 export interface MainViewProps {
   headerShown?: boolean;
@@ -20,11 +21,7 @@ export default function MainView({ headerShown = true, loading = false, children
 
   const loadingScreen = () => {
     return (
-      <Modal visible={loading} transparent animationType="none">
-        <View style={style.backdrop}>
-          <ActivityIndicator size="large" color={colors.light.primary}/>
-        </View>
-      </Modal>
+      <LoadingModal loading={loading} />
     )
   }
 
