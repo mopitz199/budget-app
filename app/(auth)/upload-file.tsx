@@ -38,7 +38,6 @@ export default function UploadFileScreen() {
 
 
   const pickImageAsync = async () => {
-    setLoading(true)
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsMultipleSelection: true,
       quality: .1,
@@ -53,7 +52,6 @@ export default function UploadFileScreen() {
     }else{
       console.log("No image selected")
     }
-    setLoading(false)
   }
 
   const readImages = async (token: string, images_urls: string[]) => {
@@ -157,7 +155,7 @@ export default function UploadFileScreen() {
       </View>
       <SecondaryButton
         title="Select files"
-        onPress={() => {console.log("Secondary button pressed")}}
+        onPress={pickImageAsync}
         style={{ marginBottom: 20, marginTop: 20 }}
       />
       <PrincipalButton
