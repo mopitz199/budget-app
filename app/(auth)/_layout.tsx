@@ -46,8 +46,8 @@ export default function RootLayout() {
   }
 
   const loadContexts = async () => {
-    const settings = await fetchUserSettings();
-    setUserSettings(settings);
+    const userSettingData = await fetchUserSettings();
+    setUserSettings(userSettingData);
     setLoading(false);
   }
 

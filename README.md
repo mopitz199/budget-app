@@ -216,3 +216,198 @@ function MyComponent() {
 - Centered modal with max 80% screen width
 - Flexible button layout (one or two buttons)
 - Touch events properly handled to prevent backdrop dismissal when pressing the alert content
+
+
+## Using Firebase with the app models
+
+This section explains the standardized pattern for handling data structures between the application and Firebase. Each model follows a consistent structure to ensure type safety and maintainability.
+
+### Pattern Overview
+
+Each data model consists of two main parts:
+
+1. **Type Definition** - Defines the shape of data used within the app
+2. **Factory Object** - Provides methods for data transformation
+
+### Example: UserSettings Model
+
+Located in `models/UserSettings.tsx`:
+
+```tsx
+export type UserSettingsData = {
+  defaultCurrency: string;
+};
+
+type UserSettingsFactory = {
+  initToApp: () => UserSettingsData;
+  toApp: (data: any) => UserSettingsData;
+  toFirebase: (data: UserSettingsData) => any;
+};
+
+export const UserSettingsFactory: UserSettingsFactory = {
+  initToApp: function(): UserSettingsData {
+    return {
+      defaultCurrency: 'USD',
+    };
+  },
+  toApp: function(data: any): UserSettingsData {
+    return {
+      defaultCurrency: data.defaultCurrency
+    };
+  },
+  toFirebase: function(data: UserSettingsData): any {
+    return {
+      defaultCurrency: data.defaultCurrency
+    };
+  }
+};
+```
+
+### The Three Factory Methods
+
+#### 1. `initToApp(): ModelData`
+
+**Purpose**: Creates a new instance with default values.
+
+**When to use**:
+- Initializing new user accounts
+- Resetting data to defaults
+- Creating placeholder instances
+
+```tsx
+const newSettings = UserSettingsFactory.initToApp();
+// Returns: { defaultCurrency: 'USD' }
+```
+
+#### 2. `toApp(data: any): ModelData`
+
+**Purpose**: Transforms Firebase data into app format.
+
+**When to use**:
+- After fetching data from Firebase
+- Receiving data from external sources
+
+```tsx
+const firebaseData = { defaultCurrency: 'EUR' };
+const appData = UserSettingsFactory.toApp(firebaseData);
+// Returns typed UserSettingsData
+```
+
+**Best practices**:
+- Handle missing fields gracefully
+- Convert Firebase types (Timestamp → Date)
+- Provide defaults for undefined values
+
+#### 3. `toFirebase(data: ModelData): any`
+
+**Purpose**: Transforms app data into Firebase-compatible format.
+
+**When to use**:
+- Before saving to Firebase
+- Before updating Firebase documents
+
+```tsx
+const appData: UserSettingsData = { defaultCurrency: 'GBP' };
+const firebaseData = UserSettingsFactory.toFirebase(appData);
+// Returns object ready for Firebase
+```
+
+### Complete Usage Example
+
+#### Fetching from Firebase
+
+```tsx
+import { UserSettingsFactory } from '@/models/UserSettings';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/firebase';
+
+async function fetchUserSettings(userId: string) {
+  const docRef = doc(db, 'user_settings', userId);
+  const docSnap = await getDoc(docRef);
+  
+  if (docSnap.exists()) {
+    // Transform Firebase data to app format
+    const settings = UserSettingsFactory.toApp(docSnap.data());
+    return settings;
+  } else {
+    // Return defaults for new users
+    return UserSettingsFactory.initToApp();
+  }
+}
+```
+
+#### Saving to Firebase
+
+```tsx
+import { UserSettingsFactory, UserSettingsData } from '@/models/UserSettings';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '@/firebase';
+
+async function saveUserSettings(userId: string, settings: UserSettingsData) {
+  const docRef = doc(db, 'user_settings', userId);
+  
+  // Transform app data to Firebase format
+  const firebaseData = UserSettingsFactory.toFirebase(settings);
+  await setDoc(docRef, firebaseData);
+}
+```
+
+### Creating a New Model
+
+Follow this template when creating new models in the `models/` directory:
+
+```tsx
+// models/Transaction.tsx
+
+export type TransactionData = {
+  id: string;
+  amount: number;
+  currency: string;
+  description: string;
+  date: Date;
+  category: string;
+};
+
+type TransactionFactory = {
+  initToApp: () => TransactionData;
+  toApp: (data: any) => TransactionData;
+  toFirebase: (data: TransactionData) => any;
+};
+
+export const TransactionFactory: TransactionFactory = {
+  initToApp: function(): TransactionData {
+    return {
+      id: '',
+      amount: 0,
+      currency: 'USD',
+      description: '',
+      date: new Date(),
+      category: 'uncategorized',
+    };
+  },
+  
+  toApp: function(data: any): TransactionData {
+    return {
+      id: data.id || '',
+      amount: data.amount || 0,
+      currency: data.currency || 'USD',
+      description: data.description || '',
+      // Convert Firebase Timestamp to Date
+      date: data.date?.toDate() || new Date(),
+      category: data.category || 'uncategorized',
+    };
+  },
+  
+  toFirebase: function(data: TransactionData): any {
+    return {
+      id: data.id,
+      amount: data.amount,
+      currency: data.currency,
+      description: data.description,
+      // Convert Date to Firebase Timestamp
+      date: Timestamp.fromDate(data.date),
+      category: data.category,
+    };
+  }
+};
+```
