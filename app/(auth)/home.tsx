@@ -25,7 +25,7 @@ export default function HomeScreen() {
   return (
     <MainView headerShown={screenConf.headerShown}>
       <Text>Home Page</Text>
-      <Text>{userSettings.userSettingsData?.defaultCurrency}</Text>
+      <Text>{userSettings.userSettingsData.defaultCurrency}</Text>
       <Text>Chao</Text>
       <Button title="Go to UploadFile" onPress={() => router.navigate('/(auth)/upload-file')} />
       <Button title="Go to Manual Transaction" onPress={() => router.navigate('/(auth)/manual-transaction')} />

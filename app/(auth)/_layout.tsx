@@ -25,7 +25,7 @@ export default function RootLayout() {
         crashlyticsInstance,
         new Error('user_does_not_exists: There is no user logged in')
       );
-      return undefined
+      throw new Error('user_does_not_exists: There is no user logged in');
     }else {
       const db = getFirestore();
       const docRef = doc(db, "user_settings", user.uid);
