@@ -13,12 +13,15 @@ import { Button, Text, Alert as AlertRN } from "react-native";
 export default function HomeScreen() {
 
   const screenConf: ScreenConf = {
-    headerShown: false
+    headerShown: true
   };
 
   const crashlyticsInstance = getCrashlytics();
   const router = useRouter();
-  useHeaderBehavior({ headerShown: screenConf.headerShown });
+  useHeaderBehavior({
+    headerShown: screenConf.headerShown,
+    iconName: 'settings'
+  });
 
   const auth = getAuth()
   const userSettings = useUserSettings();
@@ -29,19 +32,17 @@ export default function HomeScreen() {
       <StartAddingTransaction
         manualTransactionText="Manually"
         fileTransactionText="From File"
-        onClose={() => AlertRN.alert("close")}
-        onOpen={() => AlertRN.alert("open")}
-        onManualTransaction={() => AlertRN.alert("manual")}
-        onFileTransaction={() => AlertRN.alert("file")}
+        onClose={() => console.log("close")}
+        onOpen={() => console.log("open")}
+        onManualTransaction={() => console.log("manual")}
+        onFileTransaction={() => router.navigate('/(auth)/upload-file')}
         style={{
           bottom: 40,
           right: 20
         }}
       />
 
-      <Text>Home Page</Text>
-      <Text>{userSettings.userSettingsData.defaultCurrency}</Text>
-      <Text>Chao</Text>
+      {/*
       <Button title="Go to UploadFile" onPress={() => router.navigate('/(auth)/upload-file')} />
       <Button title="Go to Manual Transaction" onPress={() => router.navigate('/(auth)/manual-transaction')} />
       <Button title="Go to Settings" onPress={() => router.navigate('/(auth)/settings')} />
@@ -65,6 +66,7 @@ export default function HomeScreen() {
 
         router.replace('/login');
       }} />
+      */}
     </MainView>
   );
 }

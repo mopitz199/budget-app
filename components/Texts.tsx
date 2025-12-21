@@ -64,6 +64,18 @@ export function LinkText({ children, onPress, style }: { children: string; onPre
   )
 }
 
+// Input label component for inputs
+export function InputLabel({ children, style }: { children: string; style?: any }) {
+
+  const theme = useColorScheme();
+  const isDarkMode = theme === 'dark';
+  const styles = makeStyles({ isDarkMode });
+
+  return (
+    <RNText style={StyleSheet.compose(styles.labelInputText, style)}>{children}</RNText>
+  )
+}
+
 type StyleParams = {
   isDarkMode: boolean;
 };
@@ -95,6 +107,10 @@ function makeStyles({ isDarkMode }: StyleParams) {
       fontSize: globalStyles.textFontSize,
       color: isDarkMode ? colors.dark.link : colors.light.link,
     },
+    labelInputText:{
+      color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
+      fontSize: globalStyles.inputLabelFontSize,
+    }
   })
   return styles;
 }

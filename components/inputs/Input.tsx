@@ -1,5 +1,5 @@
 import { colors } from "@/colors";
-import { Text } from "@/components/Texts";
+import { InputLabel, Text } from "@/components/Texts";
 import { globalStyles } from "@/global-styles";
 import { JSX } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
@@ -62,7 +62,7 @@ export function Input (
 
   return (
     <View style={StyleSheet.compose(styles.container, style)}>
-      {labelMessage !== '' && <Text style={styles.labelMessage}>{labelMessage}</Text>}
+      {labelMessage !== '' && <InputLabel style={styles.labelMessage}>{labelMessage}</InputLabel>}
       <View style={styles.inputWrapper}>
         <TextInput
           placeholderTextColor={isDarkMode ? colors.dark.placeholder : colors.light.placeholder}
@@ -139,9 +139,7 @@ function makeStyles({
       color: isDarkMode ? colors.dark.error : colors.light.error,
     },
     labelMessage: {
-      marginBottom: 4,
-      color: isDarkMode ? colors.dark.onSurface : colors.light.onSurface,
-      fontSize: globalStyles.inputLabelFontSize,
+      marginBottom: 4
     }
   });
 }
