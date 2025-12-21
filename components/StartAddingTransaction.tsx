@@ -58,7 +58,7 @@ export default function StartAddingTransaction({
 
   const closeTransaction = () => {
     return (
-      <View style={StyleSheet.compose(styles.container, style)}>
+      <View style={styles.subContainer}>
         <View style={styles.transactionRow}>
           <Text>{manualTransactionText}</Text>
           <TouchableOpacity activeOpacity={0.9} onPress={onManualTransactionPress} style={styles.iconButton}>
@@ -94,7 +94,7 @@ export default function StartAddingTransaction({
 
   const addTransaction = () => {
     return (
-      <View style={StyleSheet.compose(styles.container, style)}>
+      <View style={styles.subContainer}>
         <View style={styles.transactionRow}>
           <TouchableOpacity activeOpacity={1} onPress={openTransaction} style={styles.closeButton}>
             <Ionicons
@@ -109,7 +109,7 @@ export default function StartAddingTransaction({
   }
 
   return (
-    <View>
+    <View style={StyleSheet.compose(styles.container, style)}>
       {showCloseButton ? closeTransaction() : addTransaction()}
     </View>
   )
@@ -121,11 +121,13 @@ function makeStyles(isDarkMode: boolean) {
       position: 'absolute',
       bottom: 0,
       right: 0,
-      flexDirection: 'column',
-      gap: 10,
+    },
+    subContainer:{
       alignItems: 'flex-end',
       justifyContent: 'flex-start',
       alignSelf: 'flex-end',
+      flexDirection: 'column',
+      gap: 10,
     },
     transactionRow: {
       flexDirection: 'row',

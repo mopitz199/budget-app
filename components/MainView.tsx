@@ -54,12 +54,5 @@ function makeStyles({ isDarkMode }: StyleParams) {
       backgroundColor: isDarkMode ? colors.dark.background : colors.light.background,
       padding: 20,
     },
-    backdrop: {
-      flex: 1,
-      backgroundColor: isDarkMode ? colors.dark.loadingBackground : colors.light.loadingBackground,
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 9999,
-    }
   });
 }

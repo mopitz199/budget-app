@@ -1,5 +1,6 @@
 import { PrincipalButton } from "@/components/Buttons";
 import MainView from "@/components/MainView";
+import StartAddingTransaction from "@/components/StartAddingTransaction";
 import { useUserSettings } from "@/contexts";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
@@ -7,7 +8,7 @@ import { getAuth, signOut } from "@react-native-firebase/auth";
 import { getCrashlytics, recordError } from "@react-native-firebase/crashlytics";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { useRouter } from "expo-router";
-import { Button, Text } from "react-native";
+import { Button, Text, Alert as AlertRN } from "react-native";
 
 export default function HomeScreen() {
 
@@ -24,6 +25,20 @@ export default function HomeScreen() {
 
   return (
     <MainView headerShown={screenConf.headerShown}>
+
+      <StartAddingTransaction
+        manualTransactionText="Manually"
+        fileTransactionText="From File"
+        onClose={() => AlertRN.alert("close")}
+        onOpen={() => AlertRN.alert("open")}
+        onManualTransaction={() => AlertRN.alert("manual")}
+        onFileTransaction={() => AlertRN.alert("file")}
+        style={{
+          bottom: 40,
+          right: 20
+        }}
+      />
+
       <Text>Home Page</Text>
       <Text>{userSettings.userSettingsData.defaultCurrency}</Text>
       <Text>Chao</Text>
@@ -32,7 +47,6 @@ export default function HomeScreen() {
       <Button title="Go to Settings" onPress={() => router.navigate('/(auth)/settings')} />
       <Button title="Go to Transactions" onPress={() => router.navigate('/(auth)/transactions')} />
       <PrincipalButton title="Sign out" onPress={async () => {
-
         try {
           await signOut(auth);
 
