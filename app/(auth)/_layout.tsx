@@ -16,7 +16,7 @@ export default function RootLayout() {
   const auth = getAuth()
   const user = auth.currentUser;
 
-  const [userSettingsData, setUserSettings] = useState<UserSettingsData | undefined>(undefined);
+  const [userSettingsData, setUserSettings] = useState<UserSettingsData>(UserSettingsFactory.initToApp());
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchUserSettings = async () => {  

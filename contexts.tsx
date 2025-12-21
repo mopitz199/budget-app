@@ -3,7 +3,7 @@ import { createContext, useContext } from "react";
 
 export const UserSettingsContext = createContext<{
   userSettingsData: UserSettingsData;
-  setUserSettings: (settings: UserSettingsData | undefined) => void;
+  setUserSettings: (settings: UserSettingsData) => void;
 } | undefined>(undefined);
 
 export function useUserSettings() {
