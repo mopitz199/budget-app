@@ -1,9 +1,9 @@
-import { UserSettings } from "@/models/userSettings";
+import { UserSettingsData } from "@/models/UserSettings";
 import { createContext, useContext } from "react";
 
 export const UserSettingsContext = createContext<{
-  userSettingsData: UserSettings | undefined;
-  setUserSettings: (settings: UserSettings | undefined) => void;
+  userSettingsData: UserSettingsData | undefined;
+  setUserSettings: (settings: UserSettingsData | undefined) => void;
 } | undefined>(undefined);
 
 export function useUserSettings() {

@@ -1,21 +1,27 @@
-export type UserSettings = {
+export type UserSettingsData = {
   defaultCurrency: string;
 };
 
-export function initUserSettings(): UserSettings {
-  return {
-    defaultCurrency: 'USD',
-  };
-}
+type UserSettingsFactory = {
+  initToApp: () => UserSettingsData;
+  toApp: (data: any) => UserSettingsData;
+  toFirebase: (data: UserSettingsData) => any;
+};
 
-export function transformToAppUserSettings(firebaseData: any): UserSettings {
-  return {
-    defaultCurrency: firebaseData.defaultCurrency
-  };
-}
-
-export function transformToFirebaseUserSettings(appData: UserSettings): any {
-  return {
-    defaultCurrency: appData.defaultCurrency,
-  };
-}
+export const UserSettingsFactory: UserSettingsFactory = {
+  initToApp: function(): UserSettingsData {
+    return {
+      defaultCurrency: 'USD',
+    };
+  },
+  toApp: function(data: any): UserSettingsData {
+    return {
+      defaultCurrency: data.defaultCurrency
+    };
+  },
+  toFirebase: function(data: UserSettingsData): any {
+    return {
+      defaultCurrency: data.defaultCurrency
+    };
+  }
+};

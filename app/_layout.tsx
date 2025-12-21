@@ -1,6 +1,6 @@
 import LoadingModal from "@/components/LoadingModal";
 import { UserSettingsContext } from "@/contexts";
-import { initUserSettings, transformToAppUserSettings, transformToFirebaseUserSettings, UserSettings } from "@/models/userSettings";
+import { UserSettingsData, UserSettingsFactory } from "@/models/UserSettings";
 import { log } from "@/utils/logUtils";
 import { getAuth } from "@react-native-firebase/auth";
 import { getCrashlytics, recordError } from "@react-native-firebase/crashlytics";
@@ -14,12 +14,12 @@ export default function RootLayout() {
   const { t } = useTranslation();
   const crashlyticsInstance = getCrashlytics();
   const auth = getAuth()
-  
-  const [userSettingsData, setUserSettings] = useState<UserSettings | undefined>(undefined);
+  const user = auth.currentUser;
+
+  const [userSettingsData, setUserSettings] = useState<UserSettingsData | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const fetchUserSettings = async () => {
-    const user = auth.currentUser;
+  const fetchUserSettings = async () => {  
     if(!user){
       recordError(
         crashlyticsInstance,
@@ -31,14 +31,14 @@ export default function RootLayout() {
       const docRef = doc(db, "user_settings", user.uid);
       const docSnap = await getDoc(docRef); 
 
-      let userSettingsData = initUserSettings()
+      let userSettingsData = UserSettingsFactory.initToApp()
       if(docSnap.exists()){
-        userSettingsData = transformToAppUserSettings(docSnap.data());
+        userSettingsData = UserSettingsFactory.toApp(docSnap.data());
       }else{
         log(crashlyticsInstance, 'Creating user settings for user: ' + user.uid);
         await setDoc(
           docRef,
-          transformToFirebaseUserSettings(userSettingsData)
+          UserSettingsFactory.toFirebase(userSettingsData)
         )
       }
       return userSettingsData
