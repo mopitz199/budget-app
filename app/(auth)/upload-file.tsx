@@ -5,8 +5,8 @@ import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, Button, useColorScheme, View } from "react-native";
-import { currencyOptions, formatDisplay, formatMask } from "@/utils/currencyUtil";
+import { Alert, useColorScheme, View, Image, ScrollView } from "react-native";
+import { currencyOptions } from "@/utils/currencyUtil";
 import CurrencyOption from "@/components/CurrencyOption";
 import { PrincipalButton, SecondaryButton } from "@/components/Buttons";
 import { globalStyles } from "@/global-styles";
@@ -33,6 +33,7 @@ export default function UploadFileScreen() {
   const [currencyError, setCurrencyError] = useState('');
 
   const [images_uri, setImagesURI] = useState<string[]>([]);
+  const [images, setImages] = useState<any[]>([]);
 
   useHeaderBehavior({ loading: loading, headerShown: screenConf.headerShown });
 
@@ -45,10 +46,14 @@ export default function UploadFileScreen() {
 
     if(!result.canceled){
       let aux_images_uri = []
+      let images_data = []
       for (const asset of result.assets) {
+        console.log("Selected image URI: ", asset)
+        images_data.push(asset)
         aux_images_uri.push(asset.uri)
       }
       setImagesURI(aux_images_uri)
+      setImages(images_data)
     }else{
       console.log("No image selected")
     }
@@ -113,6 +118,56 @@ export default function UploadFileScreen() {
     setLoading(false)
   }
 
+  const showImagesPreview = () => {
+    if(images.length > 0){
+      return (
+        <ScrollView
+          style={{
+            flex: 1,
+            width: '100%',
+          }}
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: "center",
+            flexDirection: 'row',
+            alignItems: "center",
+            flexWrap: 'wrap',
+            padding: 10,
+          }}
+        >
+            {(images.map((image, index) => {
+              const ratio = image.width / image.height;
+              return (
+                <View key={index} style={{
+                  width: (images.length - 1) == index ? '100%' : '50%',
+                  padding: 10,
+                }}>
+                  <Image
+                    style={{width: '100%', aspectRatio: ratio}}
+                    resizeMode='contain'
+                    key={index}
+                    source={{ uri: image.uri }}
+                  />
+                </View>
+              )
+            }
+            ))}
+        </ScrollView>
+      )
+    }else {
+      return (
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <Ionicons
+            name={'document'}
+            size={100}
+            color={isDarkMode ? colors.dark.primary : colors.light.primary}
+          />
+          <Text style={{ marginTop: 10 }}>Here you will see the image preview</Text>
+        </View>
+      )
+    }
+  }
+
   return (
     <MainView headerShown={screenConf.headerShown} loading={loading}>
       <Title style={{ marginBottom: 20 }}>Load your files</Title>
@@ -145,12 +200,7 @@ export default function UploadFileScreen() {
           marginTop: 8,
           borderRadius: 4
         }}>
-          <Ionicons
-            name={'document'}
-            size={100}
-            color={isDarkMode ? colors.dark.primary : colors.light.primary}
-          />
-          <Text style={{ marginTop: 10 }}>Here you will see the image preview</Text>
+          {showImagesPreview()}
         </View>
       </View>
       <SecondaryButton
