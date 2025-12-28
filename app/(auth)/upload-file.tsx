@@ -241,7 +241,11 @@ export default function UploadFileScreen() {
         style={{ marginBottom: 20, marginTop: 20 }}
       />
       <PrincipalButton
-        style={{ marginBottom: 20}}
+        disabled={images.length === 0 || currency === ''}
+        style={{
+          marginBottom: 20,
+          opacity: (images.length === 0 || currency === '') ? 0.5 : 1
+        }}
         title="Done" onPress={
           () => {uploadImage();}
         }
