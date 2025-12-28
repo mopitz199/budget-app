@@ -1,21 +1,25 @@
+import { colors } from "@/colors";
+import { Alert } from "@/components/Alert";
+import { PrincipalButton, SecondaryButton } from "@/components/Buttons";
+import CurrencyOption from "@/components/CurrencyOption";
 import { SelectorInput } from "@/components/inputs/SelectorInput";
 import MainView from "@/components/MainView";
 import { InputLabel, Text, Title } from "@/components/Texts";
+import { globalStyles } from "@/global-styles";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
+import { currencyOptions } from "@/utils/currencyUtil";
+import { log } from "@/utils/logUtils";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { getAuth, getIdToken } from "@react-native-firebase/auth";
+import { getCrashlytics, recordError } from "@react-native-firebase/crashlytics";
+import { getDownloadURL, getStorage, putFile, ref } from '@react-native-firebase/storage';
+import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, useColorScheme, View, Image, ScrollView } from "react-native";
-import { currencyOptions } from "@/utils/currencyUtil";
-import CurrencyOption from "@/components/CurrencyOption";
-import { PrincipalButton, SecondaryButton } from "@/components/Buttons";
-import { globalStyles } from "@/global-styles";
-import { colors } from "@/colors";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import * as ImagePicker from 'expo-image-picker';
-import { getAuth, getIdToken } from "@react-native-firebase/auth";
+import { useTranslation } from "react-i18next";
+import { Image, ScrollView, useColorScheme, View } from "react-native";
 import uuid from 'react-native-uuid';
-import { getDownloadURL, getStorage, putFile, ref } from '@react-native-firebase/storage';
 
 export default function UploadFileScreen() {
 
@@ -24,7 +28,9 @@ export default function UploadFileScreen() {
   };
   const router = useRouter();
   const theme = useColorScheme();
+  const crashlyticsInstance = getCrashlytics();
   const auth = getAuth()
+  const { t, i18n } = useTranslation();
   const isDarkMode = theme === 'dark';
 
   const [loading, setLoading] = useState(false);
@@ -32,8 +38,11 @@ export default function UploadFileScreen() {
   const [currency, setCurrency] = useState('');
   const [currencyError, setCurrencyError] = useState('');
 
-  const [images_uri, setImagesURI] = useState<string[]>([]);
   const [images, setImages] = useState<any[]>([]);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [titleAlert, setTitleAlert] = useState("");
+  const [messageAlert, setMessageAlert] = useState("");
 
   useHeaderBehavior({ loading: loading, headerShown: screenConf.headerShown });
 
@@ -45,22 +54,18 @@ export default function UploadFileScreen() {
     })
 
     if(!result.canceled){
-      let aux_images_uri = []
       let images_data = []
       for (const asset of result.assets) {
-        console.log("Selected image URI: ", asset)
         images_data.push(asset)
-        aux_images_uri.push(asset.uri)
       }
-      setImagesURI(aux_images_uri)
       setImages(images_data)
     }else{
-      console.log("No image selected")
+      log(crashlyticsInstance, "User cancelled image selection");
     }
   }
 
   const readImages = async (token: string, images_urls: string[]) => {
-    const response = await fetch('http://192.168.1.88:8080/analyze-bank-transactions', {
+    const response = await fetch('http://172.20.10.3:8080/analyze-bank-transactions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`, // 👈 Enviar token como Bearer
@@ -74,25 +79,23 @@ export default function UploadFileScreen() {
   }
 
   const uploadImage = async () => {
-    const user = auth.currentUser;
-    const router = useRouter();
-
+    let user = auth.currentUser;
     if(user){
       setLoading(true)
 
       let images_urls = []
-      for (const uri of images_uri) {
+      for (const image of images) {
         const path = `/statements/${user?.uid}/${uuid.v4()}`
         const storage = getStorage()
         const reference = ref(storage, path)
-        await putFile(reference, uri);
+        await putFile(reference, image.uri);
         const url = await getDownloadURL(reference);
         images_urls.push(url)
       }
 
       try {
         const token = await getIdToken(user);
-        const response = await readImages(token, images_urls)
+        let response = await readImages(token, images_urls)
         if(response.ok){
           const data = await response.json();
           router.replace(
@@ -104,16 +107,34 @@ export default function UploadFileScreen() {
               },
             }
           )
-          setImagesURI([]); // Clear images after successful upload
+          setImages([]); // Clear images after successful upload
         }else{
           const errorData = await response.json();
-          Alert.alert("Error", "An error occurred while processing the images. Please try again later.");
+          recordError(
+            crashlyticsInstance,
+            new Error(`error_reading_image_transactions: ${JSON.stringify(errorData)}`)
+          );
+          setTitleAlert(t("error"));
+          setMessageAlert(t("serverErrorReadingImages"));
+          setShowAlert(true);
         }
       } catch (err) {
-        Alert.alert("Error", "An error occurred while reading the images. Please try again later.");
+        recordError(
+          crashlyticsInstance,
+          new Error(`error_processing_images: ${JSON.stringify(err)}`)
+        );
+        setTitleAlert(t("error"));
+        setMessageAlert(t("serverErrorReadingImages"));
+        setShowAlert(true);
       }
     }else{
-      Alert.alert("Error", "The user is not authenticated. Please log in again.");
+      recordError(
+        crashlyticsInstance,
+        new Error(`error_user_not_authenticated: The user is not authenticated.`)
+      );
+      setTitleAlert(t("error"));
+      setMessageAlert("The user is not authenticated. Please log in again.");
+      setShowAlert(true);
     }
     setLoading(false)
   }
@@ -139,12 +160,11 @@ export default function UploadFileScreen() {
               const ratio = image.width / image.height;
               return (
                 <View key={index} style={{
-                  width: (images.length - 1) == index ? '100%' : '50%',
+                  width: '50%',
                   padding: 10,
                 }}>
                   <Image
                     style={{width: '100%', aspectRatio: ratio}}
-                    resizeMode='contain'
                     key={index}
                     source={{ uri: image.uri }}
                   />
@@ -170,6 +190,18 @@ export default function UploadFileScreen() {
 
   return (
     <MainView headerShown={screenConf.headerShown} loading={loading}>
+
+      <Alert
+        title={titleAlert}
+        message={messageAlert}
+        leftButton={
+          <SecondaryButton style={{ height: globalStyles.alertButtonHeight }} title={t('close')} onPress={() => {
+            setShowAlert(false);
+          }}/>
+        }
+        visible={showAlert}
+      />
+
       <Title style={{ marginBottom: 20 }}>Load your files</Title>
       <SelectorInput
         value={currency}
@@ -211,7 +243,7 @@ export default function UploadFileScreen() {
       <PrincipalButton
         style={{ marginBottom: 20}}
         title="Done" onPress={
-          () => {router.navigate('/(auth)/upload-file-transactions-preview')}
+          () => {uploadImage();}
         }
       />
     </MainView>

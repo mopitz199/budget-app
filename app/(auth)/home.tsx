@@ -1,14 +1,11 @@
-import { PrincipalButton } from "@/components/Buttons";
 import MainView from "@/components/MainView";
 import StartAddingTransaction from "@/components/StartAddingTransaction";
 import { useUserSettings } from "@/contexts";
 import { useHeaderBehavior } from "@/hooks/header-behavior";
 import { ScreenConf } from "@/types/screen-conf";
-import { getAuth, signOut } from "@react-native-firebase/auth";
-import { getCrashlytics, recordError } from "@react-native-firebase/crashlytics";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { getAuth } from "@react-native-firebase/auth";
+import { getCrashlytics } from "@react-native-firebase/crashlytics";
 import { useRouter } from "expo-router";
-import { Button, Text, Alert as AlertRN } from "react-native";
 
 export default function HomeScreen() {
 
