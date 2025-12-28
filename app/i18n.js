@@ -50,6 +50,7 @@ const resources = {
       "loading": "Loading...",
       "upload": "Upload",
       "selectAgain": "Select again",
+      "selectCurrency": "Select currency",
       "undo": "Undo",
       "transactionRemoved": "Transaction removed",
       "confirm": "Confirm",
@@ -74,6 +75,7 @@ const resources = {
       "filter": "Filter",
       "saving": "Saving",
       "userNotAuthenticated": "User not authenticated",
+      "userNotAuthenticatedTryAgain": "User not authenticated. Please try again.",
       "userSettingsNotFound": "User settings not found",
       "newTransaction": "New Transaction",
       "transaction": "Transaction",
@@ -84,7 +86,12 @@ const resources = {
       "ok": "Ok",
       "yourAccountHasBeenCreated": "Your account has been created successfully.",
       "almostDone": "Almost done!",
-      "registerYourAccount": "Register your account"
+      "registerYourAccount": "Register your account",
+      "loadYourFiles": "Load your files",
+      "files": "Files",
+      "selectFiles": "Select files",
+      "done": "Done",
+      "imagePreviewPlaceholder": "Here you will see the image preview"
     }
   },
   es: {
@@ -166,7 +173,14 @@ const resources = {
       "errorUnableToLoginPleaseCheckCredentials": "No se puede iniciar sesión. Por favor, verifica tus credenciales.",
       "yourAccountHasBeenCreated": "Tu cuenta ha sido creada exitosamente.",
       "almostDone": "¡Casi listo!",
-      "registerYourAccount": "Registra tu cuenta"
+      "registerYourAccount": "Registra tu cuenta",
+      "selectCurrency": "Selecciona moneda",
+      "loadYourFiles": "Carga tus archivos",
+      "files": "Archivos",
+      "selectFiles": "Seleccionar archivos",
+      "done": "Hecho",
+      "imagePreviewPlaceholder": "Aquí verás la vista previa de la imagen",
+      "userNotAuthenticatedTryAgain": "Usuario no autenticado. Por favor, inténtalo de nuevo.",
     }
   }
 };

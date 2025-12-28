@@ -18,8 +18,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Image, ScrollView, useColorScheme, View } from "react-native";
+import { Image, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
 import uuid from 'react-native-uuid';
+
+const IA_SERVER_URL = process.env.EXPO_PUBLIC_IA_SERVER_URL;
 
 export default function UploadFileScreen() {
 
@@ -65,7 +67,10 @@ export default function UploadFileScreen() {
   }
 
   const readImages = async (token: string, images_urls: string[]) => {
-    const response = await fetch('http://172.20.10.3:8080/analyze-bank-transactions', {
+    if (!IA_SERVER_URL) {
+      throw new Error('IA_SERVER_URL is not defined');
+    }
+    const response = await fetch(IA_SERVER_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`, // 👈 Enviar token como Bearer
@@ -133,38 +138,27 @@ export default function UploadFileScreen() {
         new Error(`error_user_not_authenticated: The user is not authenticated.`)
       );
       setTitleAlert(t("error"));
-      setMessageAlert("The user is not authenticated. Please log in again.");
+      setMessageAlert(t("userNotAuthenticatedTryAgain"));
       setShowAlert(true);
     }
     setLoading(false)
   }
 
+  const styles = makeStyles({ isDarkMode });
+
   const showImagesPreview = () => {
     if(images.length > 0){
       return (
         <ScrollView
-          style={{
-            flex: 1,
-            width: '100%',
-          }}
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: "center",
-            flexDirection: 'row',
-            alignItems: "center",
-            flexWrap: 'wrap',
-            padding: 10,
-          }}
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollViewContent}
         >
             {(images.map((image, index) => {
               const ratio = image.width / image.height;
               return (
-                <View key={index} style={{
-                  width: '50%',
-                  padding: 10,
-                }}>
+                <View key={index} style={styles.imageContainer}>
                   <Image
-                    style={{width: '100%', aspectRatio: ratio}}
+                    style={[styles.imagePreview, { aspectRatio: ratio }]}
                     key={index}
                     source={{ uri: image.uri }}
                   />
@@ -176,13 +170,13 @@ export default function UploadFileScreen() {
       )
     }else {
       return (
-        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <View style={styles.emptyState}>
           <Ionicons
             name={'document'}
             size={100}
             color={isDarkMode ? colors.dark.primary : colors.light.primary}
           />
-          <Text style={{ marginTop: 10 }}>Here you will see the image preview</Text>
+          <Text style={styles.emptyStateText}>{t("imagePreviewPlaceholder")}</Text>
         </View>
       )
     }
@@ -202,10 +196,10 @@ export default function UploadFileScreen() {
         visible={showAlert}
       />
 
-      <Title style={{ marginBottom: 20 }}>Load your files</Title>
+      <Title style={styles.title}>{t("loadYourFiles")}</Title>
       <SelectorInput
         value={currency}
-        placeholder="Select currency"
+        placeholder={t("selectCurrency")}
         options={currencyOptions}
         onOptionSelect={(option) => { setCurrency(option.value); }}
         optionComponent={(option) => {
@@ -220,36 +214,87 @@ export default function UploadFileScreen() {
         labelMessage="Currency"
       />
 
-      <View style={{ flex: 1 }}>
-        <InputLabel>Files</InputLabel>
-        <View style={{
-          flex: 1,
-          borderWidth: 1,
-          borderStyle: 'dashed',
-          borderColor: isDarkMode ? colors.dark.onBackground : colors.light.onBackground,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: 8,
-          borderRadius: 4
-        }}>
+      <View style={styles.filesContainer}>
+        <InputLabel>{t("files")}</InputLabel>
+        <View style={styles.filesPreviewContainer}>
           {showImagesPreview()}
         </View>
       </View>
       <SecondaryButton
-        title="Select files"
+        title={t("selectFiles")}
         onPress={pickImageAsync}
-        style={{ marginBottom: 20, marginTop: 20 }}
+        style={styles.selectFilesButton}
       />
       <PrincipalButton
         disabled={images.length === 0 || currency === ''}
-        style={{
-          marginBottom: 20,
-          opacity: (images.length === 0 || currency === '') ? 0.5 : 1
-        }}
-        title="Done" onPress={
+        style={[
+          styles.doneButton,
+          { opacity: (images.length === 0 || currency === '') ? 0.5 : 1 }
+        ]}
+        title={t("done")} onPress={
           () => {uploadImage();}
         }
       />
     </MainView>
   );
+}
+
+type StyleParams = {
+  isDarkMode: boolean;
+};
+
+function makeStyles({
+  isDarkMode,
+}: StyleParams) {
+  return StyleSheet.create({
+    title:{
+      marginBottom: 20
+    },
+    scrollView: {
+      flex: 1,
+      width: '100%',
+    },
+    scrollViewContent: {
+      flexGrow: 1,
+      justifyContent: 'center',
+      flexDirection: 'row',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      padding: 10,
+    },
+    imageContainer: {
+      width: '50%',
+      padding: 10,
+    },
+    imagePreview: {
+      width: '100%',
+    },
+    emptyState: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    emptyStateText: {
+      marginTop: 10,
+    },
+    filesContainer: {
+      flex: 1,
+    },
+    filesPreviewContainer: {
+      flex: 1,
+      borderWidth: 1,
+      borderStyle: 'dashed',
+      borderColor: isDarkMode ? colors.dark.onBackground : colors.light.onBackground,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 8,
+      borderRadius: 4,
+    },
+    selectFilesButton: {
+      marginBottom: 20,
+      marginTop: 20,
+    },
+    doneButton: {
+      marginBottom: 20,
+    },
+  })
 }
